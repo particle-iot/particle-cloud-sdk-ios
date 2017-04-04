@@ -1,6 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'Particle-SDK', :exclusive => true do
+target 'Particle-SDK'
   pod "Particle-SDK", :path => "../"
   pod 'AFNetworking', '~> 3.0'
-end
