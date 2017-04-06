@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0810"
+   LastUpgradeVersion = "0830"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "50F6507A1C85423D0065F02F"
+               BlueprintIdentifier = "50E8408B1E95D49C0038ED42"
                BuildableName = "ParticleSDK.framework"
                BlueprintName = "ParticleSDK"
                ReferencedContainer = "container:ParticleSDK.xcodeproj">
@@ -28,31 +28,12 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "50F650841C85423D0065F02F"
-               BuildableName = "ParticleSDKTests.xctest"
-               BlueprintName = "ParticleSDKTests"
-               ReferencedContainer = "container:ParticleSDK.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "50F6507A1C85423D0065F02F"
-            BuildableName = "ParticleSDK.framework"
-            BlueprintName = "ParticleSDK"
-            ReferencedContainer = "container:ParticleSDK.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -64,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "50F6507A1C85423D0065F02F"
+            BlueprintIdentifier = "50E8408B1E95D49C0038ED42"
             BuildableName = "ParticleSDK.framework"
             BlueprintName = "ParticleSDK"
             ReferencedContainer = "container:ParticleSDK.xcodeproj">
@@ -82,7 +63,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "50F6507A1C85423D0065F02F"
+            BlueprintIdentifier = "50E8408B1E95D49C0038ED42"
             BuildableName = "ParticleSDK.framework"
             BlueprintName = "ParticleSDK"
             ReferencedContainer = "container:ParticleSDK.xcodeproj">
