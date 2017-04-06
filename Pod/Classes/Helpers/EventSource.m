@@ -21,7 +21,7 @@ static NSString *const ESEventKeyValuePairSeparator = @"\n";
 static NSString *const ESEventDataKey = @"data";
 static NSString *const ESEventEventKey = @"event";
 
-@interface EventSource () <NSURLConnectionDelegate, NSURLConnectionDataDelegate> { //<NSURLSessionDelegate, NSURLSessionDataDelegate> {
+@interface EventSource () <NSURLConnectionDelegate, NSURLConnectionDataDelegate> { ///<, NSURLSessionDataDelegate> {
     BOOL wasClosed;
 }
 
