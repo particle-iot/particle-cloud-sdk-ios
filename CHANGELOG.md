@@ -6,8 +6,11 @@ Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.7.0](https://github.com/spark/spark-sdk-ios/releases/tag/0.7.0) (2017-04-04)
 
-* Grand rename from Spark to Particle !
+* Overdue rename from Spark to Particle! SparkCloud is now ParticleCloud, same for ParticleDevice etc.
 
+* Pod has been renamed from Spark-SDK to Particle-SDK. Spark-SDK pod has been deprecated.
+
+* Documentation update
 
 ## [0.6.0](https://github.com/spark/spark-sdk-ios/releases/tag/0.6.0) (2017-02-03)
 
