@@ -10,12 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/**
- *  Particle event handler function which receives two arguements
- *
- *  @param eventDict NSDictionary argument which contains the event payload keys: event (name), data (payload), ttl (time to live), published_at (date/time published), coreid (publishiing device ID).
- *  @param error     NSError object in case an error occured in parsing the event payload or receiving it
- */
 @class ParticleEvent;
 
 typedef void (^ParticleEventHandler)(ParticleEvent * _Nullable event, NSError * _Nullable error);
@@ -28,6 +22,11 @@ typedef void (^ParticleEventHandler)(ParticleEvent * _Nullable event, NSError * 
 @property (nonatomic, strong) NSDate *time;         // Event "published at" time/date UTC
 @property (nonatomic) NSInteger ttl;                // Event time to live (currently unused)
 
+/**
+ *  Particle event handler class initializer which receives a dictionary argument
+ *
+ *  @param eventDict NSDictionary argument which contains the event payload keys: event (name), data (payload), ttl (time to live), published_at (date/time published), coreid (publishiing device ID).
+ */
 -(instancetype)initWithEventDict:(NSDictionary *)eventDict;
 
 @end
