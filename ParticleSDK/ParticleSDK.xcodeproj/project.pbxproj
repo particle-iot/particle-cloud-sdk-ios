@@ -15,12 +15,12 @@
 		50E840A91E95D7490038ED42 /* ParticleEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 50E840A11E95D7490038ED42 /* ParticleEvent.m */; };
 		50E840AB1E95D7490038ED42 /* ParticleSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 50E840A31E95D7490038ED42 /* ParticleSession.m */; };
 		50E840B11E95D7590038ED42 /* EventSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 50E840AD1E95D7590038ED42 /* EventSource.m */; };
-		50E840B31E95D7590038ED42 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 50E840AF1E95D7590038ED42 /* KeychainItemWrapper.m */; };
 		50E840B41E95DB0A0038ED42 /* ParticleEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 50E840A01E95D7490038ED42 /* ParticleEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		50E840B51E95DB210038ED42 /* ParticleSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 50E840A21E95D7490038ED42 /* ParticleSession.h */; };
 		50E840B61E95DB210038ED42 /* EventSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 50E840AC1E95D7590038ED42 /* EventSource.h */; };
-		50E840B71E95DB210038ED42 /* KeychainItemWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 50E840AE1E95D7590038ED42 /* KeychainItemWrapper.h */; };
 		50E840BA1E95DD080038ED42 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E840B91E95DD080038ED42 /* AFNetworking.framework */; };
+		9383399620DD1C000002B90C /* KeychainHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 9383399420DD1BFF0002B90C /* KeychainHelper.h */; };
+		9383399720DD1C000002B90C /* KeychainHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9383399520DD1C000002B90C /* KeychainHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,9 +38,9 @@
 		50E840A31E95D7490038ED42 /* ParticleSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParticleSession.m; path = ../../Pod/Classes/SDK/ParticleSession.m; sourceTree = "<group>"; };
 		50E840AC1E95D7590038ED42 /* EventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSource.h; path = ../../Pod/Classes/Helpers/EventSource.h; sourceTree = "<group>"; };
 		50E840AD1E95D7590038ED42 /* EventSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventSource.m; path = ../../Pod/Classes/Helpers/EventSource.m; sourceTree = "<group>"; };
-		50E840AE1E95D7590038ED42 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KeychainItemWrapper.h; path = ../../Pod/Classes/Helpers/KeychainItemWrapper.h; sourceTree = "<group>"; };
-		50E840AF1E95D7590038ED42 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeychainItemWrapper.m; path = ../../Pod/Classes/Helpers/KeychainItemWrapper.m; sourceTree = "<group>"; };
 		50E840B91E95DD080038ED42 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AFNetworking.framework; sourceTree = "<group>"; };
+		9383399420DD1BFF0002B90C /* KeychainHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KeychainHelper.h; path = ../../Pod/Classes/Helpers/KeychainHelper.h; sourceTree = "<group>"; };
+		9383399520DD1C000002B90C /* KeychainHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeychainHelper.m; path = ../../Pod/Classes/Helpers/KeychainHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,10 +87,10 @@
 		50E840991E95D6E90038ED42 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				9383399420DD1BFF0002B90C /* KeychainHelper.h */,
+				9383399520DD1C000002B90C /* KeychainHelper.m */,
 				50E840AC1E95D7590038ED42 /* EventSource.h */,
 				50E840AD1E95D7590038ED42 /* EventSource.m */,
-				50E840AE1E95D7590038ED42 /* KeychainItemWrapper.h */,
-				50E840AF1E95D7590038ED42 /* KeychainItemWrapper.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -119,11 +119,11 @@
 			files = (
 				50E840911E95D49C0038ED42 /* ParticleSDK.h in Headers */,
 				50E840A41E95D7490038ED42 /* ParticleCloud.h in Headers */,
+				9383399620DD1C000002B90C /* KeychainHelper.h in Headers */,
 				50E840A61E95D7490038ED42 /* ParticleDevice.h in Headers */,
 				50E840B41E95DB0A0038ED42 /* ParticleEvent.h in Headers */,
 				50E840B51E95DB210038ED42 /* ParticleSession.h in Headers */,
 				50E840B61E95DB210038ED42 /* EventSource.h in Headers */,
-				50E840B71E95DB210038ED42 /* KeychainItemWrapper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,8 +198,8 @@
 			files = (
 				50E840AB1E95D7490038ED42 /* ParticleSession.m in Sources */,
 				50E840B11E95D7590038ED42 /* EventSource.m in Sources */,
-				50E840B31E95D7590038ED42 /* KeychainItemWrapper.m in Sources */,
 				50E840A51E95D7490038ED42 /* ParticleCloud.m in Sources */,
+				9383399720DD1C000002B90C /* KeychainHelper.m in Sources */,
 				50E840A71E95D7490038ED42 /* ParticleDevice.m in Sources */,
 				50E840A91E95D7490038ED42 /* ParticleEvent.m in Sources */,
 			);
