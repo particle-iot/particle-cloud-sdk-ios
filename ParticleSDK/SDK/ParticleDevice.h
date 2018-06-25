@@ -33,11 +33,17 @@ typedef NS_ENUM(NSInteger, ParticleDeviceType) {
     ParticleDeviceTypeCore=0,
     ParticleDeviceTypePhoton=6, // or P0
     ParticleDeviceTypeP1=8,
-    ParticleDeviceTypeElectron=10,
+    ParticleDeviceTypeElectron=10, // or E0
     ParticleDeviceTypeRaspberryPi=31,
     ParticleDeviceTypeRedBearDuo=88,
     ParticleDeviceTypeBluz=103,
     ParticleDeviceTypeDigistumpOak=82,
+    ParticleDeviceTypeESP32=11,
+    ParticleDeviceTypeArgon=12,
+    ParticleDeviceTypeBoron=13,
+    ParticleDeviceTypeXenon=14,
+    
+    
 };
 
 typedef NS_ENUM(NSInteger, ParticleDeviceSystemEvent) {
