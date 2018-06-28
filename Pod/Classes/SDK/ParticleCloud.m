@@ -7,7 +7,6 @@
 //
 
 #import "ParticleCloud.h"
-#import "KeychainItemWrapper.h"
 #import "ParticleSession.h"
 //#import "ParticleUser.h"
 #import <AFNetworking/AFNetworking.h>

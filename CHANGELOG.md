@@ -4,6 +4,10 @@ Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.7.1](https://github.com/spark/spark-sdk-ios/releases/tag/0.7.1) (2018-06-24)
+
+* BugFix: Replaced outdated and complicated keychain code with simplified version. 
+
 ## [0.7.0](https://github.com/spark/spark-sdk-ios/releases/tag/0.7.0) (2017-04-04)
 
 * Overdue rename from Spark to Particle! SparkCloud is now ParticleCloud, same for ParticleDevice etc.
@@ -32,7 +36,7 @@ Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.5.1](https://github.com/spark/spark-sdk-ios/releases/tag/0.5.1) (2016-09-07)
 
-* Bigfix: Functions (Array) and Variables (Dictionary) in a ParticleDevice instance will sometimes contain unknown type values for offline devices, this might cause problems with Swift - fixed.
+* Bugfix: Functions (Array) and Variables (Dictionary) in a ParticleDevice instance will sometimes contain unknown type values for offline devices, this might cause problems with Swift - fixed.
 
 * Added: Set both those fields to nonnull for better Swift interoperability.
 
@@ -44,7 +48,7 @@ Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 * Added: ParticleDeviceDelegate protocol - allow SDK user to register for device system events (offline/online/flashing etc) 
 
-* Bigfix: Critical event subsystem bugfixes
+* Bugfix: Critical event subsystem bugfixes
 
 * Added: Additional supported device types (P1, RedBear, Bluz, etc)
 

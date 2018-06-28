@@ -7,9 +7,9 @@
 //
 
 #import "ParticleSession.h"
-#import "KeychainItemWrapper.h"
 #import <AFNetworking/AFHTTPSessionManager.h>
 #import "ParticleCloud.h"
+#import "KeychainHelper.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -107,10 +107,16 @@ NSString *const kParticleSessionUsernameStringKey = @"kParticleSessionUsernameSt
     if (self.username)
         accessTokenDict[kParticleSessionUsernameStringKey] = self.username;
     
-    NSData *keychainData = [NSKeyedArchiver archivedDataWithRootObject:accessTokenDict];
-    KeychainItemWrapper *keychainTokenItem = [[KeychainItemWrapper alloc] initWithIdentifier:kParticleSessionKeychainEntry accessGroup:nil];
-    [keychainTokenItem setObject:keychainData forKey:(__bridge id)(kSecValueData)];
 
+    //prepare data to be stored into keychain
+    NSMutableDictionary *jsonDict = [accessTokenDict mutableCopy];
+    //convert expiry date to NSNumber for easier serialization
+    jsonDict[kParticleSessionExpiryDateKey] = @(((NSDate *)jsonDict[kParticleSessionExpiryDateKey]).timeIntervalSince1970);
+
+    NSError *err;
+    NSData *jsonData = [NSJSONSerialization  dataWithJSONObject:jsonDict options:0 error:&err];
+    NSString *keychainString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    [KeychainHelper setKeychainValue:keychainString forKey:kParticleSessionKeychainEntry];
 }
 
 
@@ -170,29 +176,29 @@ NSString *const kParticleSessionUsernameStringKey = @"kParticleSessionUsernameSt
     self = [super init];
     if (self)
     {
-        KeychainItemWrapper *keychainTokenItem = [[KeychainItemWrapper alloc] initWithIdentifier:kParticleSessionKeychainEntry accessGroup:nil];
-        NSData *keychainData = [keychainTokenItem objectForKey:(__bridge id)(kSecValueData)];
+
+        NSString *keychainEntry = [KeychainHelper keychainValueForKey:kParticleSessionKeychainEntry];
         NSDictionary *accessTokenDict;
-        if ((keychainData) && (keychainData.length > 0))
-        {
-            @try {
-                // might throw a NSInvalidArgumentException incomprehensible archive for previously incompatible saved sessions
-                accessTokenDict = (NSDictionary *)[NSKeyedUnarchiver unarchiveObjectWithData:keychainData];
-            }
-            @catch (NSException *exception) {
-                // so remove any invalid session data
+
+        if (keychainEntry != nil && keychainEntry.length > 0) {
+            NSData *data =[keychainEntry dataUsingEncoding:NSUTF8StringEncoding];
+            NSError * err;
+            accessTokenDict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&err];
+
+            if (err != nil){
                 [self removeSession];
             }
-            
-        }
-        else
+        } else {
             return nil;
+        }
+
         
         if (accessTokenDict)
         {
             self.accessToken = accessTokenDict[kParticleSessionAccessTokenStringKey];
             if ([accessTokenDict objectForKey:kParticleSessionExpiryDateKey]) {
-                self.expiryDate = accessTokenDict[kParticleSessionExpiryDateKey];
+                //expiration date is serialized as NSTimeInterval since 1970
+                self.expiryDate = [[NSDate alloc] initWithTimeIntervalSince1970:[accessTokenDict[kParticleSessionExpiryDateKey] doubleValue]];
             }
             if ([accessTokenDict objectForKey:kParticleSessionRefreshTokenStringKey]) {
                 self.refreshToken = accessTokenDict[kParticleSessionRefreshTokenStringKey];
@@ -241,8 +247,7 @@ NSString *const kParticleSessionUsernameStringKey = @"kParticleSessionUsernameSt
 
 -(void)removeSession
 {
-    KeychainItemWrapper *keychainTokenItem = [[KeychainItemWrapper alloc] initWithIdentifier:kParticleSessionKeychainEntry accessGroup:nil];
-    [keychainTokenItem resetKeychainItem];
+    [KeychainHelper resetKeychainValueForKey:kParticleSessionKeychainEntry];
     self.accessToken = nil;
     self.username = nil;
     self.refreshToken = nil;
