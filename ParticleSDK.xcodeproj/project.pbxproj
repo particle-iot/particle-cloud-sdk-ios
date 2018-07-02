@@ -110,7 +110,7 @@
 				93F9743720EA7E5600015D9D /* Info.plist */,
 				93F9743820EA7E5600015D9D /* ParticleSDK.h */,
 			);
-			path = "Supporting Files";
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
