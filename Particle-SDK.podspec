@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "Particle-SDK"
-    s.version          = "0.7.1"
+    s.version          = "0.8.0"
     s.summary          = "Particle iOS Cloud SDK for interacting with Particle powered devices (Core/Photon/Electron and more)"
     s.description      = <<-DESC
                         Particle (formerly Spark) iOS Cloud SDK Cocoapod library
@@ -17,20 +17,17 @@ Pod::Spec.new do |s|
     s.platform     = :ios, '8.0'
     s.requires_arc = true
 
-    s.public_header_files = 'Pod/Classes/*.h'
-    s.source_files = 'Pod/Classes/*.h'
+    s.public_header_files = 'ParticleSDK/*.h'
+    s.source_files = 'ParticleSDK/*.h'
 
     s.subspec 'Helpers' do |ss|
-        ss.source_files = 'Pod/Classes/Helpers/*.{h,m}'
+        ss.source_files = 'ParticleSDK/Helpers/*.{h,m}'
         ss.ios.frameworks = 'SystemConfiguration', 'Security'
     end
 
     s.subspec 'SDK' do |ss|
-        ss.source_files = 'Pod/Classes/SDK/Particle*.{h,m}'
-        ss.dependency 'AFNetworking', '~> 3.0'
-        ss.dependency 'Particle-SDK/Helpers'
+        ss.source_files = 'ParticleSDK/SDK/Particle*.{h,m}'
+        ss.dependency 'ParticleSDK/Helpers'
     end
-
-    # s.frameworks = 'SystemConfiguration', 'Security'
 
 end

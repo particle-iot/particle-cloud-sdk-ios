@@ -8,8 +8,6 @@
 
 #import "ParticleCloud.h"
 #import "ParticleSession.h"
-//#import "ParticleUser.h"
-#import <AFNetworking/AFNetworking.h>
 #import <EventSource.h>
 #import "ParticleEvent.h"
 

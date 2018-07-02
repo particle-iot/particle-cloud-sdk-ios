@@ -9,7 +9,6 @@
 #import "ParticleDevice.h"
 #import "ParticleCloud.h"
 #import "ParticleEvent.h"
-#import <AFNetworking/AFNetworking.h>
 #import <objc/runtime.h>
 
 #define MAX_SPARK_FUNCTION_ARG_LENGTH 63
