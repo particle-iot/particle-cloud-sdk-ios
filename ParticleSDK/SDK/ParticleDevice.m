@@ -8,7 +8,7 @@
 
 #import "ParticleDevice.h"
 #import "ParticleCloud.h"
-#import "ParticleEvent.h"
+#import "AFHTTPSessionManager.h"
 #import <objc/runtime.h>
 
 #define MAX_SPARK_FUNCTION_ARG_LENGTH 63
@@ -420,7 +420,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSError *)makeErrorWithDescription:(NSString *)desc code:(NSInteger)errorCode
 {
-    
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
     [errorDetail setValue:desc forKey:NSLocalizedDescriptionKey];
     return [NSError errorWithDomain:@"ParticleAPIError" code:errorCode userInfo:errorDetail];

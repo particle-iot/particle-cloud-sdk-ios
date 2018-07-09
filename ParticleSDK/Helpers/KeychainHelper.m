@@ -11,6 +11,7 @@
 + (NSString *)keychainValueForKey:(NSString *)key
 {
     NSString *value = nil;
+
     NSMutableDictionary *query = [NSMutableDictionary dictionary];
     [query setObject:(__bridge id)(kSecClassGenericPassword) forKey:(__bridge id<NSCopying>)(kSecClass)];
     [query setObject:key forKey:(__bridge id<NSCopying>)(kSecAttrAccount)];
@@ -18,6 +19,7 @@
     [query setObject:(id)kCFBooleanTrue forKey:(__bridge id<NSCopying>)(kSecReturnData)];
     CFDictionaryRef cfresult = NULL;
     OSStatus err = SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef *)&cfresult);
+
     NSData *data = (__bridge_transfer NSData *)cfresult;
     if (err == noErr) {
         value = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -36,11 +38,13 @@
 
 + (void)setKeychainValue:(NSString *)value forKey:(NSString *)key
 {
+    //remove existing value
     NSMutableDictionary *query = [NSMutableDictionary dictionary];
     [query setObject:(__bridge id)(kSecClassGenericPassword) forKey:(__bridge id<NSCopying>)(kSecClass)];
     [query setObject:key forKey:(__bridge id<NSCopying>)(kSecAttrAccount)];
     SecItemDelete((__bridge CFDictionaryRef)query);
 
+    //add new value if one is provided
     if (value) {
         [query setObject:[value dataUsingEncoding:NSUTF8StringEncoding] forKey:(__bridge id<NSCopying>)(kSecValueData)];
         OSStatus err = SecItemAdd((__bridge CFDictionaryRef)query, nil);

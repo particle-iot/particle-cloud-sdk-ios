@@ -8,8 +8,8 @@
 
 #import "ParticleCloud.h"
 #import "ParticleSession.h"
-#import <EventSource.h>
-#import "ParticleEvent.h"
+#import "EventSource.h"
+#import "AFHTTPSessionManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,7 +27,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
 @property (nonatomic, strong, nonnull) NSURL* baseURL;
 @property (nonatomic, strong, nullable) ParticleSession* session;
-//@property (nonatomic, strong, nullable) ParticleUser* user;
+
 @property (nonatomic, strong, nonnull) AFHTTPSessionManager *manager;
 
 @property (nonatomic, strong, nonnull) NSMutableDictionary *eventListenersDict;
@@ -43,7 +43,6 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
 + (instancetype)sharedInstance;
 {
-    // TODO: no singleton, initializer gets: CloudConnection, CloudEndpoint (URL) to allow private cloud, dependency injection
     static ParticleCloud *sharedInstance = nil;
     @synchronized(self) {
         if (sharedInstance == nil)
@@ -64,13 +63,10 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             return nil;
         }
 
-//        self.loggedIn = NO;
-
         self.oAuthClientId = kDefaultoAuthClientId;
         self.oAuthClientSecret = kDefaultoAuthClientSecret;
 
         // try to restore session (user and access token)
-//        self.user = [[ParticleUser alloc] initWithSavedSession];
         self.session = [[ParticleSession alloc] initWithSavedSession];
         if (self.session)
         {
@@ -149,29 +145,29 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     }
 }
 
--(BOOL)isLoggedIn
+- (BOOL)isLoggedIn
 {
     return (self.session.username != nil);
 }
 
--(BOOL)isAuthenticated
+- (BOOL)isAuthenticated
 {
     return (self.session.accessToken != nil);
 }
 
 #pragma mark Setter functions
 
--(void)setoAuthClientId:(nullable NSString *)oAuthClientId {
+- (void)setoAuthClientId:(nullable NSString *)oAuthClientId {
     _oAuthClientId = oAuthClientId ?: kDefaultoAuthClientId;
 }
 
--(void)setoAuthClientSecret:(nullable NSString *)oAuthClientSecret {
+- (void)setoAuthClientSecret:(nullable NSString *)oAuthClientSecret {
     _oAuthClientSecret = oAuthClientSecret ?: kDefaultoAuthClientSecret;
 }
 
 #pragma mark Delegate functions
 
--(void)ParticleSession:(ParticleSession *)session didExpireAt:(NSDate *)date
+- (void)ParticleSession:(ParticleSession *)session didExpireAt:(NSDate *)date
 {
     // handle auto-renewal of expired access tokens by internal timer event
     // TODO: fix that to do it using a refresh token and not save the user password!
@@ -183,9 +179,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     }
 }
 
--(void)refreshToken:(NSString *)refreshToken
+- (void)refreshToken:(NSString *)refreshToken
 {
-//    NSLog(@"Refreshing session...");
     // non default params
     NSDictionary *params = @{
                              @"grant_type": @"refresh_token",
@@ -195,7 +190,6 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     [self.manager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.oAuthClientId password:self.oAuthClientSecret];
     // OAuth login
     [self.manager POST:@"oauth/token" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
         NSMutableDictionary *responseDict = [responseObject mutableCopy];
         
         if (self.session.username)
@@ -204,7 +198,6 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         self.session = [[ParticleSession alloc] initWithNewSession:responseDict];
         if (self.session) // login was successful
         {
-//            NSLog(@"New session created using refresh token");
             self.session.delegate = self;
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -254,8 +247,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
-        
-        // check type of error?
+
         if (completion)
         {
             completion([NSError errorWithDomain:error.domain code:serverResponse.statusCode userInfo:error.userInfo]);

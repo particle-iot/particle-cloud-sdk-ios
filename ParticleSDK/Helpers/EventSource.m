@@ -111,9 +111,6 @@ static NSString *const ESEventEventKey = @"event";
     [request setHTTPMethod:@"GET"];
     
     self.eventSource = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
-//    self.eventSourceTask = [[NSURLSession sharedSession] dataTaskWithRequest:request];
-//    [self.eventSourceTask resume];
-    
     
     if (![NSThread isMainThread]) {
         CFRunLoopRun();
@@ -122,11 +119,8 @@ static NSString *const ESEventEventKey = @"event";
 
 - (void)close
 {
-//    NSLog(@"eventSource %@ closed",self.description);
-    
     wasClosed = YES;
     [self.eventSource cancel];
-//    [self.eventSourceTask cancel];
     self.queue = nil;
 }
 
@@ -135,8 +129,6 @@ static NSString *const ESEventEventKey = @"event";
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-//    NSLog(@"eventSource %@ didReceiveResponse %@",self.description,response.description);
-    
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
     if (httpResponse.statusCode == 200) {
         // Opened
@@ -159,8 +151,6 @@ static NSString *const ESEventEventKey = @"event";
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-//    NSLog(@"eventSource %@ didFailWithError %@",self.description,error.description);
-    
     Event *e = [Event new];
     e.readyState = kEventStateClosed;
     e.error = error;
@@ -175,7 +165,6 @@ static NSString *const ESEventEventKey = @"event";
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.retryInterval * NSEC_PER_SEC));
     dispatch_after(popTime, self.queue, ^(void) {
         if (self.retries < 5) {
-//            NSLog(@"connection retries %d",self.retries);
             self.retries++;
             [self open];
         }
@@ -185,8 +174,6 @@ static NSString *const ESEventEventKey = @"event";
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-//    NSLog(@"eventSource %@ didReceiveData %@",self.description,data.description);
-    
     NSString *eventString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     eventString = [eventString stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     NSArray *components = [eventString componentsSeparatedByString:ESEventKeyValuePairSeparator];
@@ -236,8 +223,6 @@ static NSString *const ESEventEventKey = @"event";
         return;
     }
     
-//    NSLog(@"eventSource %@ connectionDidFinishLoading",self.description);
-    
     Event *e = [Event new];
     e.readyState = kEventStateClosed;
     e.error = [NSError errorWithDomain:@""
@@ -254,7 +239,6 @@ static NSString *const ESEventEventKey = @"event";
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.retryInterval * NSEC_PER_SEC));
     dispatch_after(popTime, self.queue, ^(void) {
         if (self.retries < 5) {
-//            NSLog(@"connectionDidFinishLoading retries %d",self.retries);
             self.retries++;
             [self open];
         }
@@ -288,12 +272,8 @@ static NSString *const ESEventEventKey = @"event";
             break;
     }
     
-    return [NSString stringWithFormat:@"<%@: readyState: %@; event: %@; data: %@>",
-            [self class],
-            state,
-//            self.id,
-            self.name,
-            self.data];
+    return [NSString stringWithFormat:@"<%@: readyState: %@; event: %@; data: %@>", [self class], state,
+            self.name, self.data];
 
 }
 

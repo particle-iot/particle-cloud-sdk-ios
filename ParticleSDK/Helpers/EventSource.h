@@ -24,11 +24,13 @@ typedef enum {
 
 /// The name of the Event
 @property (nonatomic, strong) NSString *name;
+
 /// The data received from the EventSource
 @property (nonatomic, strong) NSData *data;
 
 /// The current state of the connection to the EventSource
 @property (nonatomic, assign) EventState readyState;
+
 /// Provides details of any errors with the connection to the EventSource
 @property (nonatomic, strong) NSError *error; // unused
 
