@@ -24,7 +24,7 @@
     if (err == noErr) {
         value = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     } else if (err != errSecItemNotFound) {
-        NSLog(@"%qi", (long long)err);
+        NSLog(@"Error: %qi", (long long)err);
     }
     return value;
 }

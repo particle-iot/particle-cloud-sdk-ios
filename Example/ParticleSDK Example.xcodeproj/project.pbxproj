@@ -8,26 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		930FC2B120EAB07000206146 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 930FC2B020EAB07000206146 /* AppDelegate.m */; };
-		930FC2B420EAB07000206146 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 930FC2B320EAB07000206146 /* ViewController.m */; };
+		930FC2B420EAB07000206146 /* ParticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 930FC2B320EAB07000206146 /* ParticleViewController.m */; };
 		930FC2B720EAB07000206146 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 930FC2B520EAB07000206146 /* Main.storyboard */; };
 		930FC2B920EAB07100206146 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 930FC2B820EAB07100206146 /* Assets.xcassets */; };
 		930FC2BC20EAB07100206146 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 930FC2BA20EAB07100206146 /* LaunchScreen.storyboard */; };
 		930FC2BF20EAB07100206146 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 930FC2BE20EAB07100206146 /* main.m */; };
 		930FC2CB20EAB1E900206146 /* ParticleSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 930FC2CA20EAB1E900206146 /* ParticleSDK.framework */; };
+		C810B3FF95A583B97734DFB7 /* ActionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C810BAB894C738A615909558 /* ActionsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		930FC2AC20EAB07000206146 /* ParticleSDK Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ParticleSDK Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		930FC2AF20EAB07000206146 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		930FC2B020EAB07000206146 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		930FC2B220EAB07000206146 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		930FC2B320EAB07000206146 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		930FC2B220EAB07000206146 /* ParticleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParticleViewController.h; sourceTree = "<group>"; };
+		930FC2B320EAB07000206146 /* ParticleViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParticleViewController.m; sourceTree = "<group>"; };
 		930FC2B620EAB07000206146 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		930FC2B820EAB07100206146 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		930FC2BB20EAB07100206146 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		930FC2BD20EAB07100206146 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		930FC2BE20EAB07100206146 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		930FC2CA20EAB1E900206146 /* ParticleSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ParticleSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C810B6203E7826155B216B3D /* ActionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionsViewController.h; sourceTree = "<group>"; };
+		C810BAB894C738A615909558 /* ActionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,8 +104,10 @@
 		930FC2CE20EAB38000206146 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				930FC2B220EAB07000206146 /* ViewController.h */,
-				930FC2B320EAB07000206146 /* ViewController.m */,
+				930FC2B220EAB07000206146 /* ParticleViewController.h */,
+				930FC2B320EAB07000206146 /* ParticleViewController.m */,
+				C810BAB894C738A615909558 /* ActionsViewController.m */,
+				C810B6203E7826155B216B3D /* ActionsViewController.h */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -177,9 +182,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				930FC2B420EAB07000206146 /* ViewController.m in Sources */,
+				930FC2B420EAB07000206146 /* ParticleViewController.m in Sources */,
 				930FC2BF20EAB07100206146 /* main.m in Sources */,
 				930FC2B120EAB07000206146 /* AppDelegate.m in Sources */,
+				C810B3FF95A583B97734DFB7 /* ActionsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

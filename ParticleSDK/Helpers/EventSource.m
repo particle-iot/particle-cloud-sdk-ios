@@ -145,12 +145,14 @@ static NSString *const ESEventEventKey = @"event";
     }
     else
     {
-        NSLog(@"Error opening event stream, code %ld",(long)httpResponse.statusCode);
+        NSLog(@"Event stream connection status code = %i", httpResponse.statusCode);
     }
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
+    NSLog(@"Event stream connection error = %@", error.localizedDescription);
+
     Event *e = [Event new];
     e.readyState = kEventStateClosed;
     e.error = error;

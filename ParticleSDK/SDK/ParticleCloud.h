@@ -24,6 +24,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+//Serialized response JSON
+FOUNDATION_EXPORT NSString * const ParticleSDKErrorResponseBodyKey;
+FOUNDATION_EXPORT NSString * const ParticleSDKErrorLocalizedStringKey;
+
 extern NSString *const kParticleAPIBaseURL;
 
 @interface ParticleCloud : NSObject
@@ -76,7 +81,11 @@ extern NSString *const kParticleAPIBaseURL;
  */
 -(NSURLSessionDataTask *)loginWithUser:(NSString *)user
                               password:(NSString *)password
-                            completion:(nullable ParticleCompletionBlock)completion; 
+                            completion:(nullable ParticleCompletionBlock)completion;
+
+
+
+
 
 /**
  *  Sign up with new account credentials to Particle cloud
@@ -87,7 +96,7 @@ extern NSString *const kParticleAPIBaseURL;
  */
 -(NSURLSessionDataTask *)signupWithUser:(NSString *)user
                                password:(NSString *)password
-                             completion:(nullable ParticleCompletionBlock)completion __deprecated_msg("use createUser:password:accountInfo:completion instead");;
+                             completion:(nullable ParticleCompletionBlock)completion __deprecated_msg("use createUser:password:accountInfo:completion instead");
 
 
 // NEW
@@ -278,13 +287,13 @@ extern NSString *const kParticleAPIBaseURL;
 // --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /**
- *  Subscribe to the firehose of public events, plus private events published by devices one owns
+ *  Subscribe to the firehose of public events, plus private events published by devices one owns. Note that as of April 2018, the event prefix filter is required. It was optional before.
  *
  *  @param eventHandler ParticleEventHandler event handler method - receiving NSDictionary argument which contains keys: event (name), data (payload), ttl (time to live), published_at (date/time emitted), coreid (device ID). Second argument is NSError object in case error occured in parsing the event payload.
- *  @param eventNamePrefix    Filter only events that match name eventName, if nil is passed any event will trigger eventHandler
+ *  @param eventNamePrefix    Filter only events that match name eventName.
  *  @return eventListenerID function will return an id type object as the eventListener registration unique ID - keep and pass this object to the unsubscribe method in order to remove this event listener
  */
--(nullable id)subscribeToAllEventsWithPrefix:(nullable NSString *)eventNamePrefix handler:(nullable ParticleEventHandler)eventHandler;
+-(nullable id)subscribeToAllEventsWithPrefix:(nonnull NSString *)eventNamePrefix handler:(nullable ParticleEventHandler)eventHandler __deprecated_msg("This method will be deprecated in the future. Please use subscribeToMyDevicesEventsWithPrefix instead.");
 /**
  *  Subscribe to all events, public and private, published by devices one owns
  *

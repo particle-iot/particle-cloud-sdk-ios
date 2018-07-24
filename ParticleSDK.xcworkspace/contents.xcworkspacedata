@@ -2,10 +2,10 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Example/ParticleSDK Example.xcodeproj">
+      location = "group:ParticleSDK.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:ParticleSDK.xcodeproj">
+      location = "group:Example/ParticleSDK Example.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

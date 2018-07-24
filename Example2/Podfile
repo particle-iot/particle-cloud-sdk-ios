@@ -1,4 +1,0 @@
-source 'https://github.com/CocoaPods/Specs.git'
-
-target 'Particle-SDK'
-  pod "Particle-SDK", :path => "../"

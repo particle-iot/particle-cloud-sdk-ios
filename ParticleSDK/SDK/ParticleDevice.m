@@ -9,6 +9,7 @@
 #import "ParticleDevice.h"
 #import "ParticleCloud.h"
 #import "AFHTTPSessionManager.h"
+#import "ErrorHelper.h"
 #import <objc/runtime.h>
 
 #define MAX_SPARK_FUNCTION_ARG_LENGTH 63
@@ -75,27 +76,21 @@ NS_ASSUME_NONNULL_BEGIN
         if ([params[@"platform_id"] isKindOfClass:[NSNumber class]])
         {
             self.platformId = [params[@"platform_id"] intValue];
-            
-            if ([params[@"platform_id"] intValue] == ParticleDeviceTypeCore)
-                _type = ParticleDeviceTypeCore;
 
-            if ([params[@"platform_id"] intValue] == ParticleDeviceTypeElectron)
-                _type = ParticleDeviceTypeElectron;
-
-            if ([params[@"platform_id"] intValue] == ParticleDeviceTypePhoton) // or P0 - same id
-                _type = ParticleDeviceTypePhoton;
-            
-            if ([params[@"platform_id"] intValue] == ParticleDeviceTypeP1)
-                _type = ParticleDeviceTypeP1;
-
-            if ([params[@"platform_id"] intValue] == ParticleDeviceTypeRedBearDuo)
-                _type = ParticleDeviceTypeRedBearDuo;
-
-            if ([params[@"platform_id"] intValue] == ParticleDeviceTypeBluz)
-                _type = ParticleDeviceTypeBluz;
-
-            if ([params[@"platform_id"] intValue] == ParticleDeviceTypeDigistumpOak)
-                _type = ParticleDeviceTypeDigistumpOak;
+            switch (self.platformId) {
+                case ParticleDeviceTypeCore:
+                case ParticleDeviceTypeElectron:
+                case ParticleDeviceTypePhoton: // or P0 - same id
+                case ParticleDeviceTypeP1:
+                case ParticleDeviceTypeRedBearDuo:
+                case ParticleDeviceTypeBluz:
+                case ParticleDeviceTypeDigistumpOak:
+                    _type = self.platformId;
+                    break;
+                default:
+                    _type = ParticleDeviceTypeUnknown;
+                    break;
+            }
         }
 
         
@@ -236,8 +231,9 @@ NS_ASSUME_NONNULL_BEGIN
             NSDictionary *responseDict = responseObject;
             if (![responseDict[@"coreInfo"][@"connected"] boolValue]) // check response
             {
-                NSError *err = [self makeErrorWithDescription:@"Device is not connected" code:1001];
-                completion(nil,err);
+                NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:@"Device is not connected"];
+
+                completion(nil,particleError);
             }
             else
             {
@@ -247,10 +243,14 @@ NS_ASSUME_NONNULL_BEGIN
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
         if (completion)
         {
-            completion(nil, error);
+            completion(nil, particleError);
         }
+
+        NSLog(@"! getVariable Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
     }];
     
     return task;
@@ -274,10 +274,9 @@ NS_ASSUME_NONNULL_BEGIN
         NSString *argsValue = [argsStr componentsJoinedByString:@","];
         if (argsValue.length > MAX_SPARK_FUNCTION_ARG_LENGTH)
         {
-            // TODO: arrange user error/codes in a list
-            NSError *err = [self makeErrorWithDescription:[NSString stringWithFormat:@"Maximum argument length cannot exceed %d",MAX_SPARK_FUNCTION_ARG_LENGTH] code:1000];
+            NSError *particleError = [ErrorHelper getParticleError:nil task:nil customMessage:[NSString stringWithFormat:@"Maximum argument length cannot exceed %d",MAX_SPARK_FUNCTION_ARG_LENGTH]];
             if (completion)
-                completion(nil,err);
+                completion(nil, particleError);
             return nil;
         }
             
@@ -293,8 +292,8 @@ NS_ASSUME_NONNULL_BEGIN
             NSDictionary *responseDict = responseObject;
             if ([responseDict[@"connected"] boolValue]==NO)
             {
-                NSError *err = [self makeErrorWithDescription:@"Device is not connected" code:1001];
-                completion(nil,err);
+                NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:@"Device is not connected"];
+                completion(nil, particleError);
             }
             else
             {
@@ -305,10 +304,14 @@ NS_ASSUME_NONNULL_BEGIN
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
         if (completion)
         {
-            completion(nil,error);
+            completion(nil, particleError);
         }
+
+        NSLog(@"! callFunction Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
     }];
     
     return task;
@@ -330,10 +333,14 @@ NS_ASSUME_NONNULL_BEGIN
             completion(nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        if (completion) // TODO: better erroring handling
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
         {
-            completion(error);
+            completion(particleError);
         }
+
+        NSLog(@"! signal Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
     }];
     
     return task;
@@ -345,8 +352,6 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/devices/%@", self.id]];
 
-//    NSMutableDictionary *params = [self defaultParams];
-//    params[@"id"] = self.id;
     [self setAuthHeaderWithAccessToken];
 
     NSURLSessionDataTask *task = [self.manager DELETE:[url description] parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
@@ -356,15 +361,28 @@ NS_ASSUME_NONNULL_BEGIN
             NSDictionary *responseDict = responseObject;
             if ([responseDict[@"ok"] boolValue])
                 completion(nil);
-            else
-                completion([self makeErrorWithDescription:@"Could not unclaim device" code:1003]);
+            else {
+                NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:@"Could not unclaim device"];
+
+                if (completion)
+                {
+                    completion(particleError);
+                }
+
+                NSLog(@"! unclaim Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
+            }
+
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
-         if (completion)
-         {
-             completion(error);
-         }
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
+        {
+            completion(particleError);
+        }
+
+        NSLog(@"! unclaim Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
     }];
     
     return task;
@@ -387,10 +405,14 @@ NS_ASSUME_NONNULL_BEGIN
             completion(nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-         if (completion) // TODO: better erroring handling
-         {
-             completion(error);
-         }
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
+        {
+            completion(particleError);
+        }
+
+        NSLog(@"! rename Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
     }];
     
     return task;
@@ -416,15 +438,6 @@ NS_ASSUME_NONNULL_BEGIN
         [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
     }
 }
-
-
--(NSError *)makeErrorWithDescription:(NSString *)desc code:(NSInteger)errorCode
-{
-    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-    [errorDetail setValue:desc forKey:NSLocalizedDescriptionKey];
-    return [NSError errorWithDomain:@"ParticleAPIError" code:errorCode userInfo:errorDetail];
-}
-
 
 
 -(NSString *)description
@@ -461,7 +474,9 @@ NS_ASSUME_NONNULL_BEGIN
         if (responseDict[@"errors"])
         {
             if (completion) {
-                completion([self makeErrorWithDescription:responseDict[@"errors"][@"error"] code:1005]);
+                NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:responseDict[@"errors"][@"error"]];
+
+                completion(particleError);
             }
         }
         else
@@ -473,10 +488,14 @@ NS_ASSUME_NONNULL_BEGIN
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
-         if (completion) // TODO: better erroring handling
-         {
-             completion(error);
-         }
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
+        {
+            completion(particleError);
+        }
+
+        NSLog(@"! flashKnownApp Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
     }];
     
     return task;
@@ -500,17 +519,21 @@ NS_ASSUME_NONNULL_BEGIN
     
     if (!reqError)
     {
-        NSURLSessionDataTask *task = [self.manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error)
+        NSURLSessionDataTask *task = [self.manager dataTaskWithRequest:request
+                uploadProgress: nil
+                downloadProgress: nil
+                completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error)
         {
             if (error == nil)
             {
                 NSDictionary *responseDict = responseObject;
-    //            NSLog(@"flashFiles: %@",responseDict.description);
                 if (responseDict[@"error"])
                 {
                     if (completion)
                     {
-                        completion([self makeErrorWithDescription:responseDict[@"error"] code:1004]);
+                        NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:responseDict[@"error"]];
+
+                        completion(particleError);
                     }
                 }
                 else if (completion)
@@ -520,11 +543,14 @@ NS_ASSUME_NONNULL_BEGIN
             }
             else
             {
-                // TODO: better erroring handlin
+                NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
                 if (completion)
                 {
-                    completion(error);
+                    completion(particleError);
                 }
+
+                NSLog(@"! flashFiles Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
             }
         }];
         
@@ -560,8 +586,8 @@ NS_ASSUME_NONNULL_BEGIN
     if (self.type != ParticleDeviceTypeElectron) {
         if (completion)
         {
-            NSError *err = [self makeErrorWithDescription:@"Command supported only for Electron device" code:4000];
-            completion(-1,err);
+            NSError *particleError = [ErrorHelper getParticleError:nil task:nil customMessage:@"Command supported only for Electron device"];
+            completion(-1, particleError);
         }
         return nil;
     }
@@ -590,10 +616,14 @@ NS_ASSUME_NONNULL_BEGIN
                                       }
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
                                   {
+                                      NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
                                       if (completion)
                                       {
-                                          completion(-1, error);
+                                          completion(-1, particleError);
                                       }
+
+                                      NSLog(@"! getCurrentDataUsage Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
                                   }];
     
     return task;

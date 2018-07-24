@@ -10,6 +10,7 @@
 #import "ParticleSession.h"
 #import "EventSource.h"
 #import "AFHTTPSessionManager.h"
+#import "ErrorHelper.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,6 +20,11 @@ NSString *const kParticleAPIBaseURL = @"https://api.particle.io";
 NSString *const kEventListenersDictEventSourceKey = @"eventSource";
 NSString *const kEventListenersDictHandlerKey = @"eventHandler";
 NSString *const kEventListenersDictIDKey = @"id";
+
+
+NSString * const ParticleSDKErrorResponseBodyKey = @"io.particle.error.response.body";
+NSString * const ParticleSDKErrorLocalizedStringKey = @"io.particle.error.localizedstring";
+
 
 static NSString *const kDefaultoAuthClientId = @"particle";
 static NSString *const kDefaultoAuthClientSecret = @"particle";
@@ -130,7 +136,6 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         [self subscribeToDevicesSystemEvents];
         return YES;
     } else return NO;
-
 }
 
 -(nullable NSString *)loggedInUsername
@@ -169,8 +174,6 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
 - (void)ParticleSession:(ParticleSession *)session didExpireAt:(NSDate *)date
 {
-    // handle auto-renewal of expired access tokens by internal timer event
-    // TODO: fix that to do it using a refresh token and not save the user password!
     if (self.session.refreshToken) {
         [self refreshToken:self.session.refreshToken];
     }
@@ -188,6 +191,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                              };
     
     [self.manager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.oAuthClientId password:self.oAuthClientSecret];
+
     // OAuth login
     [self.manager POST:@"oauth/token" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSMutableDictionary *responseDict = [responseObject mutableCopy];
@@ -201,14 +205,9 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             self.session.delegate = self;
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
-        
-        NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
-        if (errorData)
-        {
-            NSDictionary *serializedFailedBody = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
-            NSLog(@"! refreshToken %@ Failed (status code %d): %@", task.originalRequest.URL,(int)serverResponse.statusCode,serializedFailedBody);
-        }
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
+        NSLog(@"! refreshToken Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     [self.manager.requestSerializer clearAuthorizationHeader];
@@ -246,19 +245,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
 
         if (completion)
         {
-            completion([NSError errorWithDomain:error.domain code:serverResponse.statusCode userInfo:error.userInfo]);
+            completion(particleError);
         }
 
-        NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
-        if (errorData)
-        {
-            NSDictionary *serializedFailedBody = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
-            NSLog(@"! loginWithUser %@ Failed (status code %d): %@", task.originalRequest.URL,(int)serverResponse.statusCode,serializedFailedBody);
-        }
+        NSLog(@"! loginWithUser Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     [self.manager.requestSerializer clearAuthorizationHeader];
@@ -270,7 +264,9 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                         accountInfo:(nullable NSDictionary *)accountInfo
                          completion:(nullable ParticleCompletionBlock)completion
 {
-    
+
+    //TODO: accountInfo is unclear, refactor into method having separate input parameters for everything that is hinding under account info.
+
     NSMutableDictionary *params = [@{
                              @"username": username,
                              @"password": password,
@@ -293,27 +289,26 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           {
                                               NSString *errorString;
                                               if (responseDict[@"errors"][0])
-                                              errorString = [NSString stringWithFormat:@"Could not sign up: %@",responseDict[@"errors"][0]];
+                                                  errorString = [NSString stringWithFormat:@"Could not sign up: %@",responseDict[@"errors"][0]];
                                               else
-                                              errorString = @"Error signing up";
-                                              completion([self makeErrorWithDescription:errorString code:1004]);
+                                                  errorString = @"Error signing up";
+
+                                              NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:errorString];
+
+                                              completion(particleError);
+
+                                              NSLog(@"! signupWithUser Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
                                           }
                                       }
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
                                   {
-                                      NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
-                                      // check type of error?
-                                      if (completion)
-                                      {
-                                          completion([NSError errorWithDomain:error.domain code:serverResponse.statusCode userInfo:error.userInfo]);
+                                      NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
+                                      if (completion) {
+                                          completion(particleError);
                                       }
-                                      
-                                      NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
-                                      if (errorData)
-                                      {
-                                          NSDictionary *serializedFailedBody = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
-                                          NSLog(@"! signupWithUser %@ Failed (status code %d): %@",task.originalRequest.URL,(int)serverResponse.statusCode,serializedFailedBody);
-                                      }
+
+                                      NSLog(@"! signupWithUser Failed%@ (%d): %@\r\n", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
                                   }];
     
     [self.manager.requestSerializer clearAuthorizationHeader];
@@ -341,7 +336,9 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     {
         if (completion)
         {
-            completion([self makeErrorWithDescription:@"productId value must be set to a non-zero value" code:1006]);
+            NSError *particleError = [ErrorHelper getParticleError:nil task:nil customMessage:@"productId value must be set to a non-zero value"];
+
+            completion(particleError);
         }
         return nil;
     }
@@ -350,7 +347,9 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     {
         if (completion)
         {
-            completion([self makeErrorWithDescription:@"Client OAuth credentials must be set to create a new customer" code:1010]);
+            NSError *particleError = [ErrorHelper getParticleError:nil task:nil customMessage:@"Client OAuth credentials must be set to create a new customer"];
+
+            completion(particleError);
         }
         return nil;
     }
@@ -365,7 +364,6 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     
     
     NSString *url = [NSString stringWithFormat:@"/v1/products/%tu/customers", productId];
-    //    NSLog(@"Signing up customer...");
     
     NSURLSessionDataTask *task = [self.manager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
@@ -390,27 +388,24 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           }
                                           else
                                           {
-                                              NSString *errorDesc = ([responseDict[@"error"] stringValue]); // check name of field
-                                              completion([self makeErrorWithDescription:errorDesc code:1004]);
+                                              NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:[responseDict[@"error"] stringValue]];
+
+                                              completion(particleError);
+
+                                              NSLog(@"! createCustomer Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
                                           }
                                       }
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
                                   {
-                                      NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
-                                      // check type of error?
-                                      if (completion)
-                                      {
-                                          completion([NSError errorWithDomain:error.domain code:serverResponse.statusCode userInfo:error.userInfo]);
+                                      NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
+                                      if (completion) {
+                                          completion(particleError);
                                       }
-                                      
-                                      NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
-                                      if (errorData)
-                                      {
-                                          NSDictionary *serializedFailedBody = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
-                                          NSLog(@"! createCustomer %@ Failed (status code %d): %@", url, (int)serverResponse.statusCode,serializedFailedBody);
-                                      }
+
+                                      NSLog(@"! createCustomer Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
                                   }];
-    
+
     [self.manager.requestSerializer clearAuthorizationHeader];
     
     return task;
@@ -450,24 +445,24 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                 completion(nil);
             } else
             {
-                completion([self makeErrorWithDescription:@"Could not claim device" code:1002]);
+                NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:@"Could not claim device"];
+
+                if (completion) {
+                    completion(particleError);
+                }
+
+                NSLog(@"! claimDevice Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
             }
             
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
-        // check type of error?
-        if (completion)
-        {
-            completion([NSError errorWithDomain:error.domain code:serverResponse.statusCode userInfo:error.userInfo]);
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion) {
+            completion(particleError);
         }
-        
-        NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
-        if (errorData)
-        {
-            NSDictionary *serializedFailedBody = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
-            NSLog(@"! claimDevice %@ Failed (status code %d): %@",task.originalRequest.URL,(int)serverResponse.statusCode,serializedFailedBody);
-        }
+
+        NSLog(@"! claimDevice Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     return task;
@@ -505,20 +500,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
          }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
-         // check type of error?
-        
-        NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
         if (completion)
         {
-            completion(nil, [NSError errorWithDomain:error.domain code:serverResponse.statusCode userInfo:error.userInfo]);
+            completion(nil, particleError);
         }
-        
-        NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
-        if (errorData)
-        {
-            NSDictionary *serializedFailedBody = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
-            NSLog(@"! getDevice %@ Failed (status code %d): %@",task.originalRequest.URL,(int)serverResponse.statusCode,serializedFailedBody);
-        }
+
+        NSLog(@"! getDevice Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     return task;
@@ -537,7 +526,6 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         
          if (completion)
          {
-             
              NSArray *responseList = responseObject;
              NSMutableArray *queryDeviceIDList = [[NSMutableArray alloc] init];
              __block NSMutableArray *deviceList = [[NSMutableArray alloc] init];
@@ -614,19 +602,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
          }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
-        // check type of error?
-        NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
         if (completion)
         {
-            completion(nil, [NSError errorWithDomain:error.domain code:serverResponse.statusCode userInfo:error.userInfo]);
+            completion(nil, particleError);
         }
-        
-        NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
-        if (errorData)
-        {
-            NSDictionary *serializedFailedBody = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
-            NSLog(@"! getDevices %@ Failed (status code %d): %@",task.originalRequest.URL,(int)serverResponse.statusCode,serializedFailedBody);
-        }
+
+        NSLog(@"! getDevices Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     return task;
@@ -661,24 +644,24 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             }
             else
             {
-                completion(nil, nil, [self makeErrorWithDescription:@"Could not generate a claim code" code:1005]); //TODO: collect all codes to a table
+                NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:@"Could not generate a claim code"];
+
+                completion(nil, nil, particleError);
+
+                NSLog(@"! generateClaimCode Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
             }
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
-        NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
         if (completion)
         {
-            completion(nil, nil, [NSError errorWithDomain:error.domain code:serverResponse.statusCode userInfo:error.userInfo]);
+            completion(nil, nil, particleError);
         }
-        
-        NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
-        if (errorData)
-        {
-            NSDictionary *serializedFailedBody = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
-            NSLog(@"! generateClaimCode %@ Failed (status code %d): %@",task.originalRequest.URL,(int)serverResponse.statusCode,serializedFailedBody);
-        }
+
+        NSLog(@"! generateClaimCode Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     return task;
@@ -724,23 +707,24 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           }
                                           else
                                           {
-                                              completion(nil, nil, [self makeErrorWithDescription:@"Could not generate a claim code" code:1007]);
+                                              NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:@"Could not generate a claim code"];
+
+                                              completion(nil, nil, particleError);
+
+                                              NSLog(@"! generateClaimCodeForOrganization Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
                                           }
                                       }
                                       
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
                                   {
-                                      NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
-                                      NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
-                                      if (errorData)
+                                      NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
+                                      if (completion)
                                       {
-                                          NSDictionary *serializedFailedBody = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
-                                          NSLog(@"! generateClaimCodeForOrganization %@ Failed (status code %d): %@",task.originalRequest.URL,(int)serverResponse.statusCode,serializedFailedBody);
+                                          completion(nil, nil, particleError);
                                       }
-                                      
-                                      if (completion) {
-                                          completion(nil, nil, [NSError errorWithDomain:error.domain code:serverResponse.statusCode userInfo:error.userInfo]);
-                                      }
+
+                                      NSLog(@"! generateClaimCodeForOrganization Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
                                   }];
     
     return task;
@@ -765,20 +749,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                       }
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
                                   {
-                                      NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
+                                      NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
                                       if (completion)
                                       {
-                                          // make error have the HTTP response status code
-                                          // TODO: for all
-                                          completion([NSError errorWithDomain:error.domain code:serverResponse.statusCode userInfo:error.userInfo]);
+                                          completion(particleError);
                                       }
-                                      
-                                      NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
-                                      if (errorData)
-                                      {
-                                          NSDictionary *serializedFailedBody = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
-                                          NSLog(@"! requestPasswordReset %@ Failed (status code %d): %@",task.originalRequest.URL,(int)serverResponse.statusCode,serializedFailedBody);
-                                      }
+
+                                      NSLog(@"! requestPasswordReset Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
                                   }];
     
     return task;
@@ -806,21 +784,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
         if (completion)
         {
-            // make error have the HTTP response status code
-            // TODO: for all
-            completion([NSError errorWithDomain:error.domain code:serverResponse.statusCode userInfo:error.userInfo]);
+            completion(particleError);
         }
-        
-        NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
-        if (errorData)
-        {
-            
-            NSDictionary *serializedFailedBody = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
-            NSLog(@"! requestPasswordResetForUser %@ Failed (status code %d): %@",task.originalRequest.URL,(int)serverResponse.statusCode,serializedFailedBody);
-        }
+
+        NSLog(@"! requestPasswordResetForUser Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     return task;
@@ -845,21 +816,15 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     return task;
 }
 
--(NSError *)makeErrorWithDescription:(NSString *)desc code:(NSInteger)errorCode
-{
-    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-    [errorDetail setValue:desc forKey:NSLocalizedDescriptionKey];
-    return [NSError errorWithDomain:@"ParticleAPIError" code:errorCode userInfo:errorDetail];
-}
-
-
 #pragma mark Events subsystem implementation
 
 -(nullable id)subscribeToEventWithURL:(NSURL *)url handler:(nullable ParticleEventHandler)eventHandler
 {
     if (!self.accessToken)
     {
-        eventHandler(nil, [self makeErrorWithDescription:@"No active access token" code:1008]);
+        NSError *particleError = [ErrorHelper getParticleError:nil task:nil customMessage:@"No active access token"];
+
+        eventHandler(nil, particleError);
         return nil;
     }
 
@@ -936,20 +901,20 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 }
 
 
--(nullable id)subscribeToAllEventsWithPrefix:(nullable NSString *)eventNamePrefix handler:(nullable ParticleEventHandler)eventHandler
+-(nullable id)subscribeToAllEventsWithPrefix:(nonnull NSString *)eventNamePrefix handler:(nullable ParticleEventHandler)eventHandler
 {
     // GET /v1/events[/:event_name]
     NSString *endpoint;
     if ((!eventNamePrefix) || [eventNamePrefix isEqualToString:@""])
     {
-        endpoint = [NSString stringWithFormat:@"%@/v1/events", self.baseURL];
+        NSLog(@"! subscribeToAllEventsWithPrefix Failed: eventNamePrefix is no longer optional and cannot be empty for this event stream.");
+        return nil;
     }
     else
     {
         // URL encode name prefix
         NSCharacterSet *set = [NSCharacterSet URLHostAllowedCharacterSet];
         NSString *encodedEventPrefix = [eventNamePrefix stringByAddingPercentEncodingWithAllowedCharacters:set];
-
         endpoint = [NSString stringWithFormat:@"%@/v1/events/%@?access_token=%@", self.baseURL, encodedEventPrefix, self.accessToken];
     }
     
@@ -963,7 +928,6 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     NSString *endpoint;
     if ((!eventNamePrefix) || [eventNamePrefix isEqualToString:@""])
     {
-        // TODO: check
         endpoint = [NSString stringWithFormat:@"%@/v1/devices/events?access_token=%@", self.baseURL, self.accessToken];
     }
     else
@@ -971,7 +935,6 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         // URL encode name prefix
         NSCharacterSet *set = [NSCharacterSet URLHostAllowedCharacterSet];
         NSString *encodedEventPrefix = [eventNamePrefix stringByAddingPercentEncodingWithAllowedCharacters:set];
-       
         endpoint = [NSString stringWithFormat:@"%@/v1/devices/events/%@?access_token=%@", self.baseURL, encodedEventPrefix, self.accessToken];
     }
     
@@ -992,7 +955,6 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         // URL encode name prefix
         NSCharacterSet *set = [NSCharacterSet URLHostAllowedCharacterSet];
         NSString *encodedEventPrefix = [eventNamePrefix stringByAddingPercentEncodingWithAllowedCharacters:set];
-
         endpoint = [NSString stringWithFormat:@"%@/v1/devices/%@/events/%@?access_token=%@", self.baseURL, deviceID, encodedEventPrefix, self.accessToken];
     }
     
@@ -1026,8 +988,11 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             NSDictionary *responseDict = responseObject;
             if (![responseDict[@"ok"] boolValue])
             {
-                NSError *err = [self makeErrorWithDescription:@"Server reported error publishing event" code:1009];
-                completion(err);
+                NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:@"Server reported error publishing event"];
+
+                completion(particleError);
+
+                NSLog(@"! publishEventWithName Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
             }
             else
             {
@@ -1036,10 +1001,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
-         if (completion)
-         {
-             completion(error);
-         }
+        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
+        {
+            completion(particleError);
+        }
+
+        NSLog(@"! publishEventWithName Failed %@ (%d): %@\r\n%@", task.originalRequest.URL, particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     return task;
@@ -1053,14 +1022,12 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     self.systemEventsListenerId = [self subscribeToMyDevicesEventsWithPrefix:@"particle" handler:^(ParticleEvent * _Nullable event, NSError * _Nullable error) {
 
         if (!error) {
-//            NSLog(@"--> devicesMapTable got %d entries",weakSelf.devicesMapTable.count); // debug
             ParticleDevice *device = [weakSelf.devicesMapTable objectForKey:event.deviceID];
             if (device) {
-//                NSLog(@"* Device %@ (%@) got system event %@:%@",device.name,device.id,event.event,event.data); // debug
                 [device __receivedSystemEvent:event];
             }
         } else {
-            NSLog(@"! ParticleCloud could not subscribe to devices system events %@",error.localizedDescription);
+            NSLog(@"! ParticleCloud could not subscribeToEvents to devices system events %@",error.localizedDescription);
         }
     }];
 
