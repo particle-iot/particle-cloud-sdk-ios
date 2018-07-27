@@ -30,7 +30,7 @@
 		9396292720FFE0C3009F5560 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9396292520FFE0C3009F5560 /* LaunchScreen.storyboard */; };
 		9396292A20FFE0C3009F5560 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9396292920FFE0C3009F5560 /* main.m */; };
 		93B668A12109F9FA00DFF793 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B6689C2109F90700DFF793 /* AFNetworking.framework */; };
-		93E849B220F7956E00CBEFEC /* ParticleSDKCarthage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E8408C1E95D49C0038ED42 /* ParticleSDKCarthage.framework */; };
+		93E849B220F7956E00CBEFEC /* ParticleSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E8408C1E95D49C0038ED42 /* ParticleSDK.framework */; };
 		93E849B920F795A000CBEFEC /* ErrorHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E849B820F795A000CBEFEC /* ErrorHelperTests.m */; };
 		93F9743A20EA7E5600015D9D /* ParticleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F9743820EA7E5600015D9D /* ParticleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		93F9744F20EA7F2200015D9D /* EventSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F9744B20EA7F2200015D9D /* EventSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -67,8 +67,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		50E8408C1E95D49C0038ED42 /* ParticleSDKCarthage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParticleSDKCarthage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9352CD4A210B8268005EB505 /* ParticleSDKPods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParticleSDKPods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		50E8408C1E95D49C0038ED42 /* ParticleSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParticleSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9352CD4A210B8268005EB505 /* ParticleSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParticleSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9352CD4C210B8296005EB505 /* InfoPods.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = InfoPods.plist; path = Framework/InfoPods.plist; sourceTree = "<group>"; };
 		9358DA3720FE2241003FF8DC /* KeychainHelperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainHelperTests.m; sourceTree = "<group>"; };
 		9396291820FFE0C2009F5560 /* ParticleSDKTestsHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParticleSDKTestsHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,7 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93E849B220F7956E00CBEFEC /* ParticleSDKCarthage.framework in Frameworks */,
+				93E849B220F7956E00CBEFEC /* ParticleSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,10 +149,10 @@
 		50E8408D1E95D49C0038ED42 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				50E8408C1E95D49C0038ED42 /* ParticleSDKCarthage.framework */,
+				50E8408C1E95D49C0038ED42 /* ParticleSDK.framework */,
 				93E849AD20F7956E00CBEFEC /* ParticleSDKTests.xctest */,
 				9396291820FFE0C2009F5560 /* ParticleSDKTestsHost.app */,
-				9352CD4A210B8268005EB505 /* ParticleSDKPods.framework */,
+				9352CD4A210B8268005EB505 /* ParticleSDK.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -289,7 +289,7 @@
 			);
 			name = ParticleSDKCarthage;
 			productName = ParticleSDK;
-			productReference = 50E8408C1E95D49C0038ED42 /* ParticleSDKCarthage.framework */;
+			productReference = 50E8408C1E95D49C0038ED42 /* ParticleSDK.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		9352CD31210B8268005EB505 /* ParticleSDKPods */ = {
@@ -307,7 +307,7 @@
 			);
 			name = ParticleSDKPods;
 			productName = ParticleSDK;
-			productReference = 9352CD4A210B8268005EB505 /* ParticleSDKPods.framework */;
+			productReference = 9352CD4A210B8268005EB505 /* ParticleSDK.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		9396291720FFE0C2009F5560 /* ParticleSDKTestsHost */ = {
@@ -653,7 +653,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.particle.ParticleSDK;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ParticleSDK;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
@@ -679,7 +679,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.particle.ParticleSDK;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ParticleSDK;
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
@@ -709,7 +709,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.particle.ParticleSDK;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ParticleSDK;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -737,7 +737,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.particle.ParticleSDK;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = ParticleSDK;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";

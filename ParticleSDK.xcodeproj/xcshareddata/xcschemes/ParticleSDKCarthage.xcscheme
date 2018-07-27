@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "50E8408B1E95D49C0038ED42"
-               BuildableName = "ParticleSDKCarthage.framework"
+               BuildableName = "ParticleSDK.framework"
                BlueprintName = "ParticleSDKCarthage"
                ReferencedContainer = "container:ParticleSDK.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "50E8408B1E95D49C0038ED42"
-            BuildableName = "ParticleSDKCarthage.framework"
+            BuildableName = "ParticleSDK.framework"
             BlueprintName = "ParticleSDKCarthage"
             ReferencedContainer = "container:ParticleSDK.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "50E8408B1E95D49C0038ED42"
-            BuildableName = "ParticleSDKCarthage.framework"
+            BuildableName = "ParticleSDK.framework"
             BlueprintName = "ParticleSDKCarthage"
             ReferencedContainer = "container:ParticleSDK.xcodeproj">
          </BuildableReference>
