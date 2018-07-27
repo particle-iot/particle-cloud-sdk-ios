@@ -17,7 +17,7 @@
                BlueprintIdentifier = "9352CD31210B8268005EB505"
                BuildableName = "ParticleSDK.framework"
                BlueprintName = "ParticleSDKCarthage"
-               ReferencedContainer = "container:ParticleSDKCarthage.xcodeproj">
+               ReferencedContainer = "container:ParticleSDK.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,26 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "93E849AC20F7956E00CBEFEC"
-               BuildableName = "ParticleSDKTests.xctest"
-               BlueprintName = "ParticleSDKTests"
-               ReferencedContainer = "container:ParticleSDKCarthage.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9352CD31210B8268005EB505"
-            BuildableName = "ParticleSDK.framework"
-            BlueprintName = "ParticleSDKCarthage"
-            ReferencedContainer = "container:ParticleSDKCarthage.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -67,7 +48,7 @@
             BlueprintIdentifier = "9352CD31210B8268005EB505"
             BuildableName = "ParticleSDK.framework"
             BlueprintName = "ParticleSDKCarthage"
-            ReferencedContainer = "container:ParticleSDKCarthage.xcodeproj">
+            ReferencedContainer = "container:ParticleSDK.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -85,7 +66,7 @@
             BlueprintIdentifier = "9352CD31210B8268005EB505"
             BuildableName = "ParticleSDK.framework"
             BlueprintName = "ParticleSDKCarthage"
-            ReferencedContainer = "container:ParticleSDKCarthage.xcodeproj">
+            ReferencedContainer = "container:ParticleSDK.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
