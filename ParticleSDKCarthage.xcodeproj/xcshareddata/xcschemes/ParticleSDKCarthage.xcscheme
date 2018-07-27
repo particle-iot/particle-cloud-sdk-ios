@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "50E8408B1E95D49C0038ED42"
+               BlueprintIdentifier = "9352CD31210B8268005EB505"
                BuildableName = "ParticleSDK.framework"
                BlueprintName = "ParticleSDKCarthage"
-               ReferencedContainer = "container:ParticleSDK.xcodeproj">
+               ReferencedContainer = "container:ParticleSDKCarthage.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,10 +45,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "50E8408B1E95D49C0038ED42"
+            BlueprintIdentifier = "9352CD31210B8268005EB505"
             BuildableName = "ParticleSDK.framework"
             BlueprintName = "ParticleSDKCarthage"
-            ReferencedContainer = "container:ParticleSDK.xcodeproj">
+            ReferencedContainer = "container:ParticleSDKCarthage.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -63,10 +63,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "50E8408B1E95D49C0038ED42"
+            BlueprintIdentifier = "9352CD31210B8268005EB505"
             BuildableName = "ParticleSDK.framework"
             BlueprintName = "ParticleSDKCarthage"
-            ReferencedContainer = "container:ParticleSDK.xcodeproj">
+            ReferencedContainer = "container:ParticleSDKCarthage.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
