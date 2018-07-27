@@ -16,9 +16,6 @@
 #define PARTICLE_USER   @"NOT SET"
 #define PARTICLE_PASSWORD   @"NOT SET"
 
-#define PARTICLE_USER   @"raimis@particle.io"
-#define PARTICLE_PASSWORD   @"        "
-
 @interface ParticleViewController()
 
 @property (assign) BOOL loggedIn;

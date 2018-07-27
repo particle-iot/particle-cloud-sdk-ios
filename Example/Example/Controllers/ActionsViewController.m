@@ -13,16 +13,6 @@
 #define FUNCTION_NAME   @"digitalWrite"
 #define FUNCTION_ARGUMENTS   @[@"D7", @1]
 
-
-#define DEVICE_NAME   @"ranger_hamster"
-#define DEVICE_ID   @"3c0025000b47363330353437"
-#define DEVICE_RENAME_NAME   @"new name"
-#define VARIABLE_NAME   @"analogvalue"
-#define FUNCTION_NAME   @"led"
-#define FUNCTION_ARGUMENTS   @[@"on"]
-
-
-
 @interface ActionsViewController()
 
 @property (strong, nonatomic) ParticleDevice *selectedDevice;
