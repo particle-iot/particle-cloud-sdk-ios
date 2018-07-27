@@ -10,7 +10,11 @@
 //
 
 #import "ParticleViewController.h"
-#import <ParticleSDK/ParticleSDK.h>
+#ifdef USE_FRAMEWORKS
+#import <ParticleSDK/ParticleCloud.h>
+#else
+#import "ParticleCloud.h"
+#endif
 
 //Make sure to change value of these constants
 #define PARTICLE_USER   @"NOT SET"

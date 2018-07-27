@@ -3,7 +3,11 @@
 // Copyright (c) 2018 Particle Inc. All rights reserved.
 //
 
+#ifdef USE_FRAMEWORKS
 #import <ParticleSDK/ParticleCloud.h>
+#else
+#import "ParticleCloud.h"
+#endif
 #import "ActionsViewController.h"
 
 #define DEVICE_NAME   @"NOT SET"
