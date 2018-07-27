@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0830"
+   LastUpgradeVersion = "0940"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "50E8408B1E95D49C0038ED42"
-               BuildableName = "ParticleSDK.framework"
-               BlueprintName = "ParticleSDK"
+               BuildableName = "ParticleSDKCarthage.framework"
+               BlueprintName = "ParticleSDKCarthage"
                ReferencedContainer = "container:ParticleSDK.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,8 +46,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "50E8408B1E95D49C0038ED42"
-            BuildableName = "ParticleSDK.framework"
-            BlueprintName = "ParticleSDK"
+            BuildableName = "ParticleSDKCarthage.framework"
+            BlueprintName = "ParticleSDKCarthage"
             ReferencedContainer = "container:ParticleSDK.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -64,8 +64,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "50E8408B1E95D49C0038ED42"
-            BuildableName = "ParticleSDK.framework"
-            BlueprintName = "ParticleSDK"
+            BuildableName = "ParticleSDKCarthage.framework"
+            BlueprintName = "ParticleSDKCarthage"
             ReferencedContainer = "container:ParticleSDK.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

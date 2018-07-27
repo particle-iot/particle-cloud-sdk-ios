@@ -4,7 +4,6 @@
 //
 
 #import "ErrorHelper.h"
-#import "AFURLResponseSerialization.h"
 #import "ParticleCloud.h"
 
 
@@ -15,7 +14,7 @@
     int code = -1;
     if (task) {
         NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
-        code = serverResponse.statusCode;
+        code = (int)serverResponse.statusCode;
     }
 
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];

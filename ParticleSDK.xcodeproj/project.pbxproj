@@ -7,31 +7,46 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3EDD8D404E1CD47455A7642B /* libPods-ParticleSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A0988E32181EC13FC42200C /* libPods-ParticleSDK.a */; };
+		9352CD33210B8268005EB505 /* KeychainHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9744D20EA7F2200015D9D /* KeychainHelper.m */; };
+		9352CD34210B8268005EB505 /* EventSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9744E20EA7F2200015D9D /* EventSource.m */; };
+		9352CD35210B8268005EB505 /* ErrorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C810B0BB68419CEE10A16B09 /* ErrorHelper.m */; };
+		9352CD36210B8268005EB505 /* ParticleCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = C810BC3A57532BFB19C44AC1 /* ParticleCloud.m */; };
+		9352CD37210B8268005EB505 /* ParticleDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = C810BDEC8CD2D616568D2306 /* ParticleDevice.m */; };
+		9352CD38210B8268005EB505 /* ParticleEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = C810B0CE042954AC880666F8 /* ParticleEvent.m */; };
+		9352CD39210B8268005EB505 /* ParticleSession.m in Sources */ = {isa = PBXBuildFile; fileRef = C810BD319450F917EFD70A65 /* ParticleSession.m */; };
+		9352CD3D210B8268005EB505 /* ErrorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = C810B035D36C9EB63EF1A92F /* ErrorHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9352CD3E210B8268005EB505 /* ParticleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F9743820EA7E5600015D9D /* ParticleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9352CD3F210B8268005EB505 /* EventSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F9744B20EA7F2200015D9D /* EventSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9352CD40210B8268005EB505 /* KeychainHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F9744C20EA7F2200015D9D /* KeychainHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9352CD41210B8268005EB505 /* ParticleCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = C810B01CA34C4A6C2000B1A2 /* ParticleCloud.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9352CD42210B8268005EB505 /* ParticleDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = C810B1E6CEE43B372124F091 /* ParticleDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9352CD43210B8268005EB505 /* ParticleEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = C810BAC24A15FB7B56D7B06E /* ParticleEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9352CD44210B8268005EB505 /* ParticleSession.h in Headers */ = {isa = PBXBuildFile; fileRef = C810B8244DD5E3F514CE68DA /* ParticleSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9352CD4D210B8296005EB505 /* InfoPods.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9352CD4C210B8296005EB505 /* InfoPods.plist */; };
 		9358DA3820FE2241003FF8DC /* KeychainHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9358DA3720FE2241003FF8DC /* KeychainHelperTests.m */; };
 		9396291C20FFE0C2009F5560 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9396291B20FFE0C2009F5560 /* AppDelegate.m */; };
 		9396292220FFE0C2009F5560 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9396292020FFE0C2009F5560 /* Main.storyboard */; };
 		9396292420FFE0C3009F5560 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9396292320FFE0C3009F5560 /* Assets.xcassets */; };
 		9396292720FFE0C3009F5560 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9396292520FFE0C3009F5560 /* LaunchScreen.storyboard */; };
 		9396292A20FFE0C3009F5560 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9396292920FFE0C3009F5560 /* main.m */; };
-		93E849B220F7956E00CBEFEC /* ParticleSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E8408C1E95D49C0038ED42 /* ParticleSDK.framework */; };
+		93B668A12109F9FA00DFF793 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B6689C2109F90700DFF793 /* AFNetworking.framework */; };
+		93E849B220F7956E00CBEFEC /* ParticleSDKCarthage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E8408C1E95D49C0038ED42 /* ParticleSDKCarthage.framework */; };
 		93E849B920F795A000CBEFEC /* ErrorHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E849B820F795A000CBEFEC /* ErrorHelperTests.m */; };
-		93F9743920EA7E5600015D9D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93F9743720EA7E5600015D9D /* Info.plist */; };
 		93F9743A20EA7E5600015D9D /* ParticleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F9743820EA7E5600015D9D /* ParticleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		93F9744320EA7F1A00015D9D /* ParticleDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9743B20EA7F1900015D9D /* ParticleDevice.m */; };
-		93F9744420EA7F1A00015D9D /* ParticleEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F9743C20EA7F1900015D9D /* ParticleEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		93F9744520EA7F1A00015D9D /* ParticleSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F9743D20EA7F1A00015D9D /* ParticleSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		93F9744620EA7F1A00015D9D /* ParticleSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9743E20EA7F1A00015D9D /* ParticleSession.m */; };
-		93F9744720EA7F1A00015D9D /* ParticleCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F9743F20EA7F1A00015D9D /* ParticleCloud.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		93F9744820EA7F1A00015D9D /* ParticleEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9744020EA7F1A00015D9D /* ParticleEvent.m */; };
-		93F9744920EA7F1A00015D9D /* ParticleCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9744120EA7F1A00015D9D /* ParticleCloud.m */; };
-		93F9744A20EA7F1A00015D9D /* ParticleDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F9744220EA7F1A00015D9D /* ParticleDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		93F9744F20EA7F2200015D9D /* EventSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F9744B20EA7F2200015D9D /* EventSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		93F9745020EA7F2200015D9D /* KeychainHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F9744C20EA7F2200015D9D /* KeychainHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		93F9745120EA7F2200015D9D /* KeychainHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9744D20EA7F2200015D9D /* KeychainHelper.m */; };
 		93F9745220EA7F2200015D9D /* EventSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9744E20EA7F2200015D9D /* EventSource.m */; };
-		C810BB57DFF967F5D4792D98 /* ErrorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = C810B035D36C9EB63EF1A92F /* ErrorHelper.h */; };
+		C810B6815A798AA7769D9716 /* ParticleCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = C810BC3A57532BFB19C44AC1 /* ParticleCloud.m */; };
+		C810B732816CF96CA2365DA4 /* ParticleSession.h in Headers */ = {isa = PBXBuildFile; fileRef = C810B8244DD5E3F514CE68DA /* ParticleSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C810B755F3B2F400F7C4CDB0 /* ParticleDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = C810BDEC8CD2D616568D2306 /* ParticleDevice.m */; };
+		C810B884A7EE45AF497A3C00 /* ParticleDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = C810B1E6CEE43B372124F091 /* ParticleDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C810BB57DFF967F5D4792D98 /* ErrorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = C810B035D36C9EB63EF1A92F /* ErrorHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C810BCE9A6FFA4EB6FC769C5 /* ParticleSession.m in Sources */ = {isa = PBXBuildFile; fileRef = C810BD319450F917EFD70A65 /* ParticleSession.m */; };
+		C810BE8DC74CA1154F54B8D4 /* ParticleEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = C810B0CE042954AC880666F8 /* ParticleEvent.m */; };
 		C810BEADD24D2C68A05AA308 /* ErrorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C810B0BB68419CEE10A16B09 /* ErrorHelper.m */; };
+		C810BF3A3298043E6EBB5D48 /* ParticleEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = C810BAC24A15FB7B56D7B06E /* ParticleEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C810BF40CBB4A4A0402710EB /* ParticleCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = C810B01CA34C4A6C2000B1A2 /* ParticleCloud.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,9 +67,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		50E8408C1E95D49C0038ED42 /* ParticleSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParticleSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5A0988E32181EC13FC42200C /* libPods-ParticleSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ParticleSDK.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8D61AB5D6CECFCCF8321F397 /* Pods-ParticleSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParticleSDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParticleSDK/Pods-ParticleSDK.debug.xcconfig"; sourceTree = "<group>"; };
+		50E8408C1E95D49C0038ED42 /* ParticleSDKCarthage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParticleSDKCarthage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9352CD4A210B8268005EB505 /* ParticleSDKPods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParticleSDKPods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9352CD4B210B8268005EB505 /* ParticleSDKCarthage copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ParticleSDKCarthage copy-Info.plist"; path = "/Volumes/Data/Projects/Particle/SDK/ParticleSDKCarthage copy-Info.plist"; sourceTree = "<absolute>"; };
+		9352CD4C210B8296005EB505 /* InfoPods.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = InfoPods.plist; path = Framework/InfoPods.plist; sourceTree = "<group>"; };
 		9358DA3720FE2241003FF8DC /* KeychainHelperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainHelperTests.m; sourceTree = "<group>"; };
 		9396291820FFE0C2009F5560 /* ParticleSDKTestsHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParticleSDKTestsHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9396291A20FFE0C2009F5560 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -64,26 +80,26 @@
 		9396292620FFE0C3009F5560 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9396292820FFE0C3009F5560 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9396292920FFE0C3009F5560 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		93B6689C2109F90700DFF793 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = Carthage/Build/iOS/AFNetworking.framework; sourceTree = "<group>"; };
 		93E849AD20F7956E00CBEFEC /* ParticleSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParticleSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		93E849B120F7956E00CBEFEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93E849B820F795A000CBEFEC /* ErrorHelperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ErrorHelperTests.m; sourceTree = "<group>"; };
-		93F9743720EA7E5600015D9D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Framework/Info.plist; sourceTree = SOURCE_ROOT; };
+		93F9743720EA7E5600015D9D /* InfoCarthage.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = InfoCarthage.plist; path = Framework/InfoCarthage.plist; sourceTree = SOURCE_ROOT; };
 		93F9743820EA7E5600015D9D /* ParticleSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleSDK.h; path = Framework/ParticleSDK.h; sourceTree = SOURCE_ROOT; };
-		93F9743B20EA7F1900015D9D /* ParticleDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParticleDevice.m; path = SDK/ParticleDevice.m; sourceTree = "<group>"; };
-		93F9743C20EA7F1900015D9D /* ParticleEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleEvent.h; path = SDK/ParticleEvent.h; sourceTree = "<group>"; };
-		93F9743D20EA7F1A00015D9D /* ParticleSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleSession.h; path = SDK/ParticleSession.h; sourceTree = "<group>"; };
-		93F9743E20EA7F1A00015D9D /* ParticleSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParticleSession.m; path = SDK/ParticleSession.m; sourceTree = "<group>"; };
-		93F9743F20EA7F1A00015D9D /* ParticleCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleCloud.h; path = SDK/ParticleCloud.h; sourceTree = "<group>"; };
-		93F9744020EA7F1A00015D9D /* ParticleEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParticleEvent.m; path = SDK/ParticleEvent.m; sourceTree = "<group>"; };
-		93F9744120EA7F1A00015D9D /* ParticleCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParticleCloud.m; path = SDK/ParticleCloud.m; sourceTree = "<group>"; };
-		93F9744220EA7F1A00015D9D /* ParticleDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleDevice.h; path = SDK/ParticleDevice.h; sourceTree = "<group>"; };
 		93F9744B20EA7F2200015D9D /* EventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSource.h; path = Helpers/EventSource.h; sourceTree = "<group>"; };
 		93F9744C20EA7F2200015D9D /* KeychainHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KeychainHelper.h; path = Helpers/KeychainHelper.h; sourceTree = "<group>"; };
 		93F9744D20EA7F2200015D9D /* KeychainHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeychainHelper.m; path = Helpers/KeychainHelper.m; sourceTree = "<group>"; };
 		93F9744E20EA7F2200015D9D /* EventSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventSource.m; path = Helpers/EventSource.m; sourceTree = "<group>"; };
+		C810B01CA34C4A6C2000B1A2 /* ParticleCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleCloud.h; path = SDK/ParticleCloud.h; sourceTree = "<group>"; };
 		C810B035D36C9EB63EF1A92F /* ErrorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ErrorHelper.h; path = Helpers/ErrorHelper.h; sourceTree = "<group>"; };
 		C810B0BB68419CEE10A16B09 /* ErrorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ErrorHelper.m; path = Helpers/ErrorHelper.m; sourceTree = "<group>"; };
-		FDA16C50EDADE7760AEBEAA9 /* Pods-ParticleSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParticleSDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParticleSDK/Pods-ParticleSDK.release.xcconfig"; sourceTree = "<group>"; };
+		C810B0CE042954AC880666F8 /* ParticleEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParticleEvent.m; path = SDK/ParticleEvent.m; sourceTree = "<group>"; };
+		C810B1E6CEE43B372124F091 /* ParticleDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleDevice.h; path = SDK/ParticleDevice.h; sourceTree = "<group>"; };
+		C810B8244DD5E3F514CE68DA /* ParticleSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleSession.h; path = SDK/ParticleSession.h; sourceTree = "<group>"; };
+		C810BAC24A15FB7B56D7B06E /* ParticleEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleEvent.h; path = SDK/ParticleEvent.h; sourceTree = "<group>"; };
+		C810BC3A57532BFB19C44AC1 /* ParticleCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParticleCloud.m; path = SDK/ParticleCloud.m; sourceTree = "<group>"; };
+		C810BD319450F917EFD70A65 /* ParticleSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParticleSession.m; path = SDK/ParticleSession.m; sourceTree = "<group>"; };
+		C810BDEC8CD2D616568D2306 /* ParticleDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParticleDevice.m; path = SDK/ParticleDevice.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +107,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3EDD8D404E1CD47455A7642B /* libPods-ParticleSDK.a in Frameworks */,
+				93B668A12109F9FA00DFF793 /* AFNetworking.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9352CD3A210B8268005EB505 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,22 +129,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93E849B220F7956E00CBEFEC /* ParticleSDK.framework in Frameworks */,
+				93E849B220F7956E00CBEFEC /* ParticleSDKCarthage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1FD34847D784454921AADC06 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				8D61AB5D6CECFCCF8321F397 /* Pods-ParticleSDK.debug.xcconfig */,
-				FDA16C50EDADE7760AEBEAA9 /* Pods-ParticleSDK.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		50E840821E95D49C0038ED42 = {
 			isa = PBXGroup;
 			children = (
@@ -129,17 +143,18 @@
 				50E8408E1E95D49C0038ED42 /* ParticleSDK */,
 				93E849AE20F7956E00CBEFEC /* ParticleSDKTests */,
 				50E8408D1E95D49C0038ED42 /* Products */,
-				1FD34847D784454921AADC06 /* Pods */,
 				B5482CF76B50CCE25B3C70FC /* Frameworks */,
+				9352CD4B210B8268005EB505 /* ParticleSDKCarthage copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
 		50E8408D1E95D49C0038ED42 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				50E8408C1E95D49C0038ED42 /* ParticleSDK.framework */,
+				50E8408C1E95D49C0038ED42 /* ParticleSDKCarthage.framework */,
 				93E849AD20F7956E00CBEFEC /* ParticleSDKTests.xctest */,
 				9396291820FFE0C2009F5560 /* ParticleSDKTestsHost.app */,
+				9352CD4A210B8268005EB505 /* ParticleSDKPods.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -147,8 +162,8 @@
 		50E8408E1E95D49C0038ED42 /* ParticleSDK */ = {
 			isa = PBXGroup;
 			children = (
-				50E8409A1E95D6F20038ED42 /* SDK */,
 				50E840991E95D6E90038ED42 /* Helpers */,
+				C810B476D80296FC080C6A55 /* SDK */,
 			);
 			path = ParticleSDK;
 			sourceTree = "<group>";
@@ -164,21 +179,6 @@
 				C810B0BB68419CEE10A16B09 /* ErrorHelper.m */,
 			);
 			name = Helpers;
-			sourceTree = "<group>";
-		};
-		50E8409A1E95D6F20038ED42 /* SDK */ = {
-			isa = PBXGroup;
-			children = (
-				93F9743F20EA7F1A00015D9D /* ParticleCloud.h */,
-				93F9744120EA7F1A00015D9D /* ParticleCloud.m */,
-				93F9744220EA7F1A00015D9D /* ParticleDevice.h */,
-				93F9743B20EA7F1900015D9D /* ParticleDevice.m */,
-				93F9743C20EA7F1900015D9D /* ParticleEvent.h */,
-				93F9744020EA7F1A00015D9D /* ParticleEvent.m */,
-				93F9743D20EA7F1A00015D9D /* ParticleSession.h */,
-				93F9743E20EA7F1A00015D9D /* ParticleSession.m */,
-			);
-			name = SDK;
 			sourceTree = "<group>";
 		};
 		9396291920FFE0C2009F5560 /* ParticleSDKTestsHost */ = {
@@ -209,7 +209,8 @@
 		93F9743620EA7E4300015D9D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				93F9743720EA7E5600015D9D /* Info.plist */,
+				9352CD4C210B8296005EB505 /* InfoPods.plist */,
+				93F9743720EA7E5600015D9D /* InfoCarthage.plist */,
 				93F9743820EA7E5600015D9D /* ParticleSDK.h */,
 			);
 			name = "Supporting Files";
@@ -218,9 +219,24 @@
 		B5482CF76B50CCE25B3C70FC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5A0988E32181EC13FC42200C /* libPods-ParticleSDK.a */,
+				93B6689C2109F90700DFF793 /* AFNetworking.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C810B476D80296FC080C6A55 /* SDK */ = {
+			isa = PBXGroup;
+			children = (
+				C810B01CA34C4A6C2000B1A2 /* ParticleCloud.h */,
+				C810BC3A57532BFB19C44AC1 /* ParticleCloud.m */,
+				C810B1E6CEE43B372124F091 /* ParticleDevice.h */,
+				C810BDEC8CD2D616568D2306 /* ParticleDevice.m */,
+				C810BAC24A15FB7B56D7B06E /* ParticleEvent.h */,
+				C810B0CE042954AC880666F8 /* ParticleEvent.m */,
+				C810B8244DD5E3F514CE68DA /* ParticleSession.h */,
+				C810BD319450F917EFD70A65 /* ParticleSession.m */,
+			);
+			name = SDK;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -230,37 +246,70 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C810BB57DFF967F5D4792D98 /* ErrorHelper.h in Headers */,
 				93F9743A20EA7E5600015D9D /* ParticleSDK.h in Headers */,
-				93F9744A20EA7F1A00015D9D /* ParticleDevice.h in Headers */,
-				93F9744720EA7F1A00015D9D /* ParticleCloud.h in Headers */,
 				93F9744F20EA7F2200015D9D /* EventSource.h in Headers */,
 				93F9745020EA7F2200015D9D /* KeychainHelper.h in Headers */,
-				93F9744520EA7F1A00015D9D /* ParticleSession.h in Headers */,
-				93F9744420EA7F1A00015D9D /* ParticleEvent.h in Headers */,
-				C810BB57DFF967F5D4792D98 /* ErrorHelper.h in Headers */,
+				C810BF40CBB4A4A0402710EB /* ParticleCloud.h in Headers */,
+				C810B884A7EE45AF497A3C00 /* ParticleDevice.h in Headers */,
+				C810BF3A3298043E6EBB5D48 /* ParticleEvent.h in Headers */,
+				C810B732816CF96CA2365DA4 /* ParticleSession.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9352CD3C210B8268005EB505 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9352CD3D210B8268005EB505 /* ErrorHelper.h in Headers */,
+				9352CD3E210B8268005EB505 /* ParticleSDK.h in Headers */,
+				9352CD3F210B8268005EB505 /* EventSource.h in Headers */,
+				9352CD40210B8268005EB505 /* KeychainHelper.h in Headers */,
+				9352CD41210B8268005EB505 /* ParticleCloud.h in Headers */,
+				9352CD42210B8268005EB505 /* ParticleDevice.h in Headers */,
+				9352CD43210B8268005EB505 /* ParticleEvent.h in Headers */,
+				9352CD44210B8268005EB505 /* ParticleSession.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		50E8408B1E95D49C0038ED42 /* ParticleSDK */ = {
+		50E8408B1E95D49C0038ED42 /* ParticleSDKCarthage */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 50E840941E95D49C0038ED42 /* Build configuration list for PBXNativeTarget "ParticleSDK" */;
+			buildConfigurationList = 50E840941E95D49C0038ED42 /* Build configuration list for PBXNativeTarget "ParticleSDKCarthage" */;
 			buildPhases = (
-				A0B0D9AC06C1A1516831CD94 /* [CP] Check Pods Manifest.lock */,
 				50E840871E95D49C0038ED42 /* Sources */,
 				50E840881E95D49C0038ED42 /* Frameworks */,
 				50E840891E95D49C0038ED42 /* Headers */,
 				50E8408A1E95D49C0038ED42 /* Resources */,
+				93B668A02109F9DB00DFF793 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = ParticleSDK;
+			name = ParticleSDKCarthage;
 			productName = ParticleSDK;
-			productReference = 50E8408C1E95D49C0038ED42 /* ParticleSDK.framework */;
+			productReference = 50E8408C1E95D49C0038ED42 /* ParticleSDKCarthage.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		9352CD31210B8268005EB505 /* ParticleSDKPods */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9352CD47210B8268005EB505 /* Build configuration list for PBXNativeTarget "ParticleSDKPods" */;
+			buildPhases = (
+				9352CD32210B8268005EB505 /* Sources */,
+				9352CD3A210B8268005EB505 /* Frameworks */,
+				9352CD3C210B8268005EB505 /* Headers */,
+				9352CD45210B8268005EB505 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ParticleSDKPods;
+			productName = ParticleSDK;
+			productReference = 9352CD4A210B8268005EB505 /* ParticleSDKPods.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		9396291720FFE0C2009F5560 /* ParticleSDKTestsHost */ = {
@@ -313,6 +362,9 @@
 						DevelopmentTeam = TNJ67X9MQD;
 						ProvisioningStyle = Automatic;
 					};
+					9352CD31210B8268005EB505 = {
+						DevelopmentTeam = TNJ67X9MQD;
+					};
 					9396291720FFE0C2009F5560 = {
 						CreatedOnToolsVersion = 9.4.1;
 						DevelopmentTeam = TNJ67X9MQD;
@@ -326,7 +378,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 50E840861E95D49C0038ED42 /* Build configuration list for PBXProject "ParticleSDK" */;
+			buildConfigurationList = 50E840861E95D49C0038ED42 /* Build configuration list for PBXProject "ParticleSDKCarthage" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -339,9 +391,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				50E8408B1E95D49C0038ED42 /* ParticleSDK */,
+				50E8408B1E95D49C0038ED42 /* ParticleSDKCarthage */,
 				93E849AC20F7956E00CBEFEC /* ParticleSDKTests */,
 				9396291720FFE0C2009F5560 /* ParticleSDKTestsHost */,
+				9352CD31210B8268005EB505 /* ParticleSDKPods */,
 			);
 		};
 /* End PBXProject section */
@@ -351,7 +404,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93F9743920EA7E5600015D9D /* Info.plist in Resources */,
+				9352CD4D210B8296005EB505 /* InfoPods.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9352CD45210B8268005EB505 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,23 +435,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A0B0D9AC06C1A1516831CD94 /* [CP] Check Pods Manifest.lock */ = {
+		93B668A02109F9DB00DFF793 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
+				"$(SRCROOT)/Carthage/Build/iOS/AFNetworking.framework",
 			);
-			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ParticleSDK-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -400,13 +456,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93F9744620EA7F1A00015D9D /* ParticleSession.m in Sources */,
-				93F9744920EA7F1A00015D9D /* ParticleCloud.m in Sources */,
 				93F9745120EA7F2200015D9D /* KeychainHelper.m in Sources */,
-				93F9744320EA7F1A00015D9D /* ParticleDevice.m in Sources */,
-				93F9744820EA7F1A00015D9D /* ParticleEvent.m in Sources */,
 				93F9745220EA7F2200015D9D /* EventSource.m in Sources */,
 				C810BEADD24D2C68A05AA308 /* ErrorHelper.m in Sources */,
+				C810B6815A798AA7769D9716 /* ParticleCloud.m in Sources */,
+				C810B755F3B2F400F7C4CDB0 /* ParticleDevice.m in Sources */,
+				C810BE8DC74CA1154F54B8D4 /* ParticleEvent.m in Sources */,
+				C810BCE9A6FFA4EB6FC769C5 /* ParticleSession.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9352CD32210B8268005EB505 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9352CD33210B8268005EB505 /* KeychainHelper.m in Sources */,
+				9352CD34210B8268005EB505 /* EventSource.m in Sources */,
+				9352CD35210B8268005EB505 /* ErrorHelper.m in Sources */,
+				9352CD36210B8268005EB505 /* ParticleCloud.m in Sources */,
+				9352CD37210B8268005EB505 /* ParticleDevice.m in Sources */,
+				9352CD38210B8268005EB505 /* ParticleEvent.m in Sources */,
+				9352CD39210B8268005EB505 /* ParticleSession.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,7 +508,7 @@
 		};
 		93E849B420F7956E00CBEFEC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 50E8408B1E95D49C0038ED42 /* ParticleSDK */;
+			target = 50E8408B1E95D49C0038ED42 /* ParticleSDKCarthage */;
 			targetProxy = 93E849B320F7956E00CBEFEC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -563,7 +633,6 @@
 		};
 		50E840951E95D49C0038ED42 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8D61AB5D6CECFCCF8321F397 /* Pods-ParticleSDK.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_IDENTITY = "";
@@ -572,8 +641,16 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)";
-				INFOPLIST_FILE = "$(SRCROOT)/Framework/Info.plist";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"USE_FRAMEWORKS=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Framework/InfoCarthage.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.particle.ParticleSDK;
@@ -586,7 +663,6 @@
 		};
 		50E840961E95D49C0038ED42 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FDA16C50EDADE7760AEBEAA9 /* Pods-ParticleSDK.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_IDENTITY = "";
@@ -595,8 +671,68 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)";
-				INFOPLIST_FILE = "$(SRCROOT)/Framework/Info.plist";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = "USE_FRAMEWORKS=1";
+				INFOPLIST_FILE = "$(SRCROOT)/Framework/InfoCarthage.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.particle.ParticleSDK;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Release;
+		};
+		9352CD48210B8268005EB505 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = TNJ67X9MQD;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"USE_FRAMEWORKS=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Framework/InfoPods.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.particle.ParticleSDK;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Debug;
+		};
+		9352CD49210B8268005EB505 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = TNJ67X9MQD;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = "USE_FRAMEWORKS=1";
+				INFOPLIST_FILE = "$(SRCROOT)/Framework/InfoPods.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.particle.ParticleSDK;
@@ -625,6 +761,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TNJ67X9MQD;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "$(SRCROOT)/ParticleSDKTests/ParticleSDKTestsHost/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
@@ -653,6 +793,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TNJ67X9MQD;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "$(SRCROOT)/ParticleSDKTests/ParticleSDKTestsHost/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
@@ -722,7 +866,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		50E840861E95D49C0038ED42 /* Build configuration list for PBXProject "ParticleSDK" */ = {
+		50E840861E95D49C0038ED42 /* Build configuration list for PBXProject "ParticleSDKCarthage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				50E840921E95D49C0038ED42 /* Debug */,
@@ -731,11 +875,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		50E840941E95D49C0038ED42 /* Build configuration list for PBXNativeTarget "ParticleSDK" */ = {
+		50E840941E95D49C0038ED42 /* Build configuration list for PBXNativeTarget "ParticleSDKCarthage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				50E840951E95D49C0038ED42 /* Debug */,
 				50E840961E95D49C0038ED42 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9352CD47210B8268005EB505 /* Build configuration list for PBXNativeTarget "ParticleSDKPods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9352CD48210B8268005EB505 /* Debug */,
+				9352CD49210B8268005EB505 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

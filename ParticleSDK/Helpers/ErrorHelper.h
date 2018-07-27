@@ -5,6 +5,12 @@
 
 #import <Foundation/Foundation.h>
 
+#ifdef USE_FRAMEWORKS
+#import <AFNetworking/AFNetworking.h>
+#else
+#import "AFNetworking.h"
+#endif
+
 @interface ErrorHelper : NSObject
 
 /// Helper method used while creating standard Particle SDK error. Returning NSError will have ParticleSDKErrorResponseBodyKey,
@@ -13,7 +19,7 @@
 /// @param networkError error object returned by AFNetworking.
 /// @param task NSURLSessionDataTask that resulted in an error.
 /// @param message Custom error message that should be used to override default error message.
-+ (NSError *)getParticleError:(nullable NSError *)networkError task:(nullable NSURLSessionDataTask *_Nullable)task customMessage:(nullable NSString *)message;
++ (NSError *)getParticleError:(nullable NSError *)networkError task:(nullable NSURLSessionDataTask *)task customMessage:(nullable NSString *)message;
 
 
 /// Get the best possible error message from error response body.

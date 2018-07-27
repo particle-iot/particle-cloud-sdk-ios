@@ -8,9 +8,14 @@
 
 #import "ParticleDevice.h"
 #import "ParticleCloud.h"
-#import "AFHTTPSessionManager.h"
 #import "ErrorHelper.h"
 #import <objc/runtime.h>
+
+#ifdef USE_FRAMEWORKS
+#import <AFNetworking/AFNetworking.h>
+#else
+#import "AFNetworking.h"
+#endif
 
 #define MAX_SPARK_FUNCTION_ARG_LENGTH 63
 
@@ -250,7 +255,7 @@ NS_ASSUME_NONNULL_BEGIN
             completion(nil, particleError);
         }
 
-        NSLog(@"! getVariable Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
+        NSLog(@"! getVariable Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     return task;
@@ -311,7 +316,7 @@ NS_ASSUME_NONNULL_BEGIN
             completion(nil, particleError);
         }
 
-        NSLog(@"! callFunction Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
+        NSLog(@"! callFunction Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     return task;
@@ -340,7 +345,7 @@ NS_ASSUME_NONNULL_BEGIN
             completion(particleError);
         }
 
-        NSLog(@"! signal Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
+        NSLog(@"! signal Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     return task;
@@ -369,7 +374,7 @@ NS_ASSUME_NONNULL_BEGIN
                     completion(particleError);
                 }
 
-                NSLog(@"! unclaim Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
+                NSLog(@"! unclaim Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
             }
 
         }
@@ -382,7 +387,7 @@ NS_ASSUME_NONNULL_BEGIN
             completion(particleError);
         }
 
-        NSLog(@"! unclaim Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
+        NSLog(@"! unclaim Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     return task;
@@ -412,7 +417,7 @@ NS_ASSUME_NONNULL_BEGIN
             completion(particleError);
         }
 
-        NSLog(@"! rename Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
+        NSLog(@"! rename Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     return task;
@@ -495,7 +500,7 @@ NS_ASSUME_NONNULL_BEGIN
             completion(particleError);
         }
 
-        NSLog(@"! flashKnownApp Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
+        NSLog(@"! flashKnownApp Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
     
     return task;
@@ -519,7 +524,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     if (!reqError)
     {
-        NSURLSessionDataTask *task = [self.manager dataTaskWithRequest:request
+        __block NSURLSessionDataTask *task = [self.manager dataTaskWithRequest:request
                 uploadProgress: nil
                 downloadProgress: nil
                 completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error)
@@ -550,7 +555,7 @@ NS_ASSUME_NONNULL_BEGIN
                     completion(particleError);
                 }
 
-                NSLog(@"! flashFiles Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
+                NSLog(@"! flashFiles Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
             }
         }];
         
@@ -623,7 +628,7 @@ NS_ASSUME_NONNULL_BEGIN
                                           completion(-1, particleError);
                                       }
 
-                                      NSLog(@"! getCurrentDataUsage Failed %@ (%d): %@", task.originalRequest.URL, particleError.code, particleError.localizedDescription);
+                                      NSLog(@"! getCurrentDataUsage Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
                                   }];
     
     return task;

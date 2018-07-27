@@ -84,6 +84,27 @@ extern NSString *const kParticleAPIBaseURL;
                             completion:(nullable ParticleCompletionBlock)completion;
 
 
+/**
+ *  If user has two-step verification enabled (multi-factor auth), he might be prompted to enter a code from authenticator app. This method is used to accomplish that
+ *
+ *  @param user       User name, must be a valid email address
+ *  @param mfaToken - MFA token returned by loginWithUser cloud call
+ *  @param otpToken - One time password provided by the authenticator app
+ *  @param completion Completion block will be called when login finished, NSError object will be passed in case of an error, nil if success
+ */
+- (NSURLSessionDataTask *)loginWithUser:(NSString *)user mfaToken:(NSString *)mfaToken OTPToken:(NSString *)otpToken completion:(nullable ParticleCompletionBlock)completion;
+
+
+/**
+ *  If user has two-step auth enabled (multi-factor auth), he might be promted to enter a code from authenticator app. If user no longer has access to
+ *  his device and needs an emergency access to his account, he might use recovery codes generated during two-step verification setup.
+ *
+ *  @param user       User name, must be a valid email address
+ *  @param mfaToken - MFA token returned by loginWithUser cloud call
+ *  @param recoveryCode - one of the recovery codes received during two-step verification setup
+ *  @param completion Completion block will be called when login finished, NSError object will be passed in case of an error, nil if success
+ */
+- (NSURLSessionDataTask *)loginWithUser:(NSString *)user mfaToken:(NSString *)mfaToken recoveryCode:(NSString *)recoveryCode completion:(nullable ParticleCompletionBlock)completion;
 
 
 

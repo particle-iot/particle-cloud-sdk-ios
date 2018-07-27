@@ -145,7 +145,7 @@ static NSString *const ESEventEventKey = @"event";
     }
     else
     {
-        NSLog(@"Event stream connection status code = %i", httpResponse.statusCode);
+        NSLog(@"Event stream connection status code = %li", (long)httpResponse.statusCode);
     }
 }
 
