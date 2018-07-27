@@ -69,7 +69,6 @@
 /* Begin PBXFileReference section */
 		50E8408C1E95D49C0038ED42 /* ParticleSDKCarthage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParticleSDKCarthage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9352CD4A210B8268005EB505 /* ParticleSDKPods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParticleSDKPods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9352CD4B210B8268005EB505 /* ParticleSDKCarthage copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ParticleSDKCarthage copy-Info.plist"; path = "/Volumes/Data/Projects/Particle/SDK/ParticleSDKCarthage copy-Info.plist"; sourceTree = "<absolute>"; };
 		9352CD4C210B8296005EB505 /* InfoPods.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = InfoPods.plist; path = Framework/InfoPods.plist; sourceTree = "<group>"; };
 		9358DA3720FE2241003FF8DC /* KeychainHelperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainHelperTests.m; sourceTree = "<group>"; };
 		9396291820FFE0C2009F5560 /* ParticleSDKTestsHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParticleSDKTestsHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,7 +143,6 @@
 				93E849AE20F7956E00CBEFEC /* ParticleSDKTests */,
 				50E8408D1E95D49C0038ED42 /* Products */,
 				B5482CF76B50CCE25B3C70FC /* Frameworks */,
-				9352CD4B210B8268005EB505 /* ParticleSDKCarthage copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -378,7 +376,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 50E840861E95D49C0038ED42 /* Build configuration list for PBXProject "ParticleSDKCarthage" */;
+			buildConfigurationList = 50E840861E95D49C0038ED42 /* Build configuration list for PBXProject "ParticleSDK" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -704,7 +702,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
-					"USE_FRAMEWORKS=1",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Framework/InfoPods.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -731,7 +728,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				GCC_PREPROCESSOR_DEFINITIONS = "USE_FRAMEWORKS=1";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Framework/InfoPods.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -866,7 +863,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		50E840861E95D49C0038ED42 /* Build configuration list for PBXProject "ParticleSDKCarthage" */ = {
+		50E840861E95D49C0038ED42 /* Build configuration list for PBXProject "ParticleSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				50E840921E95D49C0038ED42 /* Debug */,
