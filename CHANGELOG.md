@@ -4,9 +4,19 @@ Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.8.0](https://github.com/spark/spark-sdk-ios/releases/tag/0.8.0) (2018-08-01)
+
+* Added support for two-step verification
+
+* Improved error reporting. `NSError.code` now contains HTTP status code. Added 2 values to userInfo dictionary. `ParticleSDKErrorResponseBodyKey` is the NSDictionary representation of JSON server response. `ParticleSDKErrorLocalizedStringKey` contains human readable error message.  `NSError.localizedDescription` is our best attempt to explain what happened in human readable language based on `ParticleSDKErrorLocalizedStringKey` and `NSError.code`.
+
+* New library folder structure
+
+* New example app
+
 ## [0.7.1](https://github.com/spark/spark-sdk-ios/releases/tag/0.7.1) (2018-06-24)
 
-* BugFix: Replaced outdated and complicated keychain code with simplified version. 
+* BugFix: Replaced outdated and complicated keychain code with simplified version.
 
 ## [0.7.0](https://github.com/spark/spark-sdk-ios/releases/tag/0.7.0) (2017-04-04)
 
@@ -24,7 +34,7 @@ Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 * Added: accountInfo field to createUser (add optional first/last name, company name and business account info to every user signup)
 
-* Bigfix: ParticleDevice.refresh() now does not nullify the delegate property 
+* Bigfix: ParticleDevice.refresh() now does not nullify the delegate property
 
 * Bigfix: Internal device maptable issue
 
@@ -42,11 +52,11 @@ Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.5.0](https://github.com/spark/spark-sdk-ios/releases/tag/0.5.0) (2016-07-21)
 
-* Added: ParticleDevice API function: getCurrentDataUsage for Electron devices 
+* Added: ParticleDevice API function: getCurrentDataUsage for Electron devices
 
 * Added: ParticleDevice API function: Signal device (make on board LED shout rainbows)
 
-* Added: ParticleDeviceDelegate protocol - allow SDK user to register for device system events (offline/online/flashing etc) 
+* Added: ParticleDeviceDelegate protocol - allow SDK user to register for device system events (offline/online/flashing etc)
 
 * Bugfix: Critical event subsystem bugfixes
 
@@ -70,7 +80,7 @@ Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 * Added support for injecting Session access tokens for two legged auth
 
-* SDK no longer saves user password in keychain 
+* SDK no longer saves user password in keychain
 
 * SDK will now try to auto refresh expired access token using the OAuth "refresh token"
 
