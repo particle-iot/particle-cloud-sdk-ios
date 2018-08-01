@@ -269,7 +269,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 - (NSURLSessionDataTask *)loginWithUser:(NSString *)user mfaToken:(NSString *)mfaToken OTPToken:(NSString *)otpToken completion:(nullable ParticleCompletionBlock)completion {
     // non default params
     NSDictionary *params = @{
-            @"grant_type": @"mfa-otp",
+            @"grant_type": @"urn:custom:mfa-otp",
             @"mfa_token": mfaToken,
             @"otp": otpToken,
     };
