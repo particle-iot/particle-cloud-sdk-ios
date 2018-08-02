@@ -37,11 +37,13 @@ timeline.xctimeline
 playground.xcworkspace
 
 # CocoaPods
-# Pods/
+Pods/
 
 # Carthage
 Carthage/Checkouts
 Carthage/Build
+Example/Carthage/Checkouts
+Example/Carthage/Build
 
 # fastlane
 fastlane/report.xml

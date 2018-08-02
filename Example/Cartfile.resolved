@@ -1,0 +1,2 @@
+github "AFNetworking/AFNetworking" "3.2.1"
+github "particle-iot/particle-sdk-ios" "205147520e53505b68e1feb00a820f4078091db7"
