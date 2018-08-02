@@ -3,8 +3,8 @@
 </p>
 
 # Particle iOS Cloud SDK
-[![Build Status](https://api.travis-ci.org/particle-iot/particle-sdk-ios.svg)](https://travis-ci.org/particle-iot/particle-sdk-ios) [![license](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/particle-iot/particle-sdk-ios/blob/master/LICENSE) [![version](https://img.shields.io/badge/cocoapods-0.8.0-green.svg)](https://github.com/particle-iot/particle-sdk-ios/blob/master/CHANGELOG.md)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+
+[![Platform](https://img.shields.io/badge/platform-iOS-10a4fa.svg)]() [![Build Status](https://api.travis-ci.org/particle-iot/particle-sdk-ios.svg)](https://travis-ci.org/particle-iot/particle-sdk-ios) [![license](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/particle-iot/particle-sdk-ios/blob/master/LICENSE) [![version](https://img.shields.io/badge/cocoapods-0.8.0-green.svg)](https://github.com/particle-iot/particle-sdk-ios/blob/master/CHANGELOG.md) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 ### Introduction
 
