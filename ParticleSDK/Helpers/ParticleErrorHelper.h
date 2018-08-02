@@ -5,13 +5,6 @@
 
 #import <Foundation/Foundation.h>
 
-#ifdef USE_FRAMEWORKS
-#import <AFNetworking/AFNetworking.h>
-#else
-#import "AFNetworking.h"
-#endif
-
-
 //Serialized response JSON
 FOUNDATION_EXPORT NSString * const ParticleSDKErrorResponseBodyKey;
 FOUNDATION_EXPORT NSString * const ParticleSDKErrorLocalizedStringKey;
