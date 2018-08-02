@@ -11,6 +11,11 @@
 #import "AFNetworking.h"
 #endif
 
+
+//Serialized response JSON
+FOUNDATION_EXPORT NSString * const ParticleSDKErrorResponseBodyKey;
+FOUNDATION_EXPORT NSString * const ParticleSDKErrorLocalizedStringKey;
+
 @interface ErrorHelper : NSObject
 
 /// Helper method used while creating standard Particle SDK error. Returning NSError will have ParticleSDKErrorResponseBodyKey,

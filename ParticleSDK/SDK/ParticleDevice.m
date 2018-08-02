@@ -404,7 +404,7 @@ NS_ASSUME_NONNULL_BEGIN
     [self setAuthHeaderWithAccessToken];
     
     NSURLSessionDataTask *task = [self.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        _name = newName;
+        self.name = newName;
         if (completion)
         {
             completion(nil);

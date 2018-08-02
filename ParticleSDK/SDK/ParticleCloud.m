@@ -26,11 +26,6 @@ NSString *const kEventListenersDictEventSourceKey = @"eventSource";
 NSString *const kEventListenersDictHandlerKey = @"eventHandler";
 NSString *const kEventListenersDictIDKey = @"id";
 
-
-NSString * const ParticleSDKErrorResponseBodyKey = @"io.particle.error.response.body";
-NSString * const ParticleSDKErrorLocalizedStringKey = @"io.particle.error.localizedstring";
-
-
 static NSString *const kDefaultoAuthClientId = @"particle";
 static NSString *const kDefaultoAuthClientSecret = @"particle";
 

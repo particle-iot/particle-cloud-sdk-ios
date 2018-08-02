@@ -24,11 +24,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-
-//Serialized response JSON
-FOUNDATION_EXPORT NSString * const ParticleSDKErrorResponseBodyKey;
-FOUNDATION_EXPORT NSString * const ParticleSDKErrorLocalizedStringKey;
-
 extern NSString *const kParticleAPIBaseURL;
 
 @interface ParticleCloud : NSObject

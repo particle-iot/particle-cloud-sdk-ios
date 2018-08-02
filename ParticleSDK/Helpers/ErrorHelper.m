@@ -4,8 +4,9 @@
 //
 
 #import "ErrorHelper.h"
-#import "ParticleCloud.h"
 
+NSString * const ParticleSDKErrorResponseBodyKey = @"io.particle.error.response.body";
+NSString * const ParticleSDKErrorLocalizedStringKey = @"io.particle.error.localizedstring";
 
 @implementation ErrorHelper
 

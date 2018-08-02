@@ -406,10 +406,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				93944D6C210BAF6F00C2DC16 /* ParticleSDKPods */,
+				9352CD31210B8268005EB505 /* ParticleSDKCarthage */,
 				93E849AC20F7956E00CBEFEC /* ParticleSDKTests */,
 				9396291720FFE0C2009F5560 /* ParticleSDKTestsHost */,
-				9352CD31210B8268005EB505 /* ParticleSDKCarthage */,
-				93944D6C210BAF6F00C2DC16 /* ParticleSDKPods */,
 			);
 		};
 /* End PBXProject section */
