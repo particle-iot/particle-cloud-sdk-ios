@@ -3,12 +3,12 @@
 // Copyright (c) 2018 Ido Kleinman. All rights reserved.
 //
 
-#import "ErrorHelper.h"
+#import "ParticleErrorHelper.h"
 
 NSString * const ParticleSDKErrorResponseBodyKey = @"io.particle.error.response.body";
 NSString * const ParticleSDKErrorLocalizedStringKey = @"io.particle.error.localizedstring";
 
-@implementation ErrorHelper
+@implementation ParticleErrorHelper
 
 + (NSError *)getParticleError:(NSError *)networkError task:(NSURLSessionDataTask *_Nullable)task customMessage:(NSString *)message {
 
@@ -25,7 +25,7 @@ NSString * const ParticleSDKErrorLocalizedStringKey = @"io.particle.error.locali
         if (errorData) {
             NSDictionary *serializedFailedBody = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
             [errorDetail setValue:serializedFailedBody forKey:ParticleSDKErrorResponseBodyKey];
-            [errorDetail setValue:[ErrorHelper getErrorMessage:serializedFailedBody] forKey:ParticleSDKErrorLocalizedStringKey];
+            [errorDetail setValue:[ParticleErrorHelper getErrorMessage:serializedFailedBody] forKey:ParticleSDKErrorLocalizedStringKey];
         }
     }
 

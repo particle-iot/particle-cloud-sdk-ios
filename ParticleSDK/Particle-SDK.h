@@ -24,6 +24,7 @@
 
 #import "ParticleCloud.h"
 #import "ParticleDevice.h"
+#import "ParticleErrorHelper.h"
 
 #endif
 

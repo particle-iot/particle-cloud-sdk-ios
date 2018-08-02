@@ -17,5 +17,6 @@ FOUNDATION_EXPORT const unsigned char ParticleSDKVersionString[];
 #import <ParticleSDK/ParticleCloud.h>
 #import <ParticleSDK/ParticleDevice.h>
 #import <ParticleSDK/ParticleEvent.h>
+#import <ParticleSDK/ParticleErrorHelper.h>
 
 

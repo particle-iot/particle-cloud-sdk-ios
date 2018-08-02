@@ -9,7 +9,7 @@
 #import "ParticleCloud.h"
 #import "ParticleSession.h"
 #import "EventSource.h"
-#import "ErrorHelper.h"
+#import "ParticleErrorHelper.h"
 
 #ifdef USE_FRAMEWORKS
 #import <AFNetworking/AFNetworking.h>
@@ -205,7 +205,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             self.session.delegate = self;
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
         NSLog(@"! refreshToken Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
     }];
@@ -245,7 +245,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
         if (completion)
         {
@@ -287,7 +287,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
         if (completion)
         {
@@ -337,7 +337,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                               else
                                                   errorString = @"Error signing up";
 
-                                              NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:errorString];
+                                              NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:errorString];
 
                                               completion(particleError);
 
@@ -346,7 +346,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                       }
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
                                   {
-                                      NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
                                       if (completion) {
                                           completion(particleError);
@@ -380,7 +380,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     {
         if (completion)
         {
-            NSError *particleError = [ErrorHelper getParticleError:nil task:nil customMessage:@"productId value must be set to a non-zero value"];
+            NSError *particleError = [ParticleErrorHelper getParticleError:nil task:nil customMessage:@"productId value must be set to a non-zero value"];
 
             completion(particleError);
         }
@@ -391,7 +391,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     {
         if (completion)
         {
-            NSError *particleError = [ErrorHelper getParticleError:nil task:nil customMessage:@"Client OAuth credentials must be set to create a new customer"];
+            NSError *particleError = [ParticleErrorHelper getParticleError:nil task:nil customMessage:@"Client OAuth credentials must be set to create a new customer"];
 
             completion(particleError);
         }
@@ -432,7 +432,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           }
                                           else
                                           {
-                                              NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:[responseDict[@"error"] stringValue]];
+                                              NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:[responseDict[@"error"] stringValue]];
 
                                               completion(particleError);
 
@@ -441,7 +441,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                       }
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
                                   {
-                                      NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
                                       if (completion) {
                                           completion(particleError);
@@ -489,7 +489,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                 completion(nil);
             } else
             {
-                NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:@"Could not claim device"];
+                NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:@"Could not claim device"];
 
                 if (completion) {
                     completion(particleError);
@@ -500,7 +500,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
         if (completion) {
             completion(particleError);
@@ -544,7 +544,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
          }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
-        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
         if (completion)
         {
@@ -646,7 +646,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
          }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
-        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
         if (completion)
         {
@@ -688,7 +688,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             }
             else
             {
-                NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:@"Could not generate a claim code"];
+                NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:@"Could not generate a claim code"];
 
                 completion(nil, nil, particleError);
 
@@ -698,7 +698,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
-        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
         if (completion)
         {
@@ -751,7 +751,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           }
                                           else
                                           {
-                                              NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:@"Could not generate a claim code"];
+                                              NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:@"Could not generate a claim code"];
 
                                               completion(nil, nil, particleError);
 
@@ -761,7 +761,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                       
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
                                   {
-                                      NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
                                       if (completion)
                                       {
@@ -793,7 +793,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                       }
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
                                   {
-                                      NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
                                       if (completion)
                                       {
@@ -828,7 +828,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
         if (completion)
         {
@@ -866,7 +866,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 {
     if (!self.accessToken)
     {
-        NSError *particleError = [ErrorHelper getParticleError:nil task:nil customMessage:@"No active access token"];
+        NSError *particleError = [ParticleErrorHelper getParticleError:nil task:nil customMessage:@"No active access token"];
 
         eventHandler(nil, particleError);
         return nil;
@@ -1032,7 +1032,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             NSDictionary *responseDict = responseObject;
             if (![responseDict[@"ok"] boolValue])
             {
-                NSError *particleError = [ErrorHelper getParticleError:nil task:task customMessage:@"Server reported error publishing event"];
+                NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:@"Server reported error publishing event"];
 
                 completion(particleError);
 
@@ -1045,7 +1045,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
-        NSError *particleError = [ErrorHelper getParticleError:error task:task customMessage:nil];
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
         if (completion)
         {

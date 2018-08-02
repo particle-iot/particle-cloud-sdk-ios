@@ -16,7 +16,7 @@
 FOUNDATION_EXPORT NSString * const ParticleSDKErrorResponseBodyKey;
 FOUNDATION_EXPORT NSString * const ParticleSDKErrorLocalizedStringKey;
 
-@interface ErrorHelper : NSObject
+@interface ParticleErrorHelper : NSObject
 
 /// Helper method used while creating standard Particle SDK error. Returning NSError will have ParticleSDKErrorResponseBodyKey,
 /// ParticleSDKErrorLocalizedStringKey and localizedDescription set.

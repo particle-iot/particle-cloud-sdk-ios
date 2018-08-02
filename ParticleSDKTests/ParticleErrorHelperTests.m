@@ -1,5 +1,5 @@
 //
-//  ErrorHelperTests.m
+//  ParticleErrorHelperTests.m
 //  ParticleSDKTests
 //
 //  Created by Raimundas Sakalauskas on 12/07/2018.
@@ -7,65 +7,65 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "ErrorHelper.h"
+#import "ParticleErrorHelper.h"
 
-@interface ErrorHelperTests : XCTestCase
+@interface ParticleErrorHelperTests : XCTestCase
 
 @end
 
-@implementation ErrorHelperTests
+@implementation ParticleErrorHelperTests
 
 - (void)testErrorMessage {
     NSString *message;
 
     //error_description should be prioritized against error
     //{ error: 'error1', error_description: 'error2' }
-    message = [ErrorHelper getErrorMessage:[self getJSONDictionary:
+    message = [ParticleErrorHelper getErrorMessage:[self getJSONDictionary:
             @"{ \"error\" : \"error1\", \"error_description\": \"error2\" }"]];
     XCTAssertTrue([message isEqualToString:@"error2"]);
 
     //{ error: 'error1' }
-    message = [ErrorHelper getErrorMessage:[self getJSONDictionary:
+    message = [ParticleErrorHelper getErrorMessage:[self getJSONDictionary:
                                             @"{ \"error\" : \"error1\" }"]];
     XCTAssertTrue([message isEqualToString:@"error1"]);
 
 
     //{ err: 'error1' }
-    message = [ErrorHelper getErrorMessage:[self getJSONDictionary:
+    message = [ParticleErrorHelper getErrorMessage:[self getJSONDictionary:
                                             @"{ \"err\" : \"error1\" }"]];
     XCTAssertTrue([message isEqualToString:@"error1"]);
     
     
     //{ info: 'error1' }
-    message = [ErrorHelper getErrorMessage:[self getJSONDictionary:
+    message = [ParticleErrorHelper getErrorMessage:[self getJSONDictionary:
                                             @"{ \"info\" : \"error1\"  }"]];
     XCTAssertTrue([message isEqualToString:@"error1"]);
     
     
     
     //{ errors: ['error1', 'error2'] }
-    message = [ErrorHelper getErrorMessage:[self getJSONDictionary:
+    message = [ParticleErrorHelper getErrorMessage:[self getJSONDictionary:
                                             @"{ \"errors\" : [ \"error1\", \"error2\" ] }"]];
     XCTAssertTrue([message isEqualToString:@"error1\r\nerror2"]);
     
     
 
     //{ errors: [ { error: 'error1' }, { error: 'error2' } ] }
-    message = [ErrorHelper getErrorMessage:[self getJSONDictionary:
+    message = [ParticleErrorHelper getErrorMessage:[self getJSONDictionary:
                                             @"{ \"errors\" : [ {\"error\" : \"error1\"}, {\"error\" : \"error2\"} ] }"]];
     XCTAssertTrue([message isEqualToString:@"error1\r\nerror2"]);
 
 
     
     //{ errors: [ { error: { status: 'error1' } }, { error: { status: 'error2' } } ] }
-    message = [ErrorHelper getErrorMessage:[self getJSONDictionary:
+    message = [ParticleErrorHelper getErrorMessage:[self getJSONDictionary:
                                             @"{ \"errors\" : [ {\"error\" : { \"status\" : \"error1\"} }, {\"error\" : { \"status\" : \"error2\"} } ] }"]];
     XCTAssertTrue([message isEqualToString:@"error1\r\nerror2"]);
     
     
     
     // { }
-    message = [ErrorHelper getErrorMessage:[self getJSONDictionary:@"{ }"]];
+    message = [ParticleErrorHelper getErrorMessage:[self getJSONDictionary:@"{ }"]];
     XCTAssertTrue([message isEqualToString:@"Unknown error occurred."]);
 }
 
