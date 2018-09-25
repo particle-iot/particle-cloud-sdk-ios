@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5069CB2E215993C1000B842A /* ParticleNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 5069CB2C215993C1000B842A /* ParticleNetwork.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5069CB2F215993C1000B842A /* ParticleNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 5069CB2D215993C1000B842A /* ParticleNetwork.m */; };
+		5069CB30215993D5000B842A /* ParticleNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 5069CB2C215993C1000B842A /* ParticleNetwork.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9333157D210BA6DC00BEFAD9 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B6689C2109F90700DFF793 /* AFNetworking.framework */; };
 		9352CD33210B8268005EB505 /* KeychainHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9744D20EA7F2200015D9D /* KeychainHelper.m */; };
 		9352CD34210B8268005EB505 /* EventSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9744E20EA7F2200015D9D /* EventSource.m */; };
@@ -64,6 +67,8 @@
 
 /* Begin PBXFileReference section */
 		5000B3AFF21006858F36F8CC /* Pods-ParticleSDKPods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParticleSDKPods.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParticleSDKPods/Pods-ParticleSDKPods.release.xcconfig"; sourceTree = "<group>"; };
+		5069CB2C215993C1000B842A /* ParticleNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ParticleNetwork.h; path = SDK/ParticleNetwork.h; sourceTree = "<group>"; };
+		5069CB2D215993C1000B842A /* ParticleNetwork.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ParticleNetwork.m; path = SDK/ParticleNetwork.m; sourceTree = "<group>"; };
 		508E04E37D1E8660DB8B1E0E /* Pods-ParticleSDKPods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParticleSDKPods.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParticleSDKPods/Pods-ParticleSDKPods.debug.xcconfig"; sourceTree = "<group>"; };
 		93331581210BA9C800BEFAD9 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		9352CD4A210B8268005EB505 /* ParticleSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParticleSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -243,6 +248,8 @@
 		C810B476D80296FC080C6A55 /* SDK */ = {
 			isa = PBXGroup;
 			children = (
+				5069CB2C215993C1000B842A /* ParticleNetwork.h */,
+				5069CB2D215993C1000B842A /* ParticleNetwork.m */,
 				C810B01CA34C4A6C2000B1A2 /* ParticleCloud.h */,
 				C810BC3A57532BFB19C44AC1 /* ParticleCloud.m */,
 				C810B1E6CEE43B372124F091 /* ParticleDevice.h */,
@@ -266,6 +273,7 @@
 				9352CD3E210B8268005EB505 /* ParticleSDK.h in Headers */,
 				9352CD3F210B8268005EB505 /* EventSource.h in Headers */,
 				9352CD40210B8268005EB505 /* KeychainHelper.h in Headers */,
+				5069CB30215993D5000B842A /* ParticleNetwork.h in Headers */,
 				9352CD41210B8268005EB505 /* ParticleCloud.h in Headers */,
 				9352CD42210B8268005EB505 /* ParticleDevice.h in Headers */,
 				9352CD43210B8268005EB505 /* ParticleEvent.h in Headers */,
@@ -281,6 +289,7 @@
 				93944D79210BAF6F00C2DC16 /* ParticleSDK.h in Headers */,
 				93944D7A210BAF6F00C2DC16 /* EventSource.h in Headers */,
 				93944D7B210BAF6F00C2DC16 /* KeychainHelper.h in Headers */,
+				5069CB2E215993C1000B842A /* ParticleNetwork.h in Headers */,
 				93944D7C210BAF6F00C2DC16 /* ParticleCloud.h in Headers */,
 				93944D7D210BAF6F00C2DC16 /* ParticleDevice.h in Headers */,
 				93944D7E210BAF6F00C2DC16 /* ParticleEvent.h in Headers */,
@@ -535,6 +544,7 @@
 			files = (
 				93944D6E210BAF6F00C2DC16 /* KeychainHelper.m in Sources */,
 				93944D6F210BAF6F00C2DC16 /* EventSource.m in Sources */,
+				5069CB2F215993C1000B842A /* ParticleNetwork.m in Sources */,
 				93944D70210BAF6F00C2DC16 /* ParticleErrorHelper.m in Sources */,
 				93944D71210BAF6F00C2DC16 /* ParticleCloud.m in Sources */,
 				93944D72210BAF6F00C2DC16 /* ParticleDevice.m in Sources */,
