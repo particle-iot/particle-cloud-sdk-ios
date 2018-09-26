@@ -20,7 +20,7 @@
 #import <Foundation/Foundation.h>
 #import "ParticleDevice.h"
 #import "ParticleEvent.h"
-
+#import "ParticleNetwork.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -345,6 +345,11 @@ extern NSString *const kParticleAPIBaseURL;
                                     isPrivate:(BOOL)isPrivate
                                           ttl:(NSUInteger)ttl
                                    completion:(nullable ParticleCompletionBlock)completion;
+
+// new for mesh networks
+
+-(NSURLSessionDataTask *)getNetworks:(NSString *)filter
+                                          completion:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion;
 
 
 @end

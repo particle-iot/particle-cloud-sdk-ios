@@ -57,6 +57,23 @@ typedef NS_ENUM(NSInteger, ParticleDeviceSystemEvent) {
     ParticleDeviceSystemEventSafeModeUpdater
 };
 
+
+typedef NS_ENUM(NSInteger, ParticleDeviceNetworkState) {
+    ParticleDeviceNetworkStatePending,
+    ParticleDeviceNetworkStateConfirmed
+};
+
+typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRole) {
+    ParticleDeviceNetworkStateGateway,
+    ParticleDeviceNetworkStateNode,
+};
+
+typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
+    ParticleDeviceNetworkRoleStatePending,
+    ParticleDeviceNetworkRoleStatePendingConfirmed,
+//    ParticleDeviceNetworkRoleStateOwnerConfirmation
+};
+
 @class ParticleDevice;
 
 @protocol ParticleDeviceDelegate <NSObject>
@@ -94,6 +111,12 @@ typedef NS_ENUM(NSInteger, ParticleDeviceSystemEvent) {
 @property (strong, nonatomic, nullable, readonly) NSDate *lastHeard;
 
 @property (strong, nonatomic, nullable, readonly) NSString *appHash; // app hash received from system event after flashing a new different user app
+
+// new properties for mesh networks SDK v0.9
+@property (strong, nonatomic, nullable, readonly) NSString *networkId; // if device belongs to a mesh network thats the network ID
+@property (nonatomic, readonly) ParticleDeviceNetworkState networkState; // pending if device is waiting to join network confirmation
+@property (nonatomic, readonly) ParticleDeviceNetworkRole networkRole; // if device belongs to a mesh network true means it is a gateway device
+@property (nonatomic, readonly) ParticleDeviceNetworkRoleState networkRoleState; // pending if device is waiting to role change confirmation
 
 @property (nonatomic, readonly) BOOL isFlashing;
 

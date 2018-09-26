@@ -90,6 +90,9 @@ NS_ASSUME_NONNULL_BEGIN
                 case ParticleDeviceTypeRedBearDuo:
                 case ParticleDeviceTypeBluz:
                 case ParticleDeviceTypeDigistumpOak:
+                case ParticleDeviceTypeArgon:
+                case ParticleDeviceTypeXenon:
+                case ParticleDeviceTypeBoron:
                     _type = self.platformId;
                     break;
                 default:
