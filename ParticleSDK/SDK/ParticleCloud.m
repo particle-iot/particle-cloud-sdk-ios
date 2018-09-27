@@ -938,7 +938,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     {
         EventSource *source = [eventListenerDict objectForKey:kEventListenersDictEventSourceKey];
         EventSourceEventHandler handler = [eventListenerDict objectForKey:kEventListenersDictHandlerKey];
-        [source removeEventListener:MessageEvent handler:handler];
+        [source removeEventListener:ParticleMessageEvent handler:handler];
         [source close];
         [self.eventListenersDict removeObjectForKey:eventListenerID];
     }

@@ -90,17 +90,17 @@ static NSString *const ESEventEventKey = @"event";
 
 - (void)onMessage:(EventSourceEventHandler)handler
 {
-    [self addEventListener:MessageEvent handler:handler];
+    [self addEventListener:ParticleMessageEvent handler:handler];
 }
 
 - (void)onError:(EventSourceEventHandler)handler
 {
-    [self addEventListener:ErrorEvent handler:handler];
+    [self addEventListener:ParticleErrorEvent handler:handler];
 }
 
 - (void)onOpen:(EventSourceEventHandler)handler
 {
-    [self addEventListener:OpenEvent handler:handler];
+    [self addEventListener:ParticleOpenEvent handler:handler];
 }
 
 - (void)open
@@ -136,7 +136,7 @@ static NSString *const ESEventEventKey = @"event";
         e.readyState = kEventStateOpen;
         
         // TODO: remove this? (open/close/etc)
-        NSArray *openHandlers = self.listeners[OpenEvent];
+        NSArray *openHandlers = self.listeners[ParticleOpenEvent];
         for (EventSourceEventHandler handler in openHandlers) {
             dispatch_async(self.queue, ^{
                 handler(e);
@@ -157,7 +157,7 @@ static NSString *const ESEventEventKey = @"event";
     e.readyState = kEventStateClosed;
     e.error = error;
     
-    NSArray *errorHandlers = self.listeners[ErrorEvent];
+    NSArray *errorHandlers = self.listeners[ParticleErrorEvent];
     for (EventSourceEventHandler handler in errorHandlers) {
         dispatch_async(self.queue, ^{
             handler(e);
@@ -206,7 +206,7 @@ static NSString *const ESEventEventKey = @"event";
         
         if ((self.event.name) && (self.event.data))
         {
-            NSArray *messageHandlers = self.listeners[MessageEvent];
+            NSArray *messageHandlers = self.listeners[ParticleMessageEvent];
             __block Event *sendEvent = [self.event copy]; // to prevent race conditions where loop continues iterating sending duplicate events to handler callback
             for (EventSourceEventHandler handler in messageHandlers) {
                 dispatch_async(self.queue, ^{
@@ -231,7 +231,7 @@ static NSString *const ESEventEventKey = @"event";
                                   code:e.readyState
                               userInfo:@{ NSLocalizedDescriptionKey: @"Connection with the event source was closed." }];
     
-    NSArray *errorHandlers = self.listeners[ErrorEvent];
+    NSArray *errorHandlers = self.listeners[ParticleErrorEvent];
     for (EventSourceEventHandler handler in errorHandlers) {
         dispatch_async(self.queue, ^{
             handler(e);
@@ -293,6 +293,6 @@ static NSString *const ESEventEventKey = @"event";
 
 @end
 
-NSString *const MessageEvent = @"message";
-NSString *const ErrorEvent = @"error";
-NSString *const OpenEvent = @"open";
+NSString *const ParticleMessageEvent = @"message";
+NSString *const ParticleErrorEvent = @"error";
+NSString *const ParticleOpenEvent = @"open";
