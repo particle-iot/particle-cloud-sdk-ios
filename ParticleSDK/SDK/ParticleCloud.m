@@ -8,6 +8,7 @@
 
 #import "ParticleCloud.h"
 #import "ParticleSession.h"
+#import "ParticleNetwork.h"
 #import "EventSource.h"
 #import "ParticleErrorHelper.h"
 
@@ -1082,6 +1083,58 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         [self unsubscribeFromEventWithID:self.systemEventsListenerId];
     }
 }
+
+
+-(NSURLSessionDataTask *)getNetworks:(NSString *)filter
+                          completion:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion
+{
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+    
+    NSURLSessionDataTask *task = [self.manager GET:@"/v1/networks" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+                                  {
+                                      
+                                      if (completion)
+                                      {
+                                          NSArray *responseList = responseObject;
+                                          __block NSMutableArray *networksList = [[NSMutableArray alloc] init];
+                                          
+                                          for (NSDictionary *networkDict in responseList)
+                                          {
+                                              if (networkDict[@"id"])   // ignore <null> device listings that sometimes return from /v1/devices API call
+                                              {
+                                                  if (![networkDict[@"id"] isKindOfClass:[NSNull class]])
+                                                  {
+                                                      ParticleNetwork *network = [[ParticleNetwork alloc] initWithParams:networkDict];
+                                                      if (network) {
+                                                          [networksList addObject:network];
+                                                      }
+                                                  }
+                                              }
+                                              
+                                          }
+                                          
+                                          completion(networksList, nil);
+                                      }
+                                      
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+                                  {
+                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+                                      
+                                      if (completion)
+                                      {
+                                          completion(nil, particleError);
+                                      }
+                                      
+                                      NSLog(@"! getNetworks Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                  }];
+    
+    return task;
+}
+
+
 
 
 -(void)dealloc {

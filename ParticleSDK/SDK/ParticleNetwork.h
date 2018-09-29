@@ -27,6 +27,13 @@ typedef NS_ENUM(NSInteger, ParticleNetworkState) {
 };
  */
 
+typedef NS_ENUM(NSInteger, ParticleNetworkModifyAction) {
+    ParticleNetworkModifyActionAddDevice,
+    ParticleNetworkModifyActionRemoveDevice,
+    ParticleNetworkModifyActionEnableGateway,
+    ParticleNetworkModifyActionDisableGateway,
+};
+
 
 @interface ParticleNetwork : NSObject
 
@@ -35,11 +42,13 @@ extern NSString *const kParticleAPIBaseURL;
 
 @property (nonatomic, strong, readonly) NSString* id;
 @property (nonatomic, strong, readonly) NSString* name;
-@property (nonatomic, strong, readonly) NSString* owner; //username of owner
-@property (nonatomic, readonly) ParticleNetworkType type; 
+//@property (nonatomic, strong, readonly) NSString* owner; //username of owner
+@property (nonatomic, readonly) ParticleNetworkType type;
 @property (nonatomic, strong, nullable, readonly) NSString* panId;
 @property (nonatomic, strong, nullable, readonly) NSString* xpanId;
-@property (nonatomic, strong, nullable, readonly) NSNumber* channel;
+@property (nonatomic, readonly) NSUInteger channel;
+@property (nonatomic, readonly) NSUInteger deviceCount;
+@property (nonatomic, readonly) NSUInteger gatewayCount;
 @property (nonatomic, strong, nullable, readonly) NSDate* lastHeard;
 @property (nonatomic, nullable) NSString* notes;
 //@property (nonatomic, nullable) ParticleNetworkState state;
@@ -49,7 +58,7 @@ extern NSString *const kParticleAPIBaseURL;
 -(instancetype)init __attribute__((unavailable("Must use initWithParams:")));
 
 
--(NSURLSessionDataTask *)modify:(NSString *)action
+-(NSURLSessionDataTask *)modify:(ParticleNetworkModifyAction)action
                        deviceID:(NSString *)deviceID
                      completion:(nullable ParticleCompletionBlock)completion;
 

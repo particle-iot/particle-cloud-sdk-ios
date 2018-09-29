@@ -10,6 +10,7 @@
 		5069CB2E215993C1000B842A /* ParticleNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 5069CB2C215993C1000B842A /* ParticleNetwork.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5069CB2F215993C1000B842A /* ParticleNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 5069CB2D215993C1000B842A /* ParticleNetwork.m */; };
 		5069CB30215993D5000B842A /* ParticleNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 5069CB2C215993C1000B842A /* ParticleNetwork.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5069CB4C215F3756000B842A /* ParticleNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 5069CB2D215993C1000B842A /* ParticleNetwork.m */; };
 		9333157D210BA6DC00BEFAD9 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B6689C2109F90700DFF793 /* AFNetworking.framework */; };
 		9352CD33210B8268005EB505 /* KeychainHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9744D20EA7F2200015D9D /* KeychainHelper.m */; };
 		9352CD34210B8268005EB505 /* EventSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9744E20EA7F2200015D9D /* EventSource.m */; };
@@ -530,6 +531,7 @@
 			files = (
 				9352CD33210B8268005EB505 /* KeychainHelper.m in Sources */,
 				9352CD34210B8268005EB505 /* EventSource.m in Sources */,
+				5069CB4C215F3756000B842A /* ParticleNetwork.m in Sources */,
 				9352CD35210B8268005EB505 /* ParticleErrorHelper.m in Sources */,
 				9352CD36210B8268005EB505 /* ParticleCloud.m in Sources */,
 				9352CD37210B8268005EB505 /* ParticleDevice.m in Sources */,

@@ -8,6 +8,7 @@
 
 #import "ParticleDevice.h"
 #import "ParticleCloud.h"
+#import "ParticleNetwork.h"
 #import "ParticleErrorHelper.h"
 #import <objc/runtime.h>
 
