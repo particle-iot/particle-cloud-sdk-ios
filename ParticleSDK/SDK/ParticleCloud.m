@@ -1136,6 +1136,50 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
 
 
+-(NSURLSessionDataTask *)getNetwork:(NSString *)idOrName
+                         completion:(nullable void(^)(ParticleNetwork * _Nullable network, NSError * _Nullable error))completion
+{
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+    
+    NSString *endpoint = [NSString stringWithFormat:@"/v1/networks/%@", idOrName];
+    
+    NSURLSessionDataTask *task = [self.manager GET:endpoint parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+                                  {
+                                      
+                                      if (completion)
+                                      {
+                                          ParticleNetwork *network = nil;
+                                          NSDictionary *response = responseObject;
+                                              if (response[@"id"])   // ignore <null> device listings that sometimes return from /v1/devices API call
+                                              {
+                                                  if (![response[@"id"] isKindOfClass:[NSNull class]])
+                                                  {
+                                                      network = [[ParticleNetwork alloc] initWithParams:response];
+                                                  }
+                                              }
+                                              
+                                          completion(network, nil);
+                                      }
+                                      
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+                                  {
+                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+                                      
+                                      if (completion)
+                                      {
+                                          completion(nil, particleError);
+                                      }
+                                      
+                                      NSLog(@"! getNetwork Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                  }];
+    
+    return task;
+    
+}
+
 
 -(void)dealloc {
     [self unsubscribeToDevicesSystemEvents];

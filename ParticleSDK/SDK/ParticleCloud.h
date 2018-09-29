@@ -352,7 +352,7 @@ extern NSString *const kParticleAPIBaseURL;
                           completion:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion;
 
 -(NSURLSessionDataTask *)getNetwork:(NSString *)idOrName
-                          completion:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion;
+                          completion:(nullable void(^)(ParticleNetwork * _Nullable network, NSError * _Nullable error))completion;
 
 
 
