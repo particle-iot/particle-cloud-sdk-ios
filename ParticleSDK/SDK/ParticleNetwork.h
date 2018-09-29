@@ -62,6 +62,8 @@ extern NSString *const kParticleAPIBaseURL;
                        deviceID:(NSString *)deviceID
                      completion:(nullable ParticleCompletionBlock)completion;
 
+-(NSURLSessionDataTask *)update:(nullable ParticleCompletionBlock)completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

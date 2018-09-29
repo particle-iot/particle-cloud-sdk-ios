@@ -65,6 +65,12 @@
             _id = params[@"id"];
         }
         
+        _notes = nil;
+        if ([params[@"notes"] isKindOfClass:[NSString class]])
+        {
+            _notes = params[@"notes"];
+        }
+        
         if ([params[@"type"] isKindOfClass:[NSString class]])
         {
             if ([params[@"type"] isEqualToString:@"micro_wifi"]) {
@@ -127,6 +133,8 @@
                        deviceID:(NSString *)deviceID
                      completion:(nullable ParticleCompletionBlock)completion
 {
+    // TODO: put /v1/networks
+    
     return nil;
 }
 
