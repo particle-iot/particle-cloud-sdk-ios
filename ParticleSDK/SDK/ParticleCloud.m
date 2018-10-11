@@ -842,6 +842,52 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     return task;
 }
 
+
+#pragma mark Mesh BLE OTA Update
+-(NSURLSessionDataTask *)getNextBinaryURL:(ParticleDeviceType)deviceType currentSystemFirmwareVersion:(NSString *)currentSystemFirmwareVersion currentNcpFirmwareVersion:(NSString * _Nullable)currentNcpFirmwareVersion currentNcpFirmwareModuleVersion:(NSNumber * _Nullable)currentNcpFirmwareModuleVersion  completion:(nullable void(^)(NSString * _Nullable binaryURL, NSError* _Nullable error))completion
+{
+    NSURL *url = [self.baseURL URLByAppendingPathComponent:@"v1/system_firmware/upgrade"];
+
+    NSMutableDictionary *params = @{
+            @"platform_id": @(deviceType),
+            @"current_system_firmware_version": currentSystemFirmwareVersion
+    };
+
+    if (currentNcpFirmwareVersion != nil) {
+        params[@"current_ncp_firmware_version"] = currentNcpFirmwareVersion;
+    }
+
+    if (currentNcpFirmwareModuleVersion != nil) {
+        params[@"current_ncp_firmware_module_version"] = currentNcpFirmwareModuleVersion;
+    }
+
+
+    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    {
+        if (completion)
+        {
+            NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
+            if (serverResponse.statusCode == 200) {
+                NSDictionary *responseDict = responseObject;
+                completion(responseDict[@"binary_url"], nil);
+            } else { //if (serverResponse.statusCode == 204) {
+                completion(nil, nil);
+            }
+
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
+        {
+            completion(nil, particleError);
+        }
+
+        NSLog(@"! getNextBinaryURL Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+    }];
+
+    return task;
+}
 #pragma mark Internal use methods
 
 -(NSURLSessionDataTask *)listTokens:(NSString *)user password:(NSString *)password

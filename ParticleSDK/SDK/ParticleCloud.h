@@ -212,6 +212,23 @@ extern NSString *const kParticleAPIBaseURL;
 -(NSURLSessionDataTask *)requestPasswordResetForUser:(NSString *)email
                                           completion:(nullable ParticleCompletionBlock)completion;
 
+
+
+/**
+*  Check if device requires firmware update and request URL of next binary file if it does
+*
+*  @param deviceType    type of device being updated (only Xenon, Argon and Boron are supported)
+*  @param currentSystemFirmwareVersion    current system version reported by BLE request to the device
+*  @param currentNcpFirmwareVersion    current NCP firmware version reported by BLE request to the device
+*  @param currentNcpFirmwareModuleVersion    current current NCP firmware module version reported by BLE request to the device
+*  @param completion Completion block with NSError object if failure, optional NSString containing URL and NSError object as nil if success
+*/
+-(NSURLSessionDataTask *)getNextBinaryURL:(ParticleDeviceType)deviceType
+             currentSystemFirmwareVersion:(NSString *)currentSystemFirmwareVersion
+                currentNcpFirmwareVersion:(NSString * _Nullable)currentNcpFirmwareVersion
+          currentNcpFirmwareModuleVersion:(NSNumber * _Nullable)currentNcpFirmwareModuleVersion
+                               completion:(nullable void(^)(NSString * _Nullable binaryURL, NSError* _Nullable error))completion;
+
 #pragma mark Device management functions
 // --------------------------------------------------------------------------------------------------------------------------------------------------------
 // Device management functions
