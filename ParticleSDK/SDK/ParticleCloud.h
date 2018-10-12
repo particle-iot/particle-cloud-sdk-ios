@@ -229,6 +229,10 @@ extern NSString *const kParticleAPIBaseURL;
           currentNcpFirmwareModuleVersion:(NSNumber * _Nullable)currentNcpFirmwareModuleVersion
                                completion:(nullable void(^)(NSString * _Nullable binaryURL, NSError* _Nullable error))completion;
 
+
+
+- (NSURLSessionDataTask *)getNextBinary:(NSString *)url completion:(nullable void (^)(NSString *_Nullable binaryURL, NSError *_Nullable error))completion;
+
 #pragma mark Device management functions
 // --------------------------------------------------------------------------------------------------------------------------------------------------------
 // Device management functions

@@ -888,6 +888,41 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     return task;
 }
+
+- (NSURLSessionDataTask *)getNextBinary:(NSString *)url completion:(nullable void(^)(NSString * _Nullable binaryFilePath, NSError* _Nullable error))completion {
+    NSURL *URL = [NSURL URLWithString:url];
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+
+    NSLog(@"getNextBinary url = %@", url);
+
+    NSURLSessionDownloadTask *task = [self.manager downloadTaskWithRequest:request progress:nil
+            destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        NSURL *cachesDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSCachesDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+        return [cachesDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
+    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+        if (completion)
+        {
+            NSLog(@"getNextBinary error = %@", error);
+            NSLog(@"getNextBinary filePath = %@", filePath.absoluteString);
+            if (error == nil) {
+                completion(filePath.absoluteString, nil);
+            } else {
+                NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+
+                if (completion)
+                {
+                    completion(nil, particleError);
+                }
+
+                NSLog(@"! getNextBinary Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+            }
+        }
+    }];
+    [task resume];
+
+    return task;
+}
+
 #pragma mark Internal use methods
 
 -(NSURLSessionDataTask *)listTokens:(NSString *)user password:(NSString *)password
