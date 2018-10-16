@@ -848,10 +848,9 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 {
     NSURL *url = [self.baseURL URLByAppendingPathComponent:@"v1/system_firmware/upgrade"];
 
-    NSMutableDictionary *params = @{
-            @"platform_id": @(deviceType),
-            @"current_system_firmware_version": currentSystemFirmwareVersion
-    };
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithCapacity:2];
+    params[@"platform_id"] = @(deviceType);
+    params[@"current_system_firmware_version"] = currentSystemFirmwareVersion;
 
     if (currentNcpFirmwareVersion != nil) {
         params[@"current_ncp_firmware_version"] = currentNcpFirmwareVersion;
