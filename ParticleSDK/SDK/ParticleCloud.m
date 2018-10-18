@@ -1261,6 +1261,64 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 }
 
 
+-(NSURLSessionDataTask *)createNetwork:(NSString *)networkName
+                       gatewayDeviceID:(NSString *)gatewayDeviceID
+                    gatewayDeviceICCID:(NSString * _Nullable)gatewayDeviceICCID
+                            completion:(nullable void(^)(ParticleNetwork * _Nullable network, NSError * _Nullable error))completion
+{
+    NSMutableDictionary *params = [@{
+                                     @"name:" : networkName,
+                                     @"deviceID": gatewayDeviceID,
+                                     } mutableCopy];
+    
+    // optional ICCID for borons
+    if (gatewayDeviceICCID) {
+        params[@"iccid"] = gatewayDeviceICCID;
+    }
+    
+    NSURLSessionDataTask *task = [self.manager POST:@"/v1/networks/" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+                                  {
+                                      NSDictionary *responseDict = responseObject;
+                                      if (completion) {
+                                          if (([responseDict[@"ok"] boolValue]) && (![responseDict[@"network"] isKindOfClass:[NSNull class]]))
+                                          {
+                                              ParticleNetwork* network = [[ParticleNetwork alloc] initWithParams:responseDict[@"network"]];
+                                              completion(network, nil);
+                                          }
+                                          else
+                                          {
+                                              NSString *errorString;
+                                              if (responseDict[@"errors"][0])
+                                                  errorString = [NSString stringWithFormat:@"Could not create network: %@",responseDict[@"errors"][0]];
+                                              else
+                                                  errorString = @"Error creating network";
+                                              
+                                              NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:errorString];
+                                              
+                                              completion(nil, particleError);
+                                              
+                                              NSLog(@"! createNetwork Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                          }
+                                      }
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+                                  {
+                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+                                      
+                                      if (completion) {
+                                          completion(nil, particleError);
+                                      }
+                                      
+                                      NSLog(@"! createNetwork Failed%@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                  }];
+    
+    [self.manager.requestSerializer clearAuthorizationHeader];
+    
+    return task;
+    
+}
+
+
+
 -(void)dealloc {
     [self unsubscribeToDevicesSystemEvents];
 }
