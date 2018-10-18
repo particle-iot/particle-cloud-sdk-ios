@@ -369,11 +369,14 @@ extern NSString *const kParticleAPIBaseURL;
 
 // new for mesh networks
 
--(NSURLSessionDataTask *)getNetworks:(NSString *)filter
-                          completion:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion;
+-(NSURLSessionDataTask *)getNetworks:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion;
 
 -(NSURLSessionDataTask *)getNetwork:(NSString *)idOrName
                           completion:(nullable void(^)(ParticleNetwork * _Nullable network, NSError * _Nullable error))completion;
+
+-(NSURLSessionDataTask *)createNetwork:(NSString *)name
+                         completion:(nullable void(^)(ParticleNetwork * _Nullable network, NSError * _Nullable error))completion;
+
 
 
 

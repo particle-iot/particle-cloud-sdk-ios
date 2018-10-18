@@ -27,13 +27,6 @@ typedef NS_ENUM(NSInteger, ParticleNetworkState) {
 };
  */
 
-typedef NS_ENUM(NSInteger, ParticleNetworkModifyAction) {
-    ParticleNetworkModifyActionAddDevice,
-    ParticleNetworkModifyActionRemoveDevice,
-    ParticleNetworkModifyActionEnableGateway,
-    ParticleNetworkModifyActionDisableGateway,
-};
-
 
 @interface ParticleNetwork : NSObject
 
@@ -58,11 +51,19 @@ extern NSString *const kParticleAPIBaseURL;
 -(instancetype)init __attribute__((unavailable("Must use initWithParams:")));
 
 
--(NSURLSessionDataTask *)modify:(ParticleNetworkModifyAction)action
-                       deviceID:(NSString *)deviceID
+-(NSURLSessionDataTask *)addDevice:(NSString *)deviceID
                      completion:(nullable ParticleCompletionBlock)completion;
 
--(NSURLSessionDataTask *)update:(nullable ParticleCompletionBlock)completion;
+-(NSURLSessionDataTask *)removeDevice:(NSString *)deviceID
+                        completion:(nullable ParticleCompletionBlock)completion;
+
+-(NSURLSessionDataTask *)enableGatewayDevice:(NSString *)deviceID
+                        completion:(nullable ParticleCompletionBlock)completion;
+
+-(NSURLSessionDataTask *)disableGatewayDevice:(NSString *)deviceID
+                        completion:(nullable ParticleCompletionBlock)completion;
+
+-(NSURLSessionDataTask *)refresh:(nullable ParticleCompletionBlock)completion;
 
 @end
 

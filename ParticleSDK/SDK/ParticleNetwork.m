@@ -74,7 +74,7 @@
         if ([params[@"type"] isKindOfClass:[NSString class]])
         {
             if ([params[@"type"] isEqualToString:@"micro_wifi"]) {
-                    _type = ParticleNetworkTypeMicroWifi;
+                _type = ParticleNetworkTypeMicroWifi;
             } else if ([params[@"type"] isEqualToString:@"micro_cellular"]) {
                 _type = ParticleNetworkTypeMicroCellular;
             } else if ([params[@"type"] isEqualToString:@"high_availability"]) {
