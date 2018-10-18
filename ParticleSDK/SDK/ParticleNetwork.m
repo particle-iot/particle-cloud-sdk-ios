@@ -7,6 +7,8 @@
 //
 
 #import "ParticleNetwork.h"
+#import "ParticleErrorHelper.h"
+
 
 #ifdef USE_FRAMEWORKS
 #import <AFNetworking/AFNetworking.h>
@@ -129,11 +131,90 @@
     return nil;
 }
 
--(NSURLSessionDataTask *)modify:(ParticleNetworkModifyAction)action
-                       deviceID:(NSString *)deviceID
-                     completion:(nullable ParticleCompletionBlock)completion
+
+-(NSURLSessionDataTask *)_takeNetworkAction:(NSString *)action
+                                  deviceID:(NSString *)deviceID
+                                completion:(nullable ParticleCompletionBlock)completion
 {
     // TODO: put /v1/networks
+    
+    NSMutableDictionary *params = [@{
+                                     @"action": action,
+                                     @"deviceID": deviceID,
+                                     } mutableCopy];
+    
+    NSString *url = [NSString stringWithFormat:@"/v1/networks/%@", self.id];
+    
+    NSURLSessionDataTask *task = [self.manager PUT:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject)
+                                  {
+                                      NSDictionary *responseDict = responseObject;
+                                      if (completion) {
+                                          if ([responseDict[@"ok"] boolValue])
+                                          {
+                                              completion(nil);
+                                          }
+                                          else
+                                          {
+                                              NSString *errorString;
+                                              if (responseDict[@"errors"][0])
+                                                  errorString = [NSString stringWithFormat:@"Could not modify network: %@",responseDict[@"errors"][0]];
+                                              else
+                                                  errorString = @"Error modifying network";
+                                              
+                                              NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:errorString];
+                                              
+                                              completion(particleError);
+                                              
+                                              NSLog(@"! takeNetworkAction (%@) Failed %@ (%ld): %@\r\n%@", action, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                          }
+                                      }
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+                                  {
+                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+                                      
+                                      if (completion) {
+                                          completion(particleError);
+                                      }
+                                      
+                                      NSLog(@"! takeNetworkAction (%@) Failed %@ (%ld): %@\r\n%@", action, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                  }];
+    
+    [self.manager.requestSerializer clearAuthorizationHeader];
+    
+    return task;
+}
+
+
+-(NSURLSessionDataTask *)addDevice:(NSString *)deviceID
+                        completion:(nullable ParticleCompletionBlock)completion
+{
+    return [self _takeNetworkAction:@"add-device" deviceID:deviceID completion:completion];
+    
+}
+
+-(NSURLSessionDataTask *)removeDevice:(NSString *)deviceID
+                           completion:(nullable ParticleCompletionBlock)completion
+{
+    return [self _takeNetworkAction:@"remove-device" deviceID:deviceID completion:completion];
+    
+}
+
+-(NSURLSessionDataTask *)enableGatewayDevice:(NSString *)deviceID
+                                  completion:(nullable ParticleCompletionBlock)completion
+{
+    return [self _takeNetworkAction:@"gateway-enable" deviceID:deviceID completion:completion];
+}
+
+-(NSURLSessionDataTask *)disableGatewayDevice:(NSString *)deviceID
+                                   completion:(nullable ParticleCompletionBlock)completion
+{
+    return [self _takeNetworkAction:@"gateway-disable" deviceID:deviceID completion:completion];
+    
+}
+
+-(NSURLSessionDataTask *)refresh:(nullable ParticleCompletionBlock)completion
+{
+    
     
     return nil;
 }
