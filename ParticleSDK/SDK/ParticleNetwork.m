@@ -122,85 +122,24 @@
     return nil;
 }
 
-
--(NSURLSessionDataTask *)_takeNetworkAction:(NSString *)action
-                                  deviceID:(NSString *)deviceID
-                                completion:(nullable ParticleCompletionBlock)completion
+-(NSString *)description
 {
-    // TODO: put /v1/networks
-    
-    NSMutableDictionary *params = [@{
-                                     @"action": action,
-                                     @"deviceID": deviceID,
-                                     } mutableCopy];
-    
-    NSString *url = [NSString stringWithFormat:@"/v1/networks/%@", self.id];
-    
-    NSURLSessionDataTask *task = [self.manager PUT:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject)
-                                  {
-                                      NSDictionary *responseDict = responseObject;
-                                      if (completion) {
-                                          if ([responseDict[@"ok"] boolValue])
-                                          {
-                                              completion(nil);
-                                          }
-                                          else
-                                          {
-                                              NSString *errorString;
-                                              if (responseDict[@"errors"][0])
-                                                  errorString = [NSString stringWithFormat:@"Could not modify network: %@",responseDict[@"errors"][0]];
-                                              else
-                                                  errorString = @"Error modifying network";
-                                              
-                                              NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:errorString];
-                                              
-                                              completion(particleError);
-                                              
-                                              NSLog(@"! takeNetworkAction (%@) Failed %@ (%ld): %@\r\n%@", action, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
-                                          }
-                                      }
-                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
-                                  {
-                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
-                                      
-                                      if (completion) {
-                                          completion(particleError);
-                                      }
-                                      
-                                      NSLog(@"! takeNetworkAction (%@) Failed %@ (%ld): %@\r\n%@", action, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
-                                  }];
-    
-    [self.manager.requestSerializer clearAuthorizationHeader];
-    
-    return task;
-}
+    NSString *desc = [NSString stringWithFormat:@"<ParticleNetwork 0x%lx id: %@, name: %@, type: %d, panId: %@, xpanId: %@, channel: %u, deviceCount: %u, gatewayCount: %u, notes: %@, state: %d, lastHeard: %@>",
+                                                (unsigned long)self,
+                                                self.id,
+                                                self.name,
+                                                self.type,
+                                                self.panId,
+                                                self.xpanId,
+                                                self.channel,
+                                                self.deviceCount,
+                                                self.gatewayCount,
+                                                self.notes,
+                                                self.state,
+                                                self.lastHeard];
 
+    return desc;
 
--(NSURLSessionDataTask *)addDevice:(NSString *)deviceID
-                        completion:(nullable ParticleCompletionBlock)completion
-{
-    return [self _takeNetworkAction:@"add-device" deviceID:deviceID completion:completion];
-    
-}
-
--(NSURLSessionDataTask *)removeDevice:(NSString *)deviceID
-                           completion:(nullable ParticleCompletionBlock)completion
-{
-    return [self _takeNetworkAction:@"remove-device" deviceID:deviceID completion:completion];
-    
-}
-
--(NSURLSessionDataTask *)enableGateway:(NSString *)deviceID
-                                  completion:(nullable ParticleCompletionBlock)completion
-{
-    return [self _takeNetworkAction:@"gateway-enable" deviceID:deviceID completion:completion];
-}
-
--(NSURLSessionDataTask *)disableGateway:(NSString *)deviceID
-                                   completion:(nullable ParticleCompletionBlock)completion
-{
-    return [self _takeNetworkAction:@"gateway-disable" deviceID:deviceID completion:completion];
-    
 }
 
 -(NSURLSessionDataTask *)refresh:(nullable ParticleCompletionBlock)completion
@@ -220,11 +159,11 @@
                     [propNames addObject:propertyName];
                 }
                 free(properties);
-                
+
 //                if (self.delegate) {
 //                    updatedDevice.delegate = self.delegate;
 //                }
-                
+
                 for (NSString *property in propNames)
                 {
                     id value = [updatedNetwork valueForKey:property];
@@ -244,9 +183,13 @@
             }
         }
     }];
-    
+
     return nil;
 }
+
+
+
+
 
 
 

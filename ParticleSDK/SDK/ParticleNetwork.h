@@ -46,21 +46,8 @@ extern NSString *const kParticleAPIBaseURL;
 
 -(nullable instancetype)initWithParams:(NSDictionary *)params NS_DESIGNATED_INITIALIZER;
 -(instancetype)init __attribute__((unavailable("Must use initWithParams:")));
-
-
--(NSURLSessionDataTask *)addDevice:(NSString *)deviceID
-                     completion:(nullable ParticleCompletionBlock)completion;
-
--(NSURLSessionDataTask *)removeDevice:(NSString *)deviceID
-                        completion:(nullable ParticleCompletionBlock)completion;
-
--(NSURLSessionDataTask *)enableGateway:(NSString *)deviceID
-                        completion:(nullable ParticleCompletionBlock)completion;
-
--(NSURLSessionDataTask *)disableGateway:(NSString *)deviceID
-                        completion:(nullable ParticleCompletionBlock)completion;
-
 -(NSURLSessionDataTask *)refresh:(nullable ParticleCompletionBlock)completion;
+
 
 @end
 

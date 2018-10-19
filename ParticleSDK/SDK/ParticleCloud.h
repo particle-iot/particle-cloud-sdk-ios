@@ -403,6 +403,20 @@ typedef NS_ENUM(NSInteger, ParticleSimStatus) {
 
 
 
+-(NSURLSessionDataTask *)addDevice:(NSString *)deviceID toNetwork:(NSString *)networkID
+                        completion:(nullable ParticleCompletionBlock)completion;
+
+-(NSURLSessionDataTask *)removeDevice:(NSString *)deviceID fromNetwork:(NSString *)networkID
+                           completion:(nullable ParticleCompletionBlock)completion;
+
+-(NSURLSessionDataTask *)enableGateway:(NSString *)deviceID onNetwork:(NSString *)networkID
+                            completion:(nullable ParticleCompletionBlock)completion;
+
+-(NSURLSessionDataTask *)disableGateway:(NSString *)deviceID onNetwork:(NSString *)networkID
+                             completion:(nullable ParticleCompletionBlock)completion;
+
+
+
 
 @end
 
