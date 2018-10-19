@@ -88,7 +88,17 @@
             _channel = [params[@"channel"] intValue];
         }
         
-        // state...
+        if ([params[@"state"] isKindOfClass:[NSString class]])
+        {
+            if ([params[@"state"] isEqualToString:@"pending"]) {
+                _state = ParticleNetworkStatePending;
+            } else {
+                _state = ParticleNetworkStateConfirmed;
+            }
+        } else { // this is at least till API returns the state for all network calls - then we can remove it and keep last state
+            _state = ParticleNetworkStateConfirmed;
+        }
+        
         
         if ([params[@"last_heard"] isKindOfClass:[NSString class]])
         {

@@ -18,15 +18,12 @@ typedef NS_ENUM(NSInteger, ParticleNetworkType) {
     ParticleNetworkTypeLargeSite
 };
 
-/*
- 
+
  // for now API will only return confirmed networks
 typedef NS_ENUM(NSInteger, ParticleNetworkState) {
     ParticleNetworkStatePending=0,
     ParticleNetworkStateConfirmed
 };
- */
-
 
 @interface ParticleNetwork : NSObject
 
@@ -44,7 +41,7 @@ extern NSString *const kParticleAPIBaseURL;
 @property (nonatomic, readonly) NSUInteger gatewayCount;
 @property (nonatomic, strong, nullable, readonly) NSDate* lastHeard;
 @property (nonatomic, nullable) NSString* notes;
-//@property (nonatomic, nullable) ParticleNetworkState state;
+@property (nonatomic, nullable) ParticleNetworkState state;
 
 
 -(nullable instancetype)initWithParams:(NSDictionary *)params NS_DESIGNATED_INITIALIZER;
