@@ -41,7 +41,7 @@ extern NSString *const kParticleAPIBaseURL;
 @property (nonatomic, readonly) NSUInteger gatewayCount;
 @property (nonatomic, strong, nullable, readonly) NSDate* lastHeard;
 @property (nonatomic, nullable) NSString* notes;
-@property (nonatomic, nullable) ParticleNetworkState state;
+@property (nonatomic, readonly) ParticleNetworkState state;
 
 
 -(nullable instancetype)initWithParams:(NSDictionary *)params NS_DESIGNATED_INITIALIZER;

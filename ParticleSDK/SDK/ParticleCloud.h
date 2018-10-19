@@ -367,7 +367,8 @@ extern NSString *const kParticleAPIBaseURL;
                                           ttl:(NSUInteger)ttl
                                    completion:(nullable ParticleCompletionBlock)completion;
 
-//-(NSURLSessionDataTask *)getCard
+-(NSURLSessionDataTask *)getCard:(nullable void(^)(NSString* _Nullable token, NSString* _Nullable last4, NSUInteger expiryMonth, NSUInteger expiryYear, NSString* _Nullable brand, NSError * _Nullable error))completion;
+
 //-(NSURLSessionDataTask *)activateSim
 
 

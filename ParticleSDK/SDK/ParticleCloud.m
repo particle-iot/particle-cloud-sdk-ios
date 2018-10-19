@@ -1164,6 +1164,58 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     }
 }
 
+-(NSURLSessionDataTask *)getCard:(nullable void(^)(NSString* _Nullable token, NSString* _Nullable last4, NSUInteger expiryMonth, NSUInteger expiryYear, NSString* _Nullable brand, NSError * _Nullable error))completion;
+
+{
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+    
+    NSURLSessionDataTask *task = [self.manager GET:@"/v1/card" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+                                  {
+                                      if (completion)
+                                      {
+                                          NSDictionary *responseDict = responseObject;
+                                          if ([responseDict[@"card"] isKindOfClass:[NSDictionary class]]) {
+                                              NSDictionary *card = responseDict[@"card"];
+                                              NSString* last4 = card[@"last4"];
+                                              NSString* brand = card[@"brand"];
+                                              NSString* expiryMonthString = card[@"exp_month"];
+                                              NSString* expiryYearString = card[@"exp_year"];
+                                              NSString* token = card[@"id"];
+                                              completion(token, last4, [expiryMonthString integerValue], [expiryYearString integerValue], brand, nil);
+                                          } else {
+                                              NSString *errorString;
+                                              if (responseDict[@"error"])
+                                                  errorString = [NSString stringWithFormat:@"Could not get card: %@",responseDict[@"error"]];
+                                              else
+                                                  errorString = @"Could not get card";
+                                              
+                                              NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:errorString];
+                                              
+                                              completion(nil, nil, 0,0, nil, particleError);
+                                              
+                                              NSLog(@"! getCard Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                          }
+                                      }
+                                      
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+                                  {
+                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+                                      
+                                      if (completion)
+                                      {
+                                          completion(nil, nil, 0,0, nil, particleError);
+                                      }
+                                      
+                                      NSLog(@"! getCard Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                  }];
+    
+    return task;
+}
+
+
 
 -(NSURLSessionDataTask *)getNetworks:(NSString *)filter
                           completion:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion
@@ -1196,7 +1248,12 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                               
                                           }
                                           
-                                          completion(networksList, nil);
+                                          if (networksList.count == 0) {
+                                              // no networks returned
+                                              completion(nil, nil);
+                                          } else {
+                                              completion(networksList, nil);
+                                          }
                                       }
                                       
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
