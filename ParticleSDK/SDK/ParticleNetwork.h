@@ -57,10 +57,10 @@ extern NSString *const kParticleAPIBaseURL;
 -(NSURLSessionDataTask *)removeDevice:(NSString *)deviceID
                         completion:(nullable ParticleCompletionBlock)completion;
 
--(NSURLSessionDataTask *)enableGatewayDevice:(NSString *)deviceID
+-(NSURLSessionDataTask *)enableGateway:(NSString *)deviceID
                         completion:(nullable ParticleCompletionBlock)completion;
 
--(NSURLSessionDataTask *)disableGatewayDevice:(NSString *)deviceID
+-(NSURLSessionDataTask *)disableGateway:(NSString *)deviceID
                         completion:(nullable ParticleCompletionBlock)completion;
 
 -(NSURLSessionDataTask *)refresh:(nullable ParticleCompletionBlock)completion;

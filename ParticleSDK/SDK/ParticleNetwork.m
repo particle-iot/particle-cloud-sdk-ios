@@ -6,8 +6,11 @@
 //  Copyright © 2018 Particle Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import "ParticleNetwork.h"
 #import "ParticleErrorHelper.h"
+#import "ParticleCloud.h"
+#import <objc/runtime.h>
 
 
 #ifdef USE_FRAMEWORKS
@@ -23,28 +26,6 @@
 
 
 @implementation ParticleNetwork
-// analyze
-//                                          200 OK
-//                                          {
-//                                          networks:
-//                                              [{
-//                                              id: ‘529c1bf761966a0d35883078’,
-//                                              name: ‘my-network’,
-//                                              state: ‘confirmed’,
-//                                              type: ‘micro_wifi’,
-//                                              last_heard: `2018-08-10T02:07:45Z`
-//                                              device_count: 10, // all the devices
-//                                              gateway_count: 1,
-//
-//                                              },
-//                                              {
-//                                                  ...
-//                                              }],
-//                                          meta: {
-//                                          total_records: 3,
-//                                          total_pages: 1
-//                                          },
-//                                          }
 
 -(nullable instancetype)initWithParams:(NSDictionary *)params
 {
@@ -199,13 +180,13 @@
     
 }
 
--(NSURLSessionDataTask *)enableGatewayDevice:(NSString *)deviceID
+-(NSURLSessionDataTask *)enableGateway:(NSString *)deviceID
                                   completion:(nullable ParticleCompletionBlock)completion
 {
     return [self _takeNetworkAction:@"gateway-enable" deviceID:deviceID completion:completion];
 }
 
--(NSURLSessionDataTask *)disableGatewayDevice:(NSString *)deviceID
+-(NSURLSessionDataTask *)disableGateway:(NSString *)deviceID
                                    completion:(nullable ParticleCompletionBlock)completion
 {
     return [self _takeNetworkAction:@"gateway-disable" deviceID:deviceID completion:completion];
@@ -214,7 +195,45 @@
 
 -(NSURLSessionDataTask *)refresh:(nullable ParticleCompletionBlock)completion
 {
-    
+    return [[ParticleCloud sharedInstance] getNetwork:self.id completion:^(ParticleNetwork * _Nullable updatedNetwork, NSError * _Nullable error) {
+        if (!error)
+        {
+            if (updatedNetwork)
+            {
+                // if we got an updated network from the cloud - overwrite ALL self's properies with the new device properties (except for delegate which should be copied over)
+                NSMutableSet *propNames = [NSMutableSet set];
+                unsigned int outCount, i;
+                objc_property_t *properties = class_copyPropertyList([updatedNetwork class], &outCount);
+                for (i = 0; i < outCount; i++) {
+                    objc_property_t property = properties[i];
+                    NSString *propertyName = [[NSString alloc] initWithCString:property_getName(property) encoding:NSStringEncodingConversionAllowLossy];
+                    [propNames addObject:propertyName];
+                }
+                free(properties);
+                
+//                if (self.delegate) {
+//                    updatedDevice.delegate = self.delegate;
+//                }
+                
+                for (NSString *property in propNames)
+                {
+                    id value = [updatedNetwork valueForKey:property];
+                    [self setValue:value forKey:property];
+                }
+            }
+            if (completion)
+            {
+                completion(nil);
+            }
+        }
+        else
+        {
+            if (completion)
+            {
+                completion(error);
+            }
+        }
+    }];
     
     return nil;
 }
