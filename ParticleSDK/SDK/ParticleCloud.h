@@ -26,6 +26,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *const kParticleAPIBaseURL;
 
+
+typedef NS_ENUM(NSInteger, ParticleSimStatus) {
+    ParticleSimStatusError=0,
+    ParticleSimStatusOK,
+    ParticleSimStatusNotFound,
+    ParticleSimStatusNotOwnedByUser,
+    ParticleSimStatusActivated,
+    ParticleSimStatusActivatedFree
+};
+
 @interface ParticleCloud : NSObject
 
 /**
@@ -367,15 +377,20 @@ extern NSString *const kParticleAPIBaseURL;
                                           ttl:(NSUInteger)ttl
                                    completion:(nullable ParticleCompletionBlock)completion;
 
+
+// TODO: JSdoc comments
+
+// Get user's credit card on file
 -(NSURLSessionDataTask *)getCard:(nullable void(^)(NSString* _Nullable token, NSString* _Nullable last4, NSUInteger expiryMonth, NSUInteger expiryYear, NSString* _Nullable brand, NSError * _Nullable error))completion;
 
-//-(NSURLSessionDataTask *)activateSim
+// check SIM card
+-(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSString* _Nullable simStatusMessage, NSError * _Nullable))completion;
+// activate SIM card
+//-(NSURLSessionDataTask *)activateSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSString* _Nullable simStatusMessage, NSError * _Nullable;
 
 
 
-// new for mesh networks
-
-
+// Mesh networks API endpoints
 -(NSURLSessionDataTask *)getNetworks:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion;
 
 -(NSURLSessionDataTask *)getNetwork:(NSString *)idOrName

@@ -1374,6 +1374,69 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     
 }
 
+-(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSString* _Nullable simStatusMessage, NSError * _Nullable))completion
+{
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+    NSString *url = [NSString stringWithFormat:@"/v1/sims/%@/", iccid];
+    
+   
+    NSURLSessionDataTask *task = [self.manager HEAD:url parameters:nil success:^(NSURLSessionDataTask * _Nonnull task)
+                                  {
+                                      if (completion)
+                                      {
+                                          int code = -1;
+                                          NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
+                                          code = (int)serverResponse.statusCode;
+                                          
+                                          switch (code) {
+                                              case 204:
+                                                  completion(ParticleSimStatusActivatedFree, @"SIM card is activated and on a free plan", nil);
+                                                  break;
+
+                                              case 205:
+                                                  completion(ParticleSimStatusActivated, @"SIM card is already activated", nil);
+                                                  break;
+
+                                              default: // 200
+                                                  completion(ParticleSimStatusOK, @"SIM card is ready", nil);
+                                                  break;
+                                          }
+                                      }
+                                      
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+                                  {
+                                      int code = -1;
+                                      NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
+                                      code = (int)serverResponse.statusCode;
+                                      
+                                      switch (code) {
+                                          case 404:
+                                              completion(ParticleSimStatusNotFound, @"SIM card not found", nil);
+                                              break;
+                                              
+                                          case 403:
+                                              completion(ParticleSimStatusNotOwnedByUser, @"SIM card is owned by another user", nil);
+                                              break;
+                                              
+                                          default:
+                                              // 400 or 500
+                                              // no idea why the f%#$ that does not compile: thanks Xcode
+//                                              NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+//                                              NSLog(@"! getCard Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                              completion(ParticleSimStatusError, @"SIM card check error", error); //particleError);
+                                              break;
+                                      }
+
+                                    
+                                      
+                                  }];
+    
+    return task;
+}
+
 
 
 -(void)dealloc {
