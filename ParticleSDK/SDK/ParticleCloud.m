@@ -1217,8 +1217,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
 
 
--(NSURLSessionDataTask *)getNetworks:(NSString *)filter
-                          completion:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion
+-(NSURLSessionDataTask *)getNetworks:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion
 {
     if (self.session.accessToken) {
         NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
@@ -1324,7 +1323,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                             completion:(nullable void(^)(ParticleNetwork * _Nullable network, NSError * _Nullable error))completion
 {
     NSMutableDictionary *params = [@{
-                                     @"name:" : networkName,
+                                     @"name" : networkName,
                                      @"deviceID": gatewayDeviceID,
                                      } mutableCopy];
     
