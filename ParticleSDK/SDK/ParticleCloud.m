@@ -1195,27 +1195,27 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                                   errorString = [NSString stringWithFormat:@"Could not get card: %@",responseDict[@"error"]];
                                               else
                                                   errorString = @"Could not get card";
-                                              
+
                                               NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:errorString];
-                                              
+
                                               completion(nil, nil, 0,0, nil, particleError);
-                                              
+
                                               NSLog(@"! getCard Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
                                           }
                                       }
-                                      
+
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
                                   {
                                       NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
-                                      
+
                                       if (completion)
                                       {
                                           completion(nil, nil, 0,0, nil, particleError);
                                       }
-                                      
+
                                       NSLog(@"! getCard Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
                                   }];
-    
+
     return task;
 }
 
@@ -1542,7 +1542,35 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 }
 
 
+-(NSURLSessionDataTask *)removeDeviceNetworkInfo:(NSString *)deviceID
+                           completion:(nullable ParticleCompletionBlock)completion
+{
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@",self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
 
+    NSString *urlPath = [NSString stringWithFormat:@"/v1/devices/%@/network",deviceID];
+
+    NSURLSessionDataTask *task = [self.manager DELETE:urlPath parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
+    {
+        if (completion)
+        {
+            completion(nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
+        {
+            completion( particleError);
+        }
+
+        NSLog(@"! removeDeviceNetworkInfo Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+    }];
+
+    return task;
+}
 
 
 

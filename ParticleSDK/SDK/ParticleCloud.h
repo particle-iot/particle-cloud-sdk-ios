@@ -416,8 +416,7 @@ typedef NS_ENUM(NSInteger, ParticleSimStatus) {
                              completion:(nullable ParticleCompletionBlock)completion;
 
 
-
-
+- (NSURLSessionDataTask *)removeDeviceNetworkInfo:(NSString *)deviceID completion:(nullable ParticleCompletionBlock)completion;
 @end
 
 NS_ASSUME_NONNULL_END
