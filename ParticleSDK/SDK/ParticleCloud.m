@@ -846,8 +846,12 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 #pragma mark Mesh BLE OTA Update
 -(NSURLSessionDataTask *)getNextBinaryURL:(ParticleDeviceType)deviceType currentSystemFirmwareVersion:(NSString *)currentSystemFirmwareVersion currentNcpFirmwareVersion:(NSString * _Nullable)currentNcpFirmwareVersion currentNcpFirmwareModuleVersion:(NSNumber * _Nullable)currentNcpFirmwareModuleVersion  completion:(nullable void(^)(NSString * _Nullable binaryURL, NSError* _Nullable error))completion
 {
-    NSURL *url = [self.baseURL URLByAppendingPathComponent:@"v1/system_firmware/upgrade"];
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@",self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
 
+    NSURL *url = [self.baseURL URLByAppendingPathComponent:@"v1/system_firmware/upgrade"];
     NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithCapacity:2];
     params[@"platform_id"] = @(deviceType);
     params[@"current_system_firmware_version"] = currentSystemFirmwareVersion;
@@ -1322,6 +1326,11 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                     gatewayDeviceICCID:(NSString * _Nullable)gatewayDeviceICCID
                             completion:(nullable void(^)(ParticleNetwork * _Nullable network, NSError * _Nullable error))completion
 {
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@",self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+
     NSMutableDictionary *params = [@{
                                      @"name" : networkName,
                                      @"deviceID": gatewayDeviceID,
@@ -1451,7 +1460,12 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                   networkID:(NSString *)networkID
                                  completion:(nullable ParticleCompletionBlock)completion
 {
-    // TODO: put /v1/networks
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@",self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+
+    NSLog(@"url: %@, action: %@, deviceId: %@", [NSString stringWithFormat:@"/v1/networks/%@", networkID], action, deviceID);
 
     NSMutableDictionary *params = [@{
             @"action": action,
