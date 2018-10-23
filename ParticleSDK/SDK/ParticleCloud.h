@@ -409,7 +409,7 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 
 // check SIM card
 -(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSString* _Nullable simStatusMessage, NSError * _Nullable))completion;
-// activate SIM card - TODO
+
 -(NSURLSessionDataTask *)updateSim:(NSString *)iccid action:(ParticleUpdateSimAction)action dataLimit:(NSNumber * _Nullable)dataLimit completion:(nullable ParticleCompletionBlock)completion;
 
 -(NSURLSessionDataTask *)getPricingImpact:(ParticleNetworkAction)action objectType:(ParticlePricingImpactObjectType)objectType objectId:(NSString *)objectId planType:(ParticlePricingImpactPlanType)planType iccid:(NSString * _Nullable)iccid completion:(nullable void(^)(NSString* _Nullable response, NSError * _Nullable))completion;
@@ -428,7 +428,7 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
                             completion:(nullable void(^)(ParticleNetwork * _Nullable network, NSError * _Nullable error))completion;
 
 
-
+// TODO: create a takeAction function that takes ParticleNetworkAction param instead of those 4:
 -(NSURLSessionDataTask *)addDevice:(NSString *)deviceID toNetwork:(NSString *)networkID
                         completion:(nullable ParticleCompletionBlock)completion;
 

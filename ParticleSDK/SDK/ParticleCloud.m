@@ -1663,6 +1663,82 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     return task;
 }
 
+-(NSString *)_networkActionToString:(ParticleNetworkAction)action {
+    switch (action) {
+        case ParticleNetworkActionAddDevice:
+            return @"add-device";
+            break;
+        case ParticleNetworkActionRemoveDevice:
+            return @"remove-device";
+            break;
+        case ParticleNetworkActionEnableGateway:
+            return @"enable-gateway";
+            break;
+        case ParticleNetworkActionDisableGateway:
+            return @"disable-gateway";
+            break;
+
+    }
+    return nil;
+}
+
+-(NSURLSessionDataTask *)getPricingImpact:(ParticleNetworkAction)action objectType:(ParticlePricingImpactObjectType)objectType objectId:(NSString *)objectId planType:(ParticlePricingImpactPlanType)planType iccid:(NSString * _Nullable)iccid completion:(nullable void(^)(NSString* _Nullable response, NSError * _Nullable))completion
+{
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@",self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+    
+    NSString *actionString;
+    
+    NSURL *url = [self.baseURL URLByAppendingPathComponent:@"v1/pricing-impact"];
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+
+    params[@"action"] = [self _networkActionToString:action];
+    switch (objectType) {
+        case ParticlePricingImpactObjectTypeDevice:
+            params[@"object_type"] = @"device";
+            break;
+            
+        case ParticlePricingImpactObjectTypeNetwork:
+            params[@"object_type"] = @"network";
+            break;
+    }
+    params[@"object_id"] = objectId;
+    switch (planType) {
+        case ParticlePricingImpactPlanTypeWifi:
+            params[@"plan"] = @"wifi";
+            break;
+            
+        case ParticlePricingImpactPlanTypeCellular:
+            params[@"plan"] = @"cellular";
+            break;
+    }
+    if (iccid) {
+        params[@"iccid"] = iccid;
+    }
+    
+    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+                                  {
+                                      if (completion)
+                                      {
+                                          NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
+                                          NSDictionary *responseDict = responseObject;
+                                          completion(responseDict, nil);
+                                      }
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+                                      
+                                      if (completion)
+                                      {
+                                          completion(nil, particleError);
+                                      }
+                                      
+                                      NSLog(@"! getPricingImpact Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                  }];
+    
+    return task;
+}
 
 
 
