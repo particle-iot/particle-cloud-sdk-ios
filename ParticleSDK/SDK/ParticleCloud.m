@@ -1448,6 +1448,97 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
 
 
+-(NSURLSessionDataTask *)updateSim:(NSString *)iccid action:(ParticleUpdateSimAction)action dataLimit:(NSNumber * _Nullable)dataLimit completion:(nullable ParticleCompletionBlock)completion
+{
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@",self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+    
+    NSString *actionString;
+    NSString *mb_limit;
+    NSMutableDictionary *errorDetail = [[NSMutableDictionary alloc] init];
+    
+    switch (action) {
+        case ParticleUpdateSimActionActivate:
+            actionString = @"activate";
+            break;
+
+        case ParticleUpdateSimActionDeactivate:
+            actionString = @"deactivate";
+            break;
+            
+        case ParticleUpdateSimActionReactivate:
+            actionString = @"reactivate";
+            if (dataLimit) {
+                mb_limit = [dataLimit stringValue];
+            }
+            break;
+            
+        case ParticleUpdateSimActionSetDataLimit:
+            if (dataLimit) {
+                mb_limit = [dataLimit stringValue];
+            } else {
+                [errorDetail setValue:@"Must pass valid integer dataLimit when action is SetDataLimit" forKey:NSLocalizedDescriptionKey];
+                NSError *error = [NSError errorWithDomain:@"ParticleAPIError" code:0 userInfo:errorDetail];
+                completion(error);
+                return nil;
+            }
+
+            break;
+            
+        default:
+            [errorDetail setValue:@"Must pass valid action" forKey:NSLocalizedDescriptionKey];
+            NSError *error = [NSError errorWithDomain:@"ParticleAPIError" code:0 userInfo:errorDetail];
+            completion(error);
+            return nil;
+
+            break;
+    }
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    if (actionString) {
+        params[@"action"] = actionString;
+    }
+    if (mb_limit) {
+        params[@"mb_limit"] = mb_limit;
+    }
+    
+    
+    NSString *url = [NSString stringWithFormat:@"/v1/sims/%@", iccid];
+    
+    NSURLSessionDataTask *task = [self.manager PUT:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject)
+                                  {
+                                      NSDictionary *responseDict = responseObject;
+                                      if (completion) {
+                                          if ([responseDict[@"ok"] boolValue])
+                                          {
+                                              completion(nil);
+                                          }
+                                          else
+                                          {
+                                              NSString *errorString = @"Error updating SIM";
+                                              NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:errorString];
+                                              completion(particleError);
+                                              
+                                              NSLog(@"! updateSim (%@) Failed %@ (%ld): %@\r\n%@", actionString, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                          }
+                                      }
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+                                  {
+                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+                                      
+                                      if (completion) {
+                                          completion(particleError);
+                                      }
+                                      
+                                      NSLog(@"! updateSim (%@) Failed %@ (%ld): %@\r\n%@", actionString, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                  }];
+    
+    [self.manager.requestSerializer clearAuthorizationHeader];
+    
+    return task;
+}
 
 
 

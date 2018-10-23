@@ -36,6 +36,30 @@ typedef NS_ENUM(NSInteger, ParticleSimStatus) {
     ParticleSimStatusActivatedFree
 };
 
+typedef NS_ENUM(NSInteger, ParticlePricingImpactObjectType) {
+    ParticlePricingImpactObjectTypeDevice=0,
+    ParticlePricingImpactObjectTypeNetwork,
+};
+
+typedef NS_ENUM(NSInteger, ParticlePricingImpactPlanType) {
+    ParticlePricingImpactPlanTypeWifi=0,
+    ParticlePricingImpactPlanTypeCellular,
+};
+
+typedef NS_ENUM(NSInteger, ParticleNetworkAction) {
+    ParticleNetworkActionAddDevice=0,
+    ParticleNetworkActionRemoveDevice,
+    ParticleNetworkActionEnableGateway,
+    ParticleNetworkActionDisableGateway
+};
+
+typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
+    ParticleUpdateSimActionActivate=0,
+    ParticleUpdateSimActionDeactivate,
+    ParticleUpdateSimActionReactivate,
+    ParticleUpdateSimActionSetDataLimit
+};
+
 @interface ParticleCloud : NSObject
 
 /**
@@ -385,10 +409,12 @@ typedef NS_ENUM(NSInteger, ParticleSimStatus) {
 
 // check SIM card
 -(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSString* _Nullable simStatusMessage, NSError * _Nullable))completion;
-// activate SIM card
-//-(NSURLSessionDataTask *)activateSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSString* _Nullable simStatusMessage, NSError * _Nullable;
+// activate SIM card - TODO
+-(NSURLSessionDataTask *)updateSim:(NSString *)iccid action:(ParticleUpdateSimAction)action dataLimit:(NSNumber * _Nullable)dataLimit completion:(nullable ParticleCompletionBlock)completion;
 
+-(NSURLSessionDataTask *)getPricingImpact:(ParticleNetworkAction)action objectType:(ParticlePricingImpactObjectType)objectType objectId:(NSString *)objectId planType:(ParticlePricingImpactPlanType)planType iccid:(NSString * _Nullable)iccid completion:(nullable void(^)(NSString* _Nullable response, NSError * _Nullable))completion;
 
+//getPricingImpact(userId, { action, objectType, objectId, plan, iccid }) {
 
 // Mesh networks API endpoints
 -(NSURLSessionDataTask *)getNetworks:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion;
