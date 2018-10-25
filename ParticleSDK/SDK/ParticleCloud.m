@@ -1691,7 +1691,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     return nil;
 }
 
--(NSURLSessionDataTask *)getPricingImpact:(ParticlePricingImpactAction)action deviceID:(NSString * _Nullable)deviceID networkID:(NSString * _Nullable)networkID plan:(ParticlePricingImpactNetworkType)networkType iccid:(NSString * _Nullable)iccid completion:(nullable void(^)(ParticlePricingInfo* _Nullable response, NSError * _Nullable))completion;
+-(NSURLSessionDataTask *)getPricingImpact:(ParticlePricingImpactAction)action deviceID:(NSString * _Nullable)deviceID networkID:(NSString * _Nullable)networkID networkType:(ParticlePricingImpactNetworkType)networkType iccid:(NSString * _Nullable)iccid completion:(nullable void(^)(ParticlePricingInfo* _Nullable response, NSError * _Nullable))completion;
 {
     if (self.session.accessToken) {
         NSString *authorization = [NSString stringWithFormat:@"Bearer %@",self.session.accessToken];
@@ -1713,10 +1713,10 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     switch (networkType) {
         case ParticlePricingImpactNetworkTypeWifi:
-            params[@"network_type"] = @"wifi";
+            params[@"plan"] = @"wifi";
             break;
         case ParticlePricingImpactNetworkTypeCellular:
-            params[@"network_type"] = @"cellular";
+            params[@"plan"] = @"cellular";
             break;
     }
 

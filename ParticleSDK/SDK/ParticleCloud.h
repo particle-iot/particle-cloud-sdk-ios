@@ -411,7 +411,7 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 
 -(NSURLSessionDataTask *)updateSim:(NSString *)iccid action:(ParticleUpdateSimAction)action dataLimit:(NSNumber * _Nullable)dataLimit countryCode:(NSString * _Nullable)countryCode cardToken:(NSString * _Nullable)cardToken completion:(nullable ParticleCompletionBlock)completion;
 
--(NSURLSessionDataTask *)getPricingImpact:(ParticlePricingImpactAction)action deviceID:(NSString * _Nullable)deviceID networkID:(NSString * _Nullable)networkID plan:(ParticlePricingImpactNetworkType)networkType iccid:(NSString * _Nullable)iccid completion:(nullable void(^)(ParticlePricingInfo* _Nullable response, NSError * _Nullable))completion;
+-(NSURLSessionDataTask *)getPricingImpact:(ParticlePricingImpactAction)action deviceID:(NSString * _Nullable)deviceID networkID:(NSString * _Nullable)networkID networkType:(ParticlePricingImpactNetworkType)networkType iccid:(NSString * _Nullable)iccid completion:(nullable void(^)(ParticlePricingInfo* _Nullable response, NSError * _Nullable))completion;
 
 
 // Mesh networks API endpoints
