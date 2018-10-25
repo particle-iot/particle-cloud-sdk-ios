@@ -21,6 +21,7 @@
 #import "ParticleDevice.h"
 #import "ParticleEvent.h"
 #import "ParticleNetwork.h"
+#import "ParticlePricingInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -36,29 +37,27 @@ typedef NS_ENUM(NSInteger, ParticleSimStatus) {
     ParticleSimStatusActivatedFree
 };
 
-typedef NS_ENUM(NSInteger, ParticlePricingImpactObjectType) {
-    ParticlePricingImpactObjectTypeDevice=0,
-    ParticlePricingImpactObjectTypeNetwork,
+
+typedef NS_ENUM(NSInteger, ParticlePricingImpactNetworkType) {
+    ParticlePricingImpactNetworkTypeWifi=0, // Photons, Argons, Xenons, or any device on Ethernet featherwing
+    ParticlePricingImpactNetworkTypeCellular, // Boron or Electron
 };
 
-typedef NS_ENUM(NSInteger, ParticlePricingImpactPlanType) {
-    ParticlePricingImpactPlanTypeWifi=0,
-    ParticlePricingImpactPlanTypeCellular,
+
+typedef NS_ENUM(NSInteger, ParticlePricingImpactAction) {
+    ParticlePricingImpactActionAddUserDevice=0,  // standalone device setup
+    ParticlePricingImpactActionAddNetworkDevice, // mesh network joiner flow
+    ParticlePricingImpactActionCreateNetwork     // mesh network creation flow
 };
 
-typedef NS_ENUM(NSInteger, ParticleNetworkAction) {
-    ParticleNetworkActionAddDevice=0,
-    ParticleNetworkActionRemoveDevice,
-    ParticleNetworkActionEnableGateway,
-    ParticleNetworkActionDisableGateway
-};
 
 typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
-    ParticleUpdateSimActionActivate=0,
-    ParticleUpdateSimActionDeactivate,
-    ParticleUpdateSimActionReactivate,
-    ParticleUpdateSimActionSetDataLimit
+    ParticleUpdateSimActionActivate=0, // activate fresh SIM
+    ParticleUpdateSimActionDeactivate, // deactivate an active SIM
+    ParticleUpdateSimActionReactivate, // reactivate previously activated SIM, also can pass mb_limit to set data limit
+    ParticleUpdateSimActionSetDataLimit // set max data limit for SIM
 };
+
 
 @interface ParticleCloud : NSObject
 
@@ -408,13 +407,12 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 -(NSURLSessionDataTask *)getCard:(nullable void(^)(NSString* _Nullable token, NSString* _Nullable last4, NSUInteger expiryMonth, NSUInteger expiryYear, NSString* _Nullable brand, NSError * _Nullable error))completion;
 
 // check SIM card
--(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSString* _Nullable simStatusMessage, NSError * _Nullable))completion;
+-(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSError * _Nullable))completion;
 
--(NSURLSessionDataTask *)updateSim:(NSString *)iccid action:(ParticleUpdateSimAction)action dataLimit:(NSNumber * _Nullable)dataLimit completion:(nullable ParticleCompletionBlock)completion;
+-(NSURLSessionDataTask *)updateSim:(NSString *)iccid action:(ParticleUpdateSimAction)action dataLimit:(NSNumber * _Nullable)dataLimit countryCode:(NSString * _Nullable)countryCode cardToken:(NSString * _Nullable)cardToken completion:(nullable ParticleCompletionBlock)completion;
 
--(NSURLSessionDataTask *)getPricingImpact:(ParticleNetworkAction)action objectType:(ParticlePricingImpactObjectType)objectType objectId:(NSString *)objectId planType:(ParticlePricingImpactPlanType)planType iccid:(NSString * _Nullable)iccid completion:(nullable void(^)(NSString* _Nullable response, NSError * _Nullable))completion;
+-(NSURLSessionDataTask *)getPricingImpact:(ParticlePricingImpactAction)action deviceID:(NSString * _Nullable)deviceID networkID:(NSString * _Nullable)networkID plan:(ParticlePricingImpactNetworkType)networkType iccid:(NSString * _Nullable)iccid completion:(nullable void(^)(ParticlePricingInfo* _Nullable response, NSError * _Nullable))completion;
 
-//getPricingImpact(userId, { action, objectType, objectId, plan, iccid }) {
 
 // Mesh networks API endpoints
 -(NSURLSessionDataTask *)getNetworks:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion;

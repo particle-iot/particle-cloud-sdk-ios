@@ -16,6 +16,8 @@
 #import <AFNetworking/AFNetworking.h>
 #else
 #import "AFNetworking.h"
+#import "ParticlePricingInfo.h"
+
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
@@ -1382,7 +1384,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     
 }
 
--(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSString* _Nullable simStatusMessage, NSError * _Nullable))completion
+-(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSError * _Nullable))completion
 {
     if (self.session.accessToken) {
         NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
@@ -1401,45 +1403,46 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           
                                           switch (code) {
                                               case 204:
-                                                  completion(ParticleSimStatusActivatedFree, @"SIM card is activated and on a free plan", nil);
+                                                  completion(ParticleSimStatusActivatedFree, nil);
                                                   break;
 
                                               case 205:
-                                                  completion(ParticleSimStatusActivated, @"SIM card is already activated", nil);
+                                                  completion(ParticleSimStatusActivated, nil);
                                                   break;
 
                                               default: // 200
-                                                  completion(ParticleSimStatusOK, @"SIM card is ready", nil);
+                                                  completion(ParticleSimStatusOK, nil);
                                                   break;
                                           }
                                       }
                                       
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
                                   {
-                                      int code = -1;
-                                      NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
-                                      code = (int)serverResponse.statusCode;
-                                      
-                                      switch (code) {
-                                          case 404:
-                                              completion(ParticleSimStatusNotFound, @"SIM card not found", nil);
-                                              break;
-                                              
-                                          case 403:
-                                              completion(ParticleSimStatusNotOwnedByUser, @"SIM card is owned by another user", nil);
-                                              break;
-                                              
-                                          default:
-                                              // 400 or 500
-                                              // no idea why the f%#$ that does not compile: thanks Xcode
-//                                              NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
-//                                              NSLog(@"! getCard Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
-                                              completion(ParticleSimStatusError, @"SIM card check error", error); //particleError);
-                                              break;
+                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+
+                                      if (completion) {
+                                          NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
+                                          int code = (int)serverResponse.statusCode;
+
+                                          switch (code) {
+                                              case 404:
+                                                  completion(ParticleSimStatusNotFound, error);
+                                                  break;
+
+                                              case 403:
+                                                  completion(ParticleSimStatusNotOwnedByUser, error);
+                                                  break;
+
+                                              default: {
+                                                  completion(ParticleSimStatusError, error); //particleError);
+                                                  break;
+                                              }
+                                          }
+
+                                          completion(nil, particleError);
                                       }
 
-                                    
-                                      
+                                      NSLog(@"! createNetwork Failed%@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
                                   }];
     
     return task;
@@ -1448,7 +1451,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
 
 
--(NSURLSessionDataTask *)updateSim:(NSString *)iccid action:(ParticleUpdateSimAction)action dataLimit:(NSNumber * _Nullable)dataLimit completion:(nullable ParticleCompletionBlock)completion
+-(NSURLSessionDataTask *)updateSim:(NSString *)iccid action:(ParticleUpdateSimAction)action dataLimit:(NSNumber * _Nullable)dataLimit countryCode:(NSString * _Nullable)countryCode cardToken:(NSString * _Nullable)cardToken completion:(nullable ParticleCompletionBlock)completion
 {
     if (self.session.accessToken) {
         NSString *authorization = [NSString stringWithFormat:@"Bearer %@",self.session.accessToken];
@@ -1503,8 +1506,20 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     if (mb_limit) {
         params[@"mb_limit"] = mb_limit;
     }
-    
-    
+    if ([actionString isEqualToString:@"activate"]) {
+        if (countryCode) {
+            params[@"country"] = countryCode;
+        } else {
+            params[@"country"] = @"us";
+        }
+    }
+
+    if (cardToken) {
+        params[@"card_token"] = cardToken;
+    }
+
+
+
     NSString *url = [NSString stringWithFormat:@"/v1/sims/%@", iccid];
     
     NSURLSessionDataTask *task = [self.manager PUT:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject)
@@ -1529,6 +1544,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                       NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
                                       
                                       if (completion) {
+                                          // Handle 504s gracefully in client code
                                           completion(particleError);
                                       }
                                       
@@ -1663,26 +1679,19 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     return task;
 }
 
--(NSString *)_networkActionToString:(ParticleNetworkAction)action {
+-(NSString *)_actionToString:(ParticlePricingImpactAction)action {
     switch (action) {
-        case ParticleNetworkActionAddDevice:
-            return @"add-device";
-            break;
-        case ParticleNetworkActionRemoveDevice:
-            return @"remove-device";
-            break;
-        case ParticleNetworkActionEnableGateway:
-            return @"enable-gateway";
-            break;
-        case ParticleNetworkActionDisableGateway:
-            return @"disable-gateway";
-            break;
-
+        case ParticlePricingImpactActionAddUserDevice:
+            return @"add-device-to-user";
+        case ParticlePricingImpactActionAddNetworkDevice:
+            return @"add-device-to-network";
+        case ParticlePricingImpactActionCreateNetwork:
+            return @"create-network";
     }
     return nil;
 }
 
--(NSURLSessionDataTask *)getPricingImpact:(ParticleNetworkAction)action objectType:(ParticlePricingImpactObjectType)objectType objectId:(NSString *)objectId planType:(ParticlePricingImpactPlanType)planType iccid:(NSString * _Nullable)iccid completion:(nullable void(^)(NSString* _Nullable response, NSError * _Nullable))completion
+-(NSURLSessionDataTask *)getPricingImpact:(ParticlePricingImpactAction)action deviceID:(NSString * _Nullable)deviceID networkID:(NSString * _Nullable)networkID plan:(ParticlePricingImpactNetworkType)networkType iccid:(NSString * _Nullable)iccid completion:(nullable void(^)(ParticlePricingInfo* _Nullable response, NSError * _Nullable))completion;
 {
     if (self.session.accessToken) {
         NSString *authorization = [NSString stringWithFormat:@"Bearer %@",self.session.accessToken];
@@ -1694,26 +1703,23 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     NSURL *url = [self.baseURL URLByAppendingPathComponent:@"v1/pricing-impact"];
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
 
-    params[@"action"] = [self _networkActionToString:action];
-    switch (objectType) {
-        case ParticlePricingImpactObjectTypeDevice:
-            params[@"object_type"] = @"device";
+    params[@"action"] = [self _actionToString:action];
+    if (deviceID) {
+        params[@"device_id"] = deviceID;
+    }
+    if (networkID) {
+        params[@"network_id"] = deviceID;
+    }
+
+    switch (networkType) {
+        case ParticlePricingImpactNetworkTypeWifi:
+            params[@"network_type"] = @"wifi";
             break;
-            
-        case ParticlePricingImpactObjectTypeNetwork:
-            params[@"object_type"] = @"network";
+        case ParticlePricingImpactNetworkTypeCellular:
+            params[@"network_type"] = @"cellular";
             break;
     }
-    params[@"object_id"] = objectId;
-    switch (planType) {
-        case ParticlePricingImpactPlanTypeWifi:
-            params[@"plan"] = @"wifi";
-            break;
-            
-        case ParticlePricingImpactPlanTypeCellular:
-            params[@"plan"] = @"cellular";
-            break;
-    }
+
     if (iccid) {
         params[@"iccid"] = iccid;
     }
@@ -1724,7 +1730,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                       {
                                           NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
                                           NSDictionary *responseDict = responseObject;
-                                          completion(responseDict, nil);
+                                          completion([[ParticlePricingInfo alloc] initWithParams:responseDict], nil);
                                       }
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                                       NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
