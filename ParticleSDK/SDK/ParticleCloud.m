@@ -1526,18 +1526,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                   {
                                       NSDictionary *responseDict = responseObject;
                                       if (completion) {
-                                          if ([responseDict[@"ok"] boolValue])
-                                          {
-                                              completion(nil);
-                                          }
-                                          else
-                                          {
-                                              NSString *errorString = @"Error updating SIM";
-                                              NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:errorString];
-                                              completion(particleError);
-                                              
-                                              NSLog(@"! updateSim (%@) Failed %@ (%ld): %@\r\n%@", actionString, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
-                                          }
+                                          completion(nil);
                                       }
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
                                   {
