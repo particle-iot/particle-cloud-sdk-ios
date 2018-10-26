@@ -1508,9 +1508,9 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     }
     if ([actionString isEqualToString:@"activate"]) {
         if (countryCode) {
-            params[@"country"] = countryCode;
+            params[@"country"] = [countryCode uppercaseString];
         } else {
-            params[@"country"] = @"us";
+            params[@"country"] = @"US";
         }
     }
 
