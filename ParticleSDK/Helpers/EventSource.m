@@ -129,6 +129,10 @@ static NSString *const ESEventEventKey = @"event";
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
+    if (wasClosed) {
+        return;
+    }
+
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
     if (httpResponse.statusCode == 200) {
         // Opened
@@ -152,6 +156,9 @@ static NSString *const ESEventEventKey = @"event";
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     NSLog(@"Event stream connection error = %@", error.localizedDescription);
+    if (wasClosed) {
+        return;
+    }
 
     Event *e = [Event new];
     e.readyState = kEventStateClosed;
@@ -176,6 +183,10 @@ static NSString *const ESEventEventKey = @"event";
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
+    if (wasClosed) {
+        return;
+    }
+
     NSString *eventString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     eventString = [eventString stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     NSArray *components = [eventString componentsSeparatedByString:ESEventKeyValuePairSeparator];
