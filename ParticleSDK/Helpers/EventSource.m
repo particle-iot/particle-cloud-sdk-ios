@@ -60,12 +60,15 @@ static NSString *const ESEventEventKey = @"event";
         _retryInterval = ES_RETRY_INTERVAL;
         _queue = queue;
         _retries = 0;
-        
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_retryInterval * NSEC_PER_SEC));
-        dispatch_after(popTime, queue, ^(void){
+
+        dispatch_after(DISPATCH_TIME_NOW, queue, ^(void){
+            if (wasClosed) {
+                return;
+            }
+
             [self open];
         });
-        
+
         self.event = [Event new];
     }
     return self;
@@ -109,9 +112,9 @@ static NSString *const ESEventEventKey = @"event";
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.eventURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.timeoutInterval];
 
     [request setHTTPMethod:@"GET"];
-    
+
     self.eventSource = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
-    
+
     if (![NSThread isMainThread]) {
         CFRunLoopRun();
     }
@@ -119,10 +122,20 @@ static NSString *const ESEventEventKey = @"event";
 
 - (void)close
 {
+    if (wasClosed) {
+        return;
+    }
+
     wasClosed = YES;
-    [self.eventSource cancel];
+
+    dispatch_after(DISPATCH_TIME_NOW, self.queue, ^(void) {
+        [self.eventSource cancel];
+    });
+
     self.queue = nil;
 }
+
+
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -170,9 +183,13 @@ static NSString *const ESEventEventKey = @"event";
             handler(e);
         });
     }
-    
+
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.retryInterval * NSEC_PER_SEC));
     dispatch_after(popTime, self.queue, ^(void) {
+        if (wasClosed) {
+            return;
+        }
+
         if (self.retries < 5) {
             self.retries++;
             [self open];
@@ -251,6 +268,10 @@ static NSString *const ESEventEventKey = @"event";
     
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.retryInterval * NSEC_PER_SEC));
     dispatch_after(popTime, self.queue, ^(void) {
+        if (wasClosed) {
+            return;
+        }
+
         if (self.retries < 5) {
             self.retries++;
             [self open];
