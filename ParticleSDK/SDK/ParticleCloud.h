@@ -423,6 +423,7 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 -(NSURLSessionDataTask *)createNetwork:(NSString *)networkName
                        gatewayDeviceID:(NSString *)gatewayDeviceID
                     gatewayDeviceICCID:(NSString * _Nullable)gatewayDeviceICCID
+                           networkType:(ParticleNetworkType)networkType
                             completion:(nullable void(^)(ParticleNetwork * _Nullable network, NSError * _Nullable error))completion;
 
 

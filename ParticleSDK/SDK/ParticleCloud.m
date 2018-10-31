@@ -1326,6 +1326,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 -(NSURLSessionDataTask *)createNetwork:(NSString *)networkName
                        gatewayDeviceID:(NSString *)gatewayDeviceID
                     gatewayDeviceICCID:(NSString * _Nullable)gatewayDeviceICCID
+                           networkType:(ParticleNetworkType)networkType
                             completion:(nullable void(^)(ParticleNetwork * _Nullable network, NSError * _Nullable error))completion
 {
     if (self.session.accessToken) {
@@ -1341,6 +1342,25 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     // optional ICCID for borons
     if (gatewayDeviceICCID) {
         params[@"iccid"] = gatewayDeviceICCID;
+    }
+    
+    switch (networkType) {
+        case ParticleNetworkTypeMicroWifi:
+            params[@"type"] = @"micro_wifi";
+            break;
+
+        case ParticleNetworkTypeMicroCellular:
+            params[@"type"] = @"micro_cellular";
+            break;
+
+        case ParticleNetworkTypeHighAvailability:
+            params[@"type"] = @"high_availability";
+            break;
+
+        case ParticleNetworkTypeLargeSite:
+            params[@"type"] = @"large_site";
+            break;
+            
     }
     
     NSURLSessionDataTask *task = [self.manager POST:@"/v1/networks/" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
