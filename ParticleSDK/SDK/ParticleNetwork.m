@@ -47,6 +47,18 @@
         {
             _id = params[@"id"];
         }
+
+        _panId = nil;
+        if ([params[@"pan_id"] isKindOfClass:[NSString class]])
+        {
+            _panId = params[@"pan_id"];
+        }
+
+        _xpanId = nil;
+        if ([params[@"xpan_id"] isKindOfClass:[NSString class]])
+        {
+            _xpanId = params[@"xpan_id"];
+        }
         
         _notes = nil;
         if ([params[@"notes"] isKindOfClass:[NSString class]])

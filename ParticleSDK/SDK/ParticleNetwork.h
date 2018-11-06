@@ -32,7 +32,6 @@ extern NSString *const kParticleAPIBaseURL;
 
 @property (nonatomic, strong, readonly) NSString* id;
 @property (nonatomic, strong, readonly) NSString* name;
-//@property (nonatomic, strong, readonly) NSString* owner; //username of owner
 @property (nonatomic, readonly) ParticleNetworkType type;
 @property (nonatomic, strong, nullable, readonly) NSString* panId;
 @property (nonatomic, strong, nullable, readonly) NSString* xpanId;
