@@ -36,6 +36,20 @@
     return nil;
 }
 
+- (NSString *)description {
+    NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"allowed: %d ", _allowed];
+    [description appendFormat:@"chargeable: %d ", _chargeable];
+    [description appendFormat:@"ccOnFile: %d ", _ccOnFile];
+    [description appendFormat:@"ccLast4: %d ", _allowed];
+    [description appendFormat:@"planUpgradeNeeded: %d ", _planUpgradeNeeded];
+    [description appendFormat:@"planSlug: %@ ", _planSlug];
+    [description appendFormat:@"plan: %@", _plan];
+    [description appendString:@">"];
+    return description;
+}
+
+
 @end
 
 
@@ -89,6 +103,22 @@
     }
 
     return nil;
+}
+
+- (NSString *)description {
+    NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"freeDeviceMaxCount: %i ", _freeDeviceMaxCount];
+    [description appendFormat:@"freeDevicesAvailableCount: %i ", _freeDevicesAvailableCount];
+    [description appendFormat:@"freeWifiNetworkMaxCount: %i ", _freeWifiNetworkMaxCount];
+    [description appendFormat:@"freeWifiNetworksAvailableCount: %i ", _freeWifiNetworksAvailableCount];
+    [description appendFormat:@"includedNodeCount: %i ", _includedNodeCount];
+    [description appendFormat:@"includedGatewayCount: %i ", _includedGatewayCount];
+    [description appendFormat:@"includedDataMb: %i ", _includedDataMb];
+    [description appendFormat:@"freeMonths: %i ", _freeMonths];
+    [description appendFormat:@"monthlyBaseAmount: %@ ", [_monthlyBaseAmount stringValue]];
+    [description appendFormat:@"overageMinCostMb: %@", [_overageMinCostMb stringValue]];
+    [description appendString:@">"];
+    return description;
 }
 
 @end
