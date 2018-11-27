@@ -31,7 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic, nullable) NSString *version;
 //@property (nonatomic) ParticleDeviceType type;
 @property (nonatomic) BOOL requiresUpdate;
-@property (nonatomic, strong) AFHTTPSessionManager *manager;
 @property (nonatomic) BOOL isFlashing;
 @property (nonatomic, strong) NSURL *baseURL;
 
@@ -45,6 +44,19 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @implementation ParticleDevice
+
++ (AFHTTPSessionManager*) manager
+{
+    static dispatch_once_t onceToken;
+    static AFHTTPSessionManager *manager = nil;
+    dispatch_once(&onceToken, ^{
+        manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:kParticleAPIBaseURL]];
+        manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    });
+
+    return manager;
+}
+
 
 -(nullable instancetype)initWithParams:(NSDictionary *)params
 {
@@ -160,10 +172,7 @@ NS_ASSUME_NONNULL_BEGIN
             _requiresUpdate = YES;
         }
         
-        self.manager = [[AFHTTPSessionManager alloc] initWithBaseURL:self.baseURL];
-        self.manager.responseSerializer = [AFJSONResponseSerializer serializer];
 
-        if (!self.manager) return nil;
         
          
         return self;
@@ -233,7 +242,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         if (completion)
         {
@@ -294,7 +303,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [self.manager POST:[url description] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager POST:[url description] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         if (completion)
         {
@@ -336,7 +345,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [self.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (completion)
         {
             completion(nil);
@@ -363,7 +372,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self setAuthHeaderWithAccessToken];
 
-    NSURLSessionDataTask *task = [self.manager DELETE:[url description] parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager DELETE:[url description] parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         if (completion)
         {
@@ -407,7 +416,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self setAuthHeaderWithAccessToken];
 
-    NSURLSessionDataTask *task = [self.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         self.name = newName;
         if (completion)
         {
@@ -444,7 +453,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     if ([ParticleCloud sharedInstance].accessToken) {
         NSString *authorization = [NSString stringWithFormat:@"Bearer %@",[ParticleCloud sharedInstance].accessToken];
-        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+        [ParticleDevice.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
     }
 }
 
@@ -477,7 +486,7 @@ NS_ASSUME_NONNULL_BEGIN
     params[@"app"] = knownAppName;
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [self.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         NSDictionary *responseDict = responseObject;
         if (responseDict[@"errors"])
@@ -518,7 +527,7 @@ NS_ASSUME_NONNULL_BEGIN
     [self setAuthHeaderWithAccessToken];
     
     NSError *reqError;
-    NSMutableURLRequest *request = [self.manager.requestSerializer multipartFormRequestWithMethod:@"PUT" URLString:url.description parameters:@{@"file_type" : @"binary"} constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    NSMutableURLRequest *request = [ParticleDevice.manager.requestSerializer multipartFormRequestWithMethod:@"PUT" URLString:url.description parameters:@{@"file_type" : @"binary"} constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         // check this:
         for (NSString *key in filesDict.allKeys)
         {
@@ -528,7 +537,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     if (!reqError)
     {
-        __block NSURLSessionDataTask *task = [self.manager dataTaskWithRequest:request
+        __block NSURLSessionDataTask *task = [ParticleDevice.manager dataTaskWithRequest:request
                 uploadProgress: nil
                 downloadProgress: nil
                 completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error)
@@ -606,7 +615,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
                                       if (completion)
                                       {
