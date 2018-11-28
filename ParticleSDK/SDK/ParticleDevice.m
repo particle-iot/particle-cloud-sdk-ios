@@ -245,13 +245,6 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
--(void)setName:(nullable NSString *)name
-{
-    if (name != nil) {
-        [self rename:name completion:nil];
-    }
-}
-
 -(NSURLSessionDataTask *)getVariable:(NSString *)variableName completion:(nullable void(^)(id _Nullable result, NSError* _Nullable error))completion
 {
     // TODO: check variable name exists in list
