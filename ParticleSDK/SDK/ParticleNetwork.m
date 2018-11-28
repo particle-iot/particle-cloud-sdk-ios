@@ -17,6 +17,8 @@
 #import <AFNetworking/AFNetworking.h>
 #else
 #import "AFNetworking.h"
+#import "ParticleLogger.h"
+
 #endif
 
 @interface ParticleNetwork()
@@ -125,7 +127,9 @@
 
         self.manager = [[AFHTTPSessionManager alloc] initWithBaseURL:self.baseURL];
         self.manager.responseSerializer = [AFJSONResponseSerializer serializer];
-        
+
+        [ParticleLogger logDebug:@"ParticleNetwork" format:@"self = %@", self];
+
         if (!self.manager) return nil;
         
         return self;

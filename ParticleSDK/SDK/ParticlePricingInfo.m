@@ -3,6 +3,7 @@
 //
 
 #import "ParticlePricingInfo.h"
+#import "ParticleLogger.h"
 
 
 @implementation ParticlePricingInfo
@@ -30,7 +31,9 @@
 
         _planUpgradeNeeded = [params[@"plan_upgrade_needed"] boolValue] == YES;
 
+        [ParticleLogger logDebug:@"ParticlePricingInfo" format:@"self = %@", self];
         return self;
+
     }
 
     return nil;
