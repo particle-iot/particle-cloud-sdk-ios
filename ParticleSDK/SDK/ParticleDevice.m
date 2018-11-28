@@ -57,6 +57,25 @@ NS_ASSUME_NONNULL_BEGIN
     return manager;
 }
 
+- (NSString *)typeString {
+        switch (self.type) {
+            case ParticleDeviceTypeUnknown: return @"Unknown";
+            case ParticleDeviceTypeCore : return @"Core";
+            case ParticleDeviceTypePhoton : return @"Photon";
+            case ParticleDeviceTypeP1 : return @"P1";
+            case ParticleDeviceTypeElectron : return @"Electron";
+            case ParticleDeviceTypeRaspberryPi : return @"RaspberryPi";
+            case ParticleDeviceTypeRedBearDuo : return @"RedBearDuo";
+            case ParticleDeviceTypeBluz : return @"Bluz";
+            case ParticleDeviceTypeDigistumpOak : return @"DigistumpOak";
+            case ParticleDeviceTypeESP32 : return @"ESP32";
+            case ParticleDeviceTypeArgon : return @"Argon";
+            case ParticleDeviceTypeBoron : return @"Boron";
+            case ParticleDeviceTypeXenon : return @"Xenon";
+            default: return @"Unknown";
+    }
+}
+
 
 -(nullable instancetype)initWithParams:(NSDictionary *)params
 {
@@ -460,9 +479,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSString *)description
 {
+    switch (self.type) {
+
+    }
+
     NSString *desc = [NSString stringWithFormat:@"<ParticleDevice 0x%lx, type: %@, id: %@, name: %@, connected: %@, variables: %@, functions: %@, version: %@, requires update: %@, last app: %@, last heard: %@>",
                       (unsigned long)self,
-                      (self.type == ParticleDeviceTypeCore) ? @"Core" : @"Photon",
+                      self.typeString,
                       self.id,
                       self.name,
                       (self.connected) ? @"true" : @"false",
