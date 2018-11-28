@@ -10,6 +10,7 @@
 
 
 #import "EventSource.h"
+#import "ParticleLogger.h"
 
 static float const ES_RETRY_INTERVAL = 1.0;
 
@@ -162,13 +163,13 @@ static NSString *const ESEventEventKey = @"event";
     }
     else
     {
-        NSLog(@"Event stream connection status code = %li", (long)httpResponse.statusCode);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"Event stream connection status code = %li", (long)httpResponse.statusCode];
     }
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    NSLog(@"Event stream connection error = %@", error.localizedDescription);
+    [ParticleLogger logError:NSStringFromClass([self class]) format:@"Event stream connection error = %@", error.localizedDescription];
     if (wasClosed) {
         return;
     }

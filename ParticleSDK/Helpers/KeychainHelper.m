@@ -3,6 +3,7 @@
 //
 
 #import "KeychainHelper.h"
+#import "ParticleLogger.h"
 
 
 @implementation KeychainHelper
@@ -24,7 +25,7 @@
     if (err == noErr) {
         value = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     } else if (err != errSecItemNotFound) {
-        NSLog(@"Error: %qi", (long long)err);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"Error reading keychain value = %qi", (long long)err];
     }
     return value;
 }
@@ -49,7 +50,7 @@
         [query setObject:[value dataUsingEncoding:NSUTF8StringEncoding] forKey:(__bridge id<NSCopying>)(kSecValueData)];
         OSStatus err = SecItemAdd((__bridge CFDictionaryRef)query, nil);
         if (err != noErr) {
-            NSLog(@"%qi", (long long)err);
+            [ParticleLogger logError:NSStringFromClass([self class]) format:@"Error adding keychain value = %qi", (long long)err];
         }
     }
 }
