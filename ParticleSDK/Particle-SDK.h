@@ -26,6 +26,7 @@
 #import "ParticleDevice.h"
 #import "ParticleNetwork.h"
 #import "ParticleErrorHelper.h"
+#import "ParticleLogger.h"
 
 #endif
 
