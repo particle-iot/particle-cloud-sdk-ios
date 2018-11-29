@@ -250,7 +250,7 @@ NS_ASSUME_NONNULL_BEGIN
     // TODO: check response of calling a non existant function
     
     NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/devices/%@/%@", self.id, variableName]];
-    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@", url.absoluteString];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", url.absoluteString];
 
     [self setAuthHeaderWithAccessToken];
     
@@ -316,7 +316,7 @@ NS_ASSUME_NONNULL_BEGIN
             
         params[@"args"] = argsValue;
     }
-    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@, params = %@", url.absoluteString, params];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", url.absoluteString, params];
 
     [self setAuthHeaderWithAccessToken];
     
@@ -363,7 +363,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSMutableDictionary *params = [NSMutableDictionary new];
     params[@"signal"] = enable ? @"1" : @"0";
-    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@, params = %@", url.absoluteString, params];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", url.absoluteString, params];
 
     [self setAuthHeaderWithAccessToken];
 
@@ -394,7 +394,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
 
     NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/devices/%@", self.id]];
-    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@", url.absoluteString];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"DELETE %@", url.absoluteString];
 
     [self setAuthHeaderWithAccessToken];
 
@@ -443,7 +443,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSMutableDictionary *params = [NSMutableDictionary new];
     params[@"name"] = newName;
 
-    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@, params = %@", url.absoluteString, params];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", url.absoluteString, params];
 
     [self setAuthHeaderWithAccessToken];
 
@@ -523,7 +523,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSMutableDictionary *params = [NSMutableDictionary new];
     params[@"app"] = knownAppName;
 
-    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@, params = %@", url.absoluteString, params];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", url.absoluteString, params];
 
     [self setAuthHeaderWithAccessToken];
     
@@ -567,7 +567,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable NSURLSessionDataTask *)flashFiles:(NSDictionary *)filesDict completion:(nullable ParticleCompletionBlock)completion // binary
 {
     NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/devices/%@", self.id]];
-    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@", url.absoluteString];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@", url.absoluteString];
 
     [self setAuthHeaderWithAccessToken];
     
@@ -660,7 +660,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     //curl https://api.particle.io/v1/sims/8934076500002586576/data_usage\?access_token\=5451a5d6c6c54f6b20e3a109ee764596dc38a520
     NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/sims/%@/data_usage", self.lastIccid]];
-    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@", url.absoluteString];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", url.absoluteString];
 
     [self setAuthHeaderWithAccessToken];
     
