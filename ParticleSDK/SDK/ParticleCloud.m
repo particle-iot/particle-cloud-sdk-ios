@@ -11,13 +11,13 @@
 #import "ParticleNetwork.h"
 #import "EventSource.h"
 #import "ParticleErrorHelper.h"
+#import "ParticleLogger.h"
 
 #ifdef USE_FRAMEWORKS
 #import <AFNetworking/AFNetworking.h>
 #else
 #import "AFNetworking.h"
 #import "ParticlePricingInfo.h"
-
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
@@ -93,13 +93,15 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
         // init event listeners internal dictionary
         self.eventListenersDict = [NSMutableDictionary new];
+
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Has access token = %d", self.session.accessToken != nil];
+
         if (self.session.accessToken) {
             [self subscribeToDevicesSystemEvents];
         }
     }
     return self;
 }
-
 
 #pragma mark Getter functions
 
@@ -111,6 +113,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 -(BOOL)injectSessionAccessToken:(NSString * _Nonnull)accessToken
 {
     [self logout];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Login with access token"];
     self.session = [[ParticleSession alloc] initWithToken:accessToken];
     if (self.session) {
         self.session.delegate = self;
@@ -122,6 +125,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 -(BOOL)injectSessionAccessToken:(NSString *)accessToken withExpiryDate:(NSDate *)expiryDate
 {
     [self logout];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Login with access token"];
     self.session = [[ParticleSession alloc] initWithToken:accessToken andExpiryDate:expiryDate];
     if (self.session) {
         self.session.delegate = self;
@@ -133,6 +137,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 -(BOOL)injectSessionAccessToken:(NSString *)accessToken withExpiryDate:(NSDate *)expiryDate andRefreshToken:(nonnull NSString *)refreshToken
 {
     [self logout];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Login with access token"];
     self.session = [[ParticleSession alloc] initWithToken:accessToken withExpiryDate:expiryDate withRefreshToken:refreshToken];
     if (self.session) {
         self.session.delegate = self;
@@ -177,6 +182,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
 - (void)ParticleSession:(ParticleSession *)session didExpireAt:(NSDate *)date
 {
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Session expired"];
     if (self.session.refreshToken) {
         [self refreshToken:self.session.refreshToken];
     }
@@ -195,8 +201,13 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     
     [self.manager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.oAuthClientId password:self.oAuthClientSecret];
 
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", @"oauth/token", params];
+
     // OAuth login
     [self.manager POST:@"oauth/token" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"oauth/token", (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         NSMutableDictionary *responseDict = [responseObject mutableCopy];
         
         if (self.session.username)
@@ -210,7 +221,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
 
-        NSLog(@"! refreshToken Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! refreshToken Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     [self.manager.requestSerializer clearAuthorizationHeader];
@@ -230,9 +241,11 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                              };
     
     [self.manager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.oAuthClientId password:self.oAuthClientSecret];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@", @"oauth/token"];
+
     // OAuth login
     NSURLSessionDataTask *task = [self.manager POST:@"oauth/token" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"oauth/token", (int)((NSHTTPURLResponse *)task.response).statusCode];
         NSMutableDictionary *responseDict = [responseObject mutableCopy];
 
         responseDict[@"username"] = user;
@@ -255,7 +268,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(particleError);
         }
 
-        NSLog(@"! loginWithUser Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! loginWithUser Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     [self.manager.requestSerializer clearAuthorizationHeader];
@@ -272,8 +285,11 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             @"otp": otpToken,
     };
 
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", @"oauth/token", params];
+
     [self.manager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.oAuthClientId password:self.oAuthClientSecret];
     NSURLSessionDataTask *task = [self.manager POST:@"oauth/token" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"oauth/token", (int)((NSHTTPURLResponse *)task.response).statusCode];
 
         NSMutableDictionary *responseDict = [responseObject mutableCopy];
 
@@ -297,7 +313,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(particleError);
         }
 
-        NSLog(@"! loginWithMFAToken Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! loginWithMFAToken Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
 
     [self.manager.requestSerializer clearAuthorizationHeader];
@@ -323,9 +339,11 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     if (accountInfo) {
         params[@"account_info"] = accountInfo;
     }
-        
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@", @"/v1/users/"];
     NSURLSessionDataTask *task = [self.manager POST:@"/v1/users/" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
+                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/users/", (int)((NSHTTPURLResponse *)task.response).statusCode];
                                       NSDictionary *responseDict = responseObject;
                                       if (completion) {
                                           if ([responseDict[@"ok"] boolValue])
@@ -344,7 +362,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
                                               completion(particleError);
 
-                                              NSLog(@"! signupWithUser Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                              [ParticleLogger logError:NSStringFromClass([self class]) format:@"! signupWithUser Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                           }
                                       }
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
@@ -355,7 +373,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           completion(particleError);
                                       }
 
-                                      NSLog(@"! signupWithUser Failed%@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! signupWithUser Failed%@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                   }];
     
     [self.manager.requestSerializer clearAuthorizationHeader];
@@ -411,12 +429,16 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     
     
     NSString *url = [NSString stringWithFormat:@"/v1/products/%tu/customers", productId];
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@", url];
+
     NSURLSessionDataTask *task = [self.manager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
+                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url, (int)((NSHTTPURLResponse *)task.response).statusCode];
+
                                       NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
                                       NSMutableDictionary *responseDict = [responseObject mutableCopy];
-                                      //        NSLog(@"Got status code %d, and response: %@",(int)serverResponse.statusCode,responseDict);
+                                      //        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Got status code %d, and response: %@",(int)serverResponse.statusCode,responseDict];
                                       
                                       responseDict[@"username"] = username;
                                       
@@ -439,7 +461,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
                                               completion(particleError);
 
-                                              NSLog(@"! createCustomer Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                              [ParticleLogger logError:NSStringFromClass([self class]) format:@"! createCustomer Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                           }
                                       }
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
@@ -450,7 +472,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           completion(particleError);
                                       }
 
-                                      NSLog(@"! createCustomer Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! createCustomer Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                   }];
 
     [self.manager.requestSerializer clearAuthorizationHeader];
@@ -467,6 +489,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
 -(void)logout
 {
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Logout"];
+
     [self.session removeSession];
     [self unsubscribeToDevicesSystemEvents];
 }
@@ -480,9 +504,13 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     NSMutableDictionary *params = [NSMutableDictionary new]; //[self defaultParams];
     params[@"id"] = deviceID;
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", @"/v1/devices", params];
     
     NSURLSessionDataTask *task = [self.manager POST:@"/v1/devices" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/devices", (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
         if (completion)
         {
             NSMutableDictionary *responseDict = responseObject;
@@ -498,7 +526,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                     completion(particleError);
                 }
 
-                NSLog(@"! claimDevice Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                [ParticleLogger logError:NSStringFromClass([self class]) format:@"! claimDevice Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
             }
             
         }
@@ -509,7 +537,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(particleError);
         }
 
-        NSLog(@"! claimDevice Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! claimDevice Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     return task;
@@ -524,9 +552,12 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     }
 
     NSString *urlPath = [NSString stringWithFormat:@"/v1/devices/%@",deviceID];
-    
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", urlPath];
+
     NSURLSessionDataTask *task = [self.manager GET:urlPath parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", urlPath, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
          if (completion)
          {
              NSMutableDictionary *responseDict = responseObject;
@@ -554,7 +585,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(nil, particleError);
         }
 
-        NSLog(@"! getDevice Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getDevice Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     return task;
@@ -567,10 +598,12 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
         [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
     }
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", @"/v1/devices"];
     NSURLSessionDataTask *task = [self.manager GET:@"/v1/devices" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
-        
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/devices", (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
          if (completion)
          {
              NSArray *responseList = responseObject;
@@ -656,7 +689,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(nil, particleError);
         }
 
-        NSLog(@"! getDevices Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getDevices Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     return task;
@@ -672,8 +705,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     }
 
     NSString *urlPath = [NSString stringWithFormat:@"/v1/device_claims"];
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@", urlPath];
+
     NSURLSessionDataTask *task = [self.manager POST:urlPath parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", urlPath, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         if (completion)
         {
             NSDictionary *responseDict = responseObject;
@@ -695,7 +734,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
                 completion(nil, nil, particleError);
 
-                NSLog(@"! generateClaimCode Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                [ParticleLogger logError:NSStringFromClass([self class]) format:@"! generateClaimCode Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
             }
         }
         
@@ -708,7 +747,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(nil, nil, particleError);
         }
 
-        NSLog(@"! generateClaimCode Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! generateClaimCode Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     return task;
@@ -734,9 +773,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     }
     
     NSString *urlPath = [NSString stringWithFormat:@"/v1/products/%tu/device_claims", productId];
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@", @"/v1/products/%tu/device_claims"];
+
     NSURLSessionDataTask *task = [self.manager POST:urlPath parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
+                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/products/%tu/device_claims", (int)((NSHTTPURLResponse *)task.response).statusCode];
+                                      [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
                                       if (completion)
                                       {
                                           NSDictionary *responseDict = responseObject;
@@ -758,7 +802,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
                                               completion(nil, nil, particleError);
 
-                                              NSLog(@"! generateClaimCodeForOrganization Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                              [ParticleLogger logError:NSStringFromClass([self class]) format:@"! generateClaimCodeForOrganization Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                           }
                                       }
                                       
@@ -771,7 +815,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           completion(nil, nil, particleError);
                                       }
 
-                                      NSLog(@"! generateClaimCodeForOrganization Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! generateClaimCodeForOrganization Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                   }];
     
     return task;
@@ -786,10 +830,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     NSDictionary *params = @{@"email": email};
     
     NSString *urlPath = [NSString stringWithFormat:@"/v1/products/%tu/customers/reset_password", productId];
-    
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", urlPath, params];
+
     NSURLSessionDataTask *task = [self.manager POST:urlPath parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
+                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", urlPath, (int)((NSHTTPURLResponse *)task.response).statusCode];
+                                      [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
                                       if (completion) // TODO: check responses
                                       {
                                           completion(nil);
@@ -803,7 +851,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           completion(particleError);
                                       }
 
-                                      NSLog(@"! requestPasswordReset Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! requestPasswordReset Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                   }];
     
     return task;
@@ -823,9 +871,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 {
     NSDictionary *params = @{@"username": email};
     NSString *urlPath = [NSString stringWithFormat:@"/v1/user/password-reset"];
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%POST @, params = %@", urlPath, params];
+
     NSURLSessionDataTask *task = [self.manager POST:urlPath parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", urlPath, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         if (completion) // TODO: check responses
         {
             completion(nil);
@@ -838,7 +891,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(particleError);
         }
 
-        NSLog(@"! requestPasswordResetForUser Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! requestPasswordResetForUser Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     return task;
@@ -866,9 +919,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         params[@"current_ncp_firmware_module_version"] = currentNcpFirmwareModuleVersion;
     }
 
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@, params = %@", url.absoluteString, params];
+
 
     NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         if (completion)
         {
             NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
@@ -888,7 +946,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(nil, particleError);
         }
 
-        NSLog(@"! getNextBinaryURL Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getNextBinaryURL Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
 
     return task;
@@ -898,17 +956,20 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     NSURL *URL = [NSURL URLWithString:url];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
 
-    NSLog(@"getNextBinary url = %@", url);
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"DOWNLOAD %@", URL.absoluteString];
 
     NSURLSessionDownloadTask *task = [self.manager downloadTaskWithRequest:request progress:nil
             destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         NSURL *cachesDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSCachesDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
         return [cachesDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+                [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", URL.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+
         if (completion)
         {
-            NSLog(@"getNextBinary error = %@", error);
-            NSLog(@"getNextBinary filePath = %@", filePath.absoluteString);
+            [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"getNextBinary error = %@", error];
+            [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"getNextBinary filePath = %@", filePath.absoluteString];
             if (error == nil) {
                 completion(filePath.absoluteString, nil);
             } else {
@@ -919,7 +980,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                     completion(nil, particleError);
                 }
 
-                NSLog(@"! getNextBinary Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getNextBinary Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
             }
         }
     }];
@@ -933,13 +994,17 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 -(NSURLSessionDataTask *)listTokens:(NSString *)user password:(NSString *)password
 {
     [self.manager.requestSerializer setAuthorizationHeaderFieldWithUsername:user password:password];
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", @"/v1/access_tokens"];
+
     NSURLSessionDataTask *task = [self.manager GET:@"/v1/access_tokens" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
-//        NSArray *responseArr = responseObject;
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/access_tokens", (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
-        NSLog(@"listTokens %@",[error localizedDescription]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"listTokens %@",[error localizedDescription]];
     }];
     
     [self.manager.requestSerializer clearAuthorizationHeader];
@@ -958,6 +1023,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         eventHandler(nil, particleError);
         return nil;
     }
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Subscribe to events with URL = %@", url.absoluteString];
 
     // TODO: add eventHandler + source to an internal dictionary so it will be removeable later by calling removeEventListener on saved Source
     EventSource *source = [EventSource eventSourceWithURL:url timeoutInterval:300.0f queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)];
@@ -1038,7 +1105,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     NSString *endpoint;
     if ((!eventNamePrefix) || [eventNamePrefix isEqualToString:@""])
     {
-        NSLog(@"! subscribeToAllEventsWithPrefix Failed: eventNamePrefix is no longer optional and cannot be empty for this event stream.");
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! subscribeToAllEventsWithPrefix Failed: eventNamePrefix is no longer optional and cannot be empty for this event stream."];
         return nil;
     }
     else
@@ -1110,9 +1177,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     params[@"data"] = data;
     params[@"private"] = isPrivate ? @"true" : @"false";
     params[@"ttl"] = [NSString stringWithFormat:@"%lu", (unsigned long)ttl];
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", @"/v1/devices/events", params];
+
     NSURLSessionDataTask *task = [self.manager POST:@"/v1/devices/events" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/devices/events", (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         if (completion)
         {
             // TODO: check server response for that
@@ -1123,7 +1195,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
                 completion(particleError);
 
-                NSLog(@"! publishEventWithName Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                [ParticleLogger logError:NSStringFromClass([self class]) format:@"! publishEventWithName Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
             }
             else
             {
@@ -1139,7 +1211,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(particleError);
         }
 
-        NSLog(@"! publishEventWithName Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! publishEventWithName Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     return task;
@@ -1158,7 +1230,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                 [device __receivedSystemEvent:event];
             }
         } else {
-            NSLog(@"! ParticleCloud could not subscribeToEvents to devices system events %@",error.localizedDescription);
+            [ParticleLogger logError:NSStringFromClass([self class]) format:@"! ParticleCloud could not subscribeToEvents to devices system events %@",error.localizedDescription];
         }
     }];
 
@@ -1177,9 +1249,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
         [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
     }
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@", @"GET /v1/card"];
+
     NSURLSessionDataTask *task = [self.manager GET:@"/v1/card" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
+                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/card", (int)((NSHTTPURLResponse *)task.response).statusCode];
+                                      [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
                                       if (completion)
                                       {
                                           NSDictionary *responseDict = responseObject;
@@ -1202,7 +1279,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
                                               completion(nil, nil, 0,0, nil, particleError);
 
-                                              NSLog(@"! getCard Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                              [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getCard Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                           }
                                       }
 
@@ -1215,7 +1292,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           completion(nil, nil, 0,0, nil, particleError);
                                       }
 
-                                      NSLog(@"! getCard Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getCard Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                   }];
 
     return task;
@@ -1229,10 +1306,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
         [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
     }
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", @"/v1/networks"];
+
     NSURLSessionDataTask *task = [self.manager GET:@"/v1/networks" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
-                                      
+                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/networks", (int)((NSHTTPURLResponse *)task.response).statusCode];
+                                      [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
                                       if (completion)
                                       {
                                           NSArray *responseList = responseObject;
@@ -1269,8 +1350,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                       {
                                           completion(nil, particleError);
                                       }
-                                      
-                                      NSLog(@"! getNetworks Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+
+                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getNetworks Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                   }];
     
     return task;
@@ -1287,10 +1368,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     }
     
     NSString *endpoint = [NSString stringWithFormat:@"/v1/networks/%@", idOrName];
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", endpoint];
+
     NSURLSessionDataTask *task = [self.manager GET:endpoint parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
-                                      
+                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", endpoint, (int)((NSHTTPURLResponse *)task.response).statusCode];
+                                      [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
                                       if (completion)
                                       {
                                           ParticleNetwork *network = nil;
@@ -1314,8 +1399,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                       {
                                           completion(nil, particleError);
                                       }
-                                      
-                                      NSLog(@"! getNetwork Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+
+                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getNetwork Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                   }];
     
     return task;
@@ -1362,9 +1447,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             break;
             
     }
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", @"/v1/networks/", params];
+
     NSURLSessionDataTask *task = [self.manager POST:@"/v1/networks/" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
+                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/networks/", (int)((NSHTTPURLResponse *)task.response).statusCode];
+                                      [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
                                       NSDictionary *responseDict = responseObject;
                                       if (completion) {
                                           if (([responseDict[@"ok"] boolValue]) && (![responseDict[@"network"] isKindOfClass:[NSNull class]]))
@@ -1383,8 +1473,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                               NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:errorString];
                                               
                                               completion(nil, particleError);
-                                              
-                                              NSLog(@"! createNetwork Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+
+                                              [ParticleLogger logError:NSStringFromClass([self class]) format:@"! createNetwork Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                           }
                                       }
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
@@ -1394,8 +1484,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                       if (completion) {
                                           completion(nil, particleError);
                                       }
-                                      
-                                      NSLog(@"! createNetwork Failed%@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+
+                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! createNetwork Failed%@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                   }];
     
     [self.manager.requestSerializer clearAuthorizationHeader];
@@ -1411,10 +1501,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
     }
     NSString *url = [NSString stringWithFormat:@"/v1/sims/%@/", iccid];
-    
-   
+
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"HEAD %@", url];
+
     NSURLSessionDataTask *task = [self.manager HEAD:url parameters:nil success:^(NSURLSessionDataTask * _Nonnull task)
                                   {
+                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url, (int)((NSHTTPURLResponse *)task.response).statusCode];
+
                                       if (completion)
                                       {
                                           int code = -1;
@@ -1462,7 +1556,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           completion(nil, particleError);
                                       }
 
-                                      NSLog(@"! createNetwork Failed%@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! createNetwork Failed%@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                   }];
     
     return task;
@@ -1541,9 +1635,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
 
     NSString *url = [NSString stringWithFormat:@"/v1/sims/%@", iccid];
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", url, params];
+
     NSURLSessionDataTask *task = [self.manager PUT:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject)
                                   {
+                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url, (int)((NSHTTPURLResponse *)task.response).statusCode];
+                                      [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
                                       NSDictionary *responseDict = responseObject;
                                       if (completion) {
                                           completion(nil);
@@ -1556,8 +1655,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           // Handle 504s gracefully in client code
                                           completion(particleError);
                                       }
-                                      
-                                      NSLog(@"! updateSim (%@) Failed %@ (%ld): %@\r\n%@", actionString, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+
+                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! updateSim (%@) Failed %@ (%ld): %@\r\n%@", actionString, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                   }];
     
     [self.manager.requestSerializer clearAuthorizationHeader];
@@ -1581,7 +1680,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
     }
 
-    NSLog(@"url: %@, action: %@, deviceId: %@", [NSString stringWithFormat:@"/v1/networks/%@", networkID], action, deviceID);
+    [ParticleLogger logError:NSStringFromClass([self class]) format:@"url: %@, action: %@, deviceId: %@", [NSString stringWithFormat:@"/v1/networks/%@", networkID], action, deviceID];
 
     NSMutableDictionary *params = [@{
             @"action": action,
@@ -1590,8 +1689,13 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     NSString *url = [NSString stringWithFormat:@"/v1/networks/%@", networkID];
 
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", url, params];
+
     NSURLSessionDataTask *task = [self.manager PUT:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject)
     {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         NSDictionary *responseDict = responseObject;
         if (completion) {
             if ([responseDict[@"ok"] boolValue])
@@ -1610,7 +1714,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
                 completion(particleError);
 
-                NSLog(@"! takeNetworkAction (%@) Failed %@ (%ld): %@\r\n%@", action, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                [ParticleLogger logError:NSStringFromClass([self class]) format:@"! takeNetworkAction (%@) Failed %@ (%ld): %@\r\n%@", action, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
             }
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
@@ -1621,7 +1725,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion(particleError);
         }
 
-        NSLog(@"! takeNetworkAction (%@) Failed %@ (%ld): %@\r\n%@", action, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! takeNetworkAction (%@) Failed %@ (%ld): %@\r\n%@", action, task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
 
     [self.manager.requestSerializer clearAuthorizationHeader];
@@ -1668,8 +1772,13 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     NSString *urlPath = [NSString stringWithFormat:@"/v1/devices/%@/network",deviceID];
 
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"DELETE %@", urlPath];
+
     NSURLSessionDataTask *task = [self.manager DELETE:urlPath parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
     {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", urlPath, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         if (completion)
         {
             completion(nil);
@@ -1682,7 +1791,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
             completion( particleError);
         }
 
-        NSLog(@"! removeDeviceNetworkInfo Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! removeDeviceNetworkInfo Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
 
     return task;
@@ -1732,9 +1841,14 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     if (iccid) {
         params[@"iccid"] = iccid;
     }
-    
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@, params = %@", url.absoluteString, params];
+
     NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
+                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+                                      [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
                                       if (completion)
                                       {
                                           NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
@@ -1748,8 +1862,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                       {
                                           completion(nil, particleError);
                                       }
-                                      
-                                      NSLog(@"! getPricingImpact Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+
+                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getPricingImpact Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                   }];
     
     return task;
