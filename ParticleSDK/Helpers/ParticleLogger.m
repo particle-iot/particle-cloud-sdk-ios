@@ -45,12 +45,19 @@ static NSArray<NSString *> *ignoreControls = nil;
     va_end(args);
 }
 
+
+
 + (void)logError:(NSString *)control format:(NSString *)format, ... {
     va_list args;
     va_start(args, format);
     [self log:control type:ParticleLogTypeError format:format withParameters: args];
     va_end(args);
 }
+
++ (void)logError:(NSString *)control format:(NSString *)format withParameters:(va_list)args {
+    [self log:control type:ParticleLogTypeError format:format withParameters: args];
+}
+
 
 + (void)logInfo:(NSString *)control format:(NSString *)format, ... {
     va_list args;
@@ -59,6 +66,11 @@ static NSArray<NSString *> *ignoreControls = nil;
     va_end(args);
 }
 
++ (void)logInfo:(NSString *)control format:(NSString *)format withParameters:(va_list)args {
+    [self log:control type:ParticleLogTypeInfo format:format withParameters: args];
+}
+
+
 + (void)logDebug:(NSString *)control format:(NSString *)format, ... {
     va_list args;
     va_start(args, format);
@@ -66,20 +78,30 @@ static NSArray<NSString *> *ignoreControls = nil;
     va_end(args);
 }
 
-+ (void)logToConsole:(NSString *)control type:(ParticleLogType)type message:(NSString *)message {
-    switch (type) {
-        case ParticleLogTypeError:
-            NSLog(@"(%@ Error): %@", control, message);
-            break;
-        case ParticleLogTypeInfo:
-            NSLog(@"(%@ Info): %@", control, message);
-            break;
-        case ParticleLogTypeDebug:
-            NSLog(@"(%@ Debug): %@", control, message);
-            break;
++ (void)logDebug:(NSString *)control format:(NSString *)format withParameters:(va_list)args {
+    [self log:control type:ParticleLogTypeDebug format:format withParameters: args];
+}
+
+
++ (NSString *)logTypeStringFromType:(ParticleLogType)type {
+    return [self logTypeStringFromInt:(int)type];
+}
+
++ (NSString *)logTypeStringFromInt:(int)typeInt {
+    switch (typeInt) {
+        case (int)ParticleLogTypeError:
+            return @"Error";
+        case (int)ParticleLogTypeInfo:
+            return @"Info";
+        case (int)ParticleLogTypeDebug:
+            return @"Debug";
         default:
-            break;
+            return @"Unknown";
     }
+}
+
++ (void)logToConsole:(NSString *)control type:(ParticleLogType)type message:(NSString *)message {
+    NSLog(@"(%@ %@): %@", control, [self logTypeStringFromType:type], message);
 }
 
 @end

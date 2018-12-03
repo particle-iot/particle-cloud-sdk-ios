@@ -35,9 +35,18 @@ typedef NS_ENUM(NSInteger, ParticleLoggerLevel) {
 
 + (void)log:(NSString *)control type:(ParticleLogType)type format:(NSString *)format withParameters:(va_list)args;
 + (void)log:(NSString *)control type:(ParticleLogType)type format:(NSString *)format, ...;
+
 + (void)logError:(NSString *)control format:(NSString *)format, ...;
++ (void)logError:(NSString *)control format:(NSString *)format withParameters:(va_list)args;
+
 + (void)logInfo:(NSString *)control format:(NSString *)format, ...;
++ (void)logInfo:(NSString *)control format:(NSString *)format withParameters:(va_list)args;
+
 + (void)logDebug:(NSString *)control format:(NSString *)format, ...;
++ (void)logDebug:(NSString *)control format:(NSString *)format withParameters:(va_list)args;
+
++ (NSString *)logTypeStringFromType:(ParticleLogType)type;
++ (NSString *)logTypeStringFromInt:(int)typeInt;
 
 @end
 
