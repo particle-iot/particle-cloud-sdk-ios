@@ -1024,8 +1024,6 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         return nil;
     }
 
-    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Subscribe to events with URL = %@", url.absoluteString];
-
     // TODO: add eventHandler + source to an internal dictionary so it will be removeable later by calling removeEventListener on saved Source
     EventSource *source = [EventSource eventSourceWithURL:url timeoutInterval:300.0f queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)];
     
@@ -1114,6 +1112,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         NSCharacterSet *set = [NSCharacterSet URLHostAllowedCharacterSet];
         NSString *encodedEventPrefix = [eventNamePrefix stringByAddingPercentEncodingWithAllowedCharacters:set];
         endpoint = [NSString stringWithFormat:@"%@/v1/events/%@?access_token=%@", self.baseURL, encodedEventPrefix, self.accessToken];
+
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Subscribe to events with URL = %@", [NSString stringWithFormat:@"%@/v1/events/%@?access_token=%@", self.baseURL, encodedEventPrefix, @"ACCESS_TOKEN"]];
     }
     
     return [self subscribeToEventWithURL:[NSURL URLWithString:endpoint] handler:eventHandler];
@@ -1134,6 +1134,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         NSCharacterSet *set = [NSCharacterSet URLHostAllowedCharacterSet];
         NSString *encodedEventPrefix = [eventNamePrefix stringByAddingPercentEncodingWithAllowedCharacters:set];
         endpoint = [NSString stringWithFormat:@"%@/v1/devices/events/%@?access_token=%@", self.baseURL, encodedEventPrefix, self.accessToken];
+
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Subscribe to events with URL = %@", [NSString stringWithFormat:@"%@/v1/devices/events/%@?access_token=%@", self.baseURL, encodedEventPrefix, @"ACCESS_TOKEN"]];
     }
     
     return [self subscribeToEventWithURL:[NSURL URLWithString:endpoint] handler:eventHandler];
@@ -1154,6 +1156,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         NSCharacterSet *set = [NSCharacterSet URLHostAllowedCharacterSet];
         NSString *encodedEventPrefix = [eventNamePrefix stringByAddingPercentEncodingWithAllowedCharacters:set];
         endpoint = [NSString stringWithFormat:@"%@/v1/devices/%@/events/%@?access_token=%@", self.baseURL, deviceID, encodedEventPrefix, self.accessToken];
+
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Subscribe to events with URL = %@", [NSString stringWithFormat:@"%@/v1/devices/%@/events/%@?access_token=%@", self.baseURL, deviceID, encodedEventPrefix, @"ACCESS_TOKEN"]];
     }
     
     return [self subscribeToEventWithURL:[NSURL URLWithString:endpoint] handler:eventHandler];
