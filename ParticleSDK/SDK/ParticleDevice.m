@@ -42,6 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSUInteger productId;
 @property (strong, nonatomic, nullable) NSString *status;
 @property (strong, nonatomic, nullable) NSString *appHash;
+@property (strong, nonatomic, nullable) NSString *typeString;
 @end
 
 @implementation ParticleDevice
