@@ -72,8 +72,11 @@ NS_ASSUME_NONNULL_BEGIN
             case ParticleDeviceTypeDigistumpOak : return @"DigistumpOak";
             case ParticleDeviceTypeESP32 : return @"ESP32";
             case ParticleDeviceTypeArgon : return @"Argon";
+            case ParticleDeviceTypeArgonSoM : return @"Argon";
             case ParticleDeviceTypeBoron : return @"Boron";
+            case ParticleDeviceTypeBoronSoM : return @"Boron";
             case ParticleDeviceTypeXenon : return @"Xenon";
+            case ParticleDeviceTypeXenonSoM : return @"Xenon";
             default: return @"Unknown";
     }
 }
@@ -125,8 +128,11 @@ NS_ASSUME_NONNULL_BEGIN
                 case ParticleDeviceTypeBluz:
                 case ParticleDeviceTypeDigistumpOak:
                 case ParticleDeviceTypeArgon:
+                case ParticleDeviceTypeArgonSoM:
                 case ParticleDeviceTypeXenon:
+                case ParticleDeviceTypeXenonSoM:
                 case ParticleDeviceTypeBoron:
+                case ParticleDeviceTypeBoronSoM:
                     _type = self.platformId;
                     break;
                 default:
