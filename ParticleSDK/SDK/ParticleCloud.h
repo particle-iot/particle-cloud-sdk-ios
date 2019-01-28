@@ -401,27 +401,87 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
                                    completion:(nullable ParticleCompletionBlock)completion;
 
 
-// TODO: JSdoc comments
-
-// Get user's credit card on file
+/**
+ *  Get some details about user's credit card on file.
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 -(NSURLSessionDataTask *)getCard:(nullable void(^)(NSString* _Nullable token, NSString* _Nullable last4, NSUInteger expiryMonth, NSUInteger expiryYear, NSString* _Nullable brand, NSError * _Nullable error))completion;
 
-// check SIM card
+/**
+ *  Get current status of the SIM card
+ *
+ *  @param iccid      ICCID of the SIM card that was shipped with Particle hardware.
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 -(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSError * _Nullable))completion;
 
+
+/**
+ *  Update status of the SIM card
+ *
+ *  @param iccid        ICCID of the SIM card that was shipped with Particle hardware.
+ *  @param action       Action to be performed.
+ *  @param dataLimit    Data limit to be set for the SIM card. Only required for ParticleUpdateSimActionSetDataLimit action.
+ *  @param countryCode  The ISO Alpha-2 code of the country where the SIM card should be based. Required only if activating the SIM card for the first time.
+ *  @param cardToken    A valid Stripe credit card token. See Stripe's documentation for creating a valid card token. Required only if activating the SIM card for the first time.
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 -(NSURLSessionDataTask *)updateSim:(NSString *)iccid action:(ParticleUpdateSimAction)action dataLimit:(NSNumber * _Nullable)dataLimit countryCode:(NSString * _Nullable)countryCode cardToken:(NSString * _Nullable)cardToken completion:(nullable ParticleCompletionBlock)completion;
 
+
+/**
+ *  Get information about change in subscription plan (including fee) related to action performed with particular network/device.
+ *
+ *  @param action       Action to be performed.
+ *  @param deviceID     Id of the device in question.
+ *  @param networkID    Id of mesh network if one exists (use nil for create action).
+ *  @param networkType  Type of the network to be created. Only required when creating network.
+ *  @param iccid        ICCID of the SIM card that is used in gateway device. Only required when creating network.
+ *
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 -(NSURLSessionDataTask *)getPricingImpact:(ParticlePricingImpactAction)action deviceID:(NSString * _Nullable)deviceID networkID:(NSString * _Nullable)networkID networkType:(ParticlePricingImpactNetworkType)networkType iccid:(NSString * _Nullable)iccid completion:(nullable void(^)(ParticlePricingInfo* _Nullable response, NSError * _Nullable))completion;
 
 
-// Mesh networks API endpoints
+/**
+ *  Get an array of instances of all user owned mesh networks.
+ *
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 -(NSURLSessionDataTask *)getNetworks:(nullable void(^)(NSArray<ParticleNetwork *> * _Nullable networks, NSError * _Nullable error))completion;
 
+/**
+ *  Get instance of user owned mesh network.
+ *
+ *  @param idOrName     Id or the name of the network.
+ *
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 -(NSURLSessionDataTask *)getNetwork:(NSString *)idOrName
                          completion:(nullable void(^)(ParticleNetwork * _Nullable network, NSError * _Nullable error))completion;
 
+
+/**
+ *  Get full mobile secret when only partial mobile secret is available.
+ *
+ *  @param serialNumber     Serial number of the device
+ *  @param mobileSecret     Partial mobile secret of the same device (at least 12 characters)
+ *
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 - (NSURLSessionDataTask *)getRecoveryMobileSecret:(NSString *_Nonnull)serialNumber mobileSecret:(NSString *_Nonnull)mobileSecret completion:(nullable void (^)(NSString *_Nullable mobileSecret, NSError *_Nullable error))completion;
 
+
+
+/**
+ *  Create mesh network
+ *
+ *  @param gatewayDeviceID      Device Id of device acting as first gateway on the network
+ *  @param gatewayDeviceICCID   ICCID of SIM card used (only when 3G/LTE is used)
+ *  @param networkType          Type of the network
+ *
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 -(NSURLSessionDataTask *)createNetwork:(NSString *)networkName
                        gatewayDeviceID:(NSString *)gatewayDeviceID
                     gatewayDeviceICCID:(NSString * _Nullable)gatewayDeviceICCID
@@ -429,20 +489,64 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
                             completion:(nullable void(^)(ParticleNetwork * _Nullable network, NSError * _Nullable error))completion;
 
 
+
 // TODO: create a takeAction function that takes ParticleNetworkAction param instead of those 4:
+/**
+ *  Add device to existing mesh network
+ *
+ *  @param deviceID     Device Id of device to be added.
+ *  @param networkID    Id of the mesh network to add device to.
+ *
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 -(NSURLSessionDataTask *)addDevice:(NSString *)deviceID toNetwork:(NSString *)networkID
                         completion:(nullable ParticleCompletionBlock)completion;
 
+/**
+ *  Remove device from existing mesh network
+ *
+ *  @param deviceID     Device Id of device to be removed.
+ *  @param networkID    Id of the mesh network containing the device in question.
+ *
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 -(NSURLSessionDataTask *)removeDevice:(NSString *)deviceID fromNetwork:(NSString *)networkID
                            completion:(nullable ParticleCompletionBlock)completion;
 
+/**
+ *  Promote node to gateway on a mesh network
+ *
+ *  @param deviceID     Device Id of device to be promoted.
+ *  @param networkID    Id of the mesh network containing the device in question.
+ *
+ *  @return NSURLSessionDataTask task for requested network access
+ */
+
 -(NSURLSessionDataTask *)enableGateway:(NSString *)deviceID onNetwork:(NSString *)networkID
                             completion:(nullable ParticleCompletionBlock)completion;
+
+
+/**
+ *  Demote device from gateway to node on a mesh network.
+ *
+ *  @param deviceID     Device Id of device to be demoted.
+ *  @param networkID    Id of the mesh network containing the device in question.
+ *
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 
 -(NSURLSessionDataTask *)disableGateway:(NSString *)deviceID onNetwork:(NSString *)networkID
                              completion:(nullable ParticleCompletionBlock)completion;
 
 
+/**
+ *  Get full mobile secret when only partial mobile secret is available
+ *
+ *  @param serialNumber     Serial number of the device
+ *  @param mobileSecret     Partial mobile secret of the same device (at least 12 characters)
+ *
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 - (NSURLSessionDataTask *)removeDeviceNetworkInfo:(NSString *)deviceID completion:(nullable ParticleCompletionBlock)completion;
 @end
 
