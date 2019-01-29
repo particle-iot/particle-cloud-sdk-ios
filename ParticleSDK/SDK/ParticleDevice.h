@@ -33,11 +33,18 @@ typedef NS_ENUM(NSInteger, ParticleDeviceType) {
     ParticleDeviceTypeCore=0,
     ParticleDeviceTypePhoton=6, // or P0
     ParticleDeviceTypeP1=8,
-    ParticleDeviceTypeElectron=10,
+    ParticleDeviceTypeElectron=10, // or E0
     ParticleDeviceTypeRaspberryPi=31,
     ParticleDeviceTypeRedBearDuo=88,
     ParticleDeviceTypeBluz=103,
     ParticleDeviceTypeDigistumpOak=82,
+    ParticleDeviceTypeESP32=11,
+    ParticleDeviceTypeArgon=12,
+    ParticleDeviceTypeBoron=13,
+    ParticleDeviceTypeXenon=14,
+    ParticleDeviceTypeArgonSoM=22,
+    ParticleDeviceTypeBoronSoM=23,
+    ParticleDeviceTypeXenonSoM=24
 };
 
 typedef NS_ENUM(NSInteger, ParticleDeviceSystemEvent) {
@@ -49,6 +56,23 @@ typedef NS_ENUM(NSInteger, ParticleDeviceSystemEvent) {
     ParticleDeviceSystemEventAppHashUpdated,
     ParticleDeviceSystemEventEnteredSafeMode,
     ParticleDeviceSystemEventSafeModeUpdater
+};
+
+
+typedef NS_ENUM(NSInteger, ParticleDeviceNetworkState) {
+    ParticleDeviceNetworkStatePending,
+    ParticleDeviceNetworkStateConfirmed
+};
+
+typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRole) {
+    ParticleDeviceNetworkStateGateway,
+    ParticleDeviceNetworkStateNode,
+};
+
+typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
+    ParticleDeviceNetworkRoleStatePending,
+    ParticleDeviceNetworkRoleStatePendingConfirmed,
+//    ParticleDeviceNetworkRoleStateOwnerConfirmation
 };
 
 @class ParticleDevice;
@@ -89,6 +113,12 @@ typedef NS_ENUM(NSInteger, ParticleDeviceSystemEvent) {
 
 @property (strong, nonatomic, nullable, readonly) NSString *appHash; // app hash received from system event after flashing a new different user app
 
+// new properties for mesh networks SDK v0.9
+@property (strong, nonatomic, nullable, readonly) NSString *networkId; // if device belongs to a mesh network thats the network ID
+@property (nonatomic, readonly) ParticleDeviceNetworkState networkState; // pending if device is waiting to join network confirmation
+@property (nonatomic, readonly) ParticleDeviceNetworkRole networkRole; // if device belongs to a mesh network true means it is a gateway device
+@property (nonatomic, readonly) ParticleDeviceNetworkRoleState networkRoleState; // pending if device is waiting to role change confirmation
+
 @property (nonatomic, readonly) BOOL isFlashing;
 
 // new properties starting SDK v0.5
@@ -105,6 +135,7 @@ typedef NS_ENUM(NSInteger, ParticleDeviceSystemEvent) {
 @property (strong, nonatomic, readonly) NSString *version; // inactive
 @property (nonatomic, readonly) BOOL requiresUpdate;
 @property (nonatomic, readonly) ParticleDeviceType type;
+@property (nonatomic, readonly) NSString *typeString;
 
 -(nullable instancetype)initWithParams:(NSDictionary *)params NS_DESIGNATED_INITIALIZER;
 -(instancetype)init __attribute__((unavailable("Must use initWithParams:")));

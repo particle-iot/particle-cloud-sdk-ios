@@ -8,7 +8,9 @@
 
 #import "ParticleDevice.h"
 #import "ParticleCloud.h"
+#import "ParticleNetwork.h"
 #import "ParticleErrorHelper.h"
+#import "ParticleLogger.h"
 #import <objc/runtime.h>
 
 #ifdef USE_FRAMEWORKS
@@ -30,7 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic, nullable) NSString *version;
 //@property (nonatomic) ParticleDeviceType type;
 @property (nonatomic) BOOL requiresUpdate;
-@property (nonatomic, strong) AFHTTPSessionManager *manager;
 @property (nonatomic) BOOL isFlashing;
 @property (nonatomic, strong) NSURL *baseURL;
 
@@ -41,9 +42,45 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSUInteger productId;
 @property (strong, nonatomic, nullable) NSString *status;
 @property (strong, nonatomic, nullable) NSString *appHash;
+@property (strong, nonatomic, nullable) NSString *typeString;
 @end
 
 @implementation ParticleDevice
+
++ (AFHTTPSessionManager*) manager
+{
+    static dispatch_once_t onceToken;
+    static AFHTTPSessionManager *manager = nil;
+    dispatch_once(&onceToken, ^{
+        manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:kParticleAPIBaseURL]];
+        manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    });
+
+    return manager;
+}
+
+- (NSString *)typeString {
+        switch (self.type) {
+            case ParticleDeviceTypeUnknown: return @"Unknown";
+            case ParticleDeviceTypeCore : return @"Core";
+            case ParticleDeviceTypePhoton : return @"Photon";
+            case ParticleDeviceTypeP1 : return @"P1";
+            case ParticleDeviceTypeElectron : return @"Electron";
+            case ParticleDeviceTypeRaspberryPi : return @"RaspberryPi";
+            case ParticleDeviceTypeRedBearDuo : return @"RedBearDuo";
+            case ParticleDeviceTypeBluz : return @"Bluz";
+            case ParticleDeviceTypeDigistumpOak : return @"DigistumpOak";
+            case ParticleDeviceTypeESP32 : return @"ESP32";
+            case ParticleDeviceTypeArgon : return @"Argon";
+            case ParticleDeviceTypeArgonSoM : return @"Argon";
+            case ParticleDeviceTypeBoron : return @"Boron";
+            case ParticleDeviceTypeBoronSoM : return @"Boron";
+            case ParticleDeviceTypeXenon : return @"Xenon";
+            case ParticleDeviceTypeXenonSoM : return @"Xenon";
+            default: return @"Unknown";
+    }
+}
+
 
 -(nullable instancetype)initWithParams:(NSDictionary *)params
 {
@@ -90,6 +127,12 @@ NS_ASSUME_NONNULL_BEGIN
                 case ParticleDeviceTypeRedBearDuo:
                 case ParticleDeviceTypeBluz:
                 case ParticleDeviceTypeDigistumpOak:
+                case ParticleDeviceTypeArgon:
+                case ParticleDeviceTypeArgonSoM:
+                case ParticleDeviceTypeXenon:
+                case ParticleDeviceTypeXenonSoM:
+                case ParticleDeviceTypeBoron:
+                case ParticleDeviceTypeBoronSoM:
                     _type = self.platformId;
                     break;
                 default:
@@ -155,20 +198,15 @@ NS_ASSUME_NONNULL_BEGIN
         {
             _requiresUpdate = YES;
         }
-        
-        self.manager = [[AFHTTPSessionManager alloc] initWithBaseURL:self.baseURL];
-        self.manager.responseSerializer = [AFJSONResponseSerializer serializer];
 
-        if (!self.manager) return nil;
-        
-         
+
+
+        [ParticleLogger logDebug:@"ParticleDevice" format:@"self = %@", self];
         return self;
     }
     
     return nil;
 }
-
-
 
 -(NSURLSessionDataTask *)refresh:(nullable ParticleCompletionBlock)completion;
 {
@@ -213,24 +251,21 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
--(void)setName:(nullable NSString *)name
-{
-    if (name != nil) {
-        [self rename:name completion:nil];
-    }
-}
-
 -(NSURLSessionDataTask *)getVariable:(NSString *)variableName completion:(nullable void(^)(id _Nullable result, NSError* _Nullable error))completion
 {
     // TODO: check variable name exists in list
     // TODO: check response of calling a non existant function
     
     NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/devices/%@/%@", self.id, variableName]];
-    
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", url.absoluteString];
+
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         if (completion)
         {
             NSDictionary *responseDict = responseObject;
@@ -255,7 +290,7 @@ NS_ASSUME_NONNULL_BEGIN
             completion(nil, particleError);
         }
 
-        NSLog(@"! getVariable Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getVariable Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     return task;
@@ -268,6 +303,7 @@ NS_ASSUME_NONNULL_BEGIN
     // TODO: check function name exists in list
     // TODO: check response of calling a non existant function
     NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/devices/%@/%@", self.id, functionName]];
+
     NSMutableDictionary *params = [NSMutableDictionary new]; //[self defaultParams];
 
     if (args) {
@@ -287,11 +323,15 @@ NS_ASSUME_NONNULL_BEGIN
             
         params[@"args"] = argsValue;
     }
-    
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", url.absoluteString, params];
+
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [self.manager POST:[url description] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager POST:[url description] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         if (completion)
         {
             NSDictionary *responseDict = responseObject;
@@ -316,7 +356,7 @@ NS_ASSUME_NONNULL_BEGIN
             completion(nil, particleError);
         }
 
-        NSLog(@"! callFunction Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! callFunction Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     return task;
@@ -326,13 +366,18 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSURLSessionDataTask *)signal:(BOOL)enable completion:(nullable ParticleCompletionBlock)completion
 {
     NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/devices/%@", self.id]];
-    
+
+
     NSMutableDictionary *params = [NSMutableDictionary new];
     params[@"signal"] = enable ? @"1" : @"0";
-    
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", url.absoluteString, params];
+
     [self setAuthHeaderWithAccessToken];
-    
-    NSURLSessionDataTask *task = [self.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         if (completion)
         {
             completion(nil);
@@ -345,7 +390,7 @@ NS_ASSUME_NONNULL_BEGIN
             completion(particleError);
         }
 
-        NSLog(@"! signal Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! signal Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     return task;
@@ -356,11 +401,15 @@ NS_ASSUME_NONNULL_BEGIN
 {
 
     NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/devices/%@", self.id]];
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"DELETE %@", url.absoluteString];
 
     [self setAuthHeaderWithAccessToken];
 
-    NSURLSessionDataTask *task = [self.manager DELETE:[url description] parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager DELETE:[url description] parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         if (completion)
         {
             NSDictionary *responseDict = responseObject;
@@ -374,7 +423,7 @@ NS_ASSUME_NONNULL_BEGIN
                     completion(particleError);
                 }
 
-                NSLog(@"! unclaim Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                [ParticleLogger logError:NSStringFromClass([self class]) format:@"! unclaim Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
             }
 
         }
@@ -387,7 +436,7 @@ NS_ASSUME_NONNULL_BEGIN
             completion(particleError);
         }
 
-        NSLog(@"! unclaim Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! unclaim Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     return task;
@@ -401,9 +450,14 @@ NS_ASSUME_NONNULL_BEGIN
     NSMutableDictionary *params = [NSMutableDictionary new];
     params[@"name"] = newName;
 
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", url.absoluteString, params];
+
     [self setAuthHeaderWithAccessToken];
 
-    NSURLSessionDataTask *task = [self.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         self.name = newName;
         if (completion)
         {
@@ -417,7 +471,7 @@ NS_ASSUME_NONNULL_BEGIN
             completion(particleError);
         }
 
-        NSLog(@"! rename Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! rename Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     return task;
@@ -440,16 +494,20 @@ NS_ASSUME_NONNULL_BEGIN
 {
     if ([ParticleCloud sharedInstance].accessToken) {
         NSString *authorization = [NSString stringWithFormat:@"Bearer %@",[ParticleCloud sharedInstance].accessToken];
-        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+        [ParticleDevice.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
     }
 }
 
 
 -(NSString *)description
 {
+    switch (self.type) {
+
+    }
+
     NSString *desc = [NSString stringWithFormat:@"<ParticleDevice 0x%lx, type: %@, id: %@, name: %@, connected: %@, variables: %@, functions: %@, version: %@, requires update: %@, last app: %@, last heard: %@>",
                       (unsigned long)self,
-                      (self.type == ParticleDeviceTypeCore) ? @"Core" : @"Photon",
+                      self.typeString,
                       self.id,
                       self.name,
                       (self.connected) ? @"true" : @"false",
@@ -468,13 +526,19 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSURLSessionDataTask *)flashKnownApp:(NSString *)knownAppName completion:(nullable ParticleCompletionBlock)completion
 {
     NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/devices/%@", self.id]];
-    
+
     NSMutableDictionary *params = [NSMutableDictionary new];
     params[@"app"] = knownAppName;
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", url.absoluteString, params];
+
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [self.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
         NSDictionary *responseDict = responseObject;
         if (responseDict[@"errors"])
         {
@@ -500,7 +564,7 @@ NS_ASSUME_NONNULL_BEGIN
             completion(particleError);
         }
 
-        NSLog(@"! flashKnownApp Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! flashKnownApp Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
     return task;
@@ -510,11 +574,12 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable NSURLSessionDataTask *)flashFiles:(NSDictionary *)filesDict completion:(nullable ParticleCompletionBlock)completion // binary
 {
     NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/devices/%@", self.id]];
-    
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@", url.absoluteString];
+
     [self setAuthHeaderWithAccessToken];
     
     NSError *reqError;
-    NSMutableURLRequest *request = [self.manager.requestSerializer multipartFormRequestWithMethod:@"PUT" URLString:url.description parameters:@{@"file_type" : @"binary"} constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    NSMutableURLRequest *request = [ParticleDevice.manager.requestSerializer multipartFormRequestWithMethod:@"PUT" URLString:url.description parameters:@{@"file_type" : @"binary"} constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         // check this:
         for (NSString *key in filesDict.allKeys)
         {
@@ -524,11 +589,14 @@ NS_ASSUME_NONNULL_BEGIN
     
     if (!reqError)
     {
-        __block NSURLSessionDataTask *task = [self.manager dataTaskWithRequest:request
+        __block NSURLSessionDataTask *task = [ParticleDevice.manager dataTaskWithRequest:request
                 uploadProgress: nil
                 downloadProgress: nil
                 completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error)
         {
+            [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)response).statusCode];
+            [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
             if (error == nil)
             {
                 NSDictionary *responseDict = responseObject;
@@ -555,7 +623,7 @@ NS_ASSUME_NONNULL_BEGIN
                     completion(particleError);
                 }
 
-                NSLog(@"! flashFiles Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                [ParticleLogger logError:NSStringFromClass([self class]) format:@"! flashFiles Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
             }
         }];
         
@@ -599,11 +667,15 @@ NS_ASSUME_NONNULL_BEGIN
     
     //curl https://api.particle.io/v1/sims/8934076500002586576/data_usage\?access_token\=5451a5d6c6c54f6b20e3a109ee764596dc38a520
     NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/sims/%@/data_usage", self.lastIccid]];
-    
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", url.absoluteString];
+
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
+                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+                                      [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
                                       if (completion)
                                       {
                                           NSDictionary *responseDict = responseObject;
@@ -628,7 +700,7 @@ NS_ASSUME_NONNULL_BEGIN
                                           completion(-1, particleError);
                                       }
 
-                                      NSLog(@"! getCurrentDataUsage Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]);
+                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getCurrentDataUsage Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
                                   }];
     
     return task;

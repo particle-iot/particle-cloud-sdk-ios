@@ -89,6 +89,6 @@ typedef void (^EventSourceEventHandler)(Event *event);
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-extern NSString *const MessageEvent;
-extern NSString *const ErrorEvent;
-extern NSString *const OpenEvent;
+extern NSString *const ParticleMessageEvent;
+extern NSString *const ParticleErrorEvent;
+extern NSString *const ParticleOpenEvent;
