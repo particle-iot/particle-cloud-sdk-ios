@@ -12,12 +12,12 @@
 #import "EventSource.h"
 #import "ParticleErrorHelper.h"
 #import "ParticleLogger.h"
+#import "ParticlePricingInfo.h"
 
 #ifdef USE_FRAMEWORKS
 #import <AFNetworking/AFNetworking.h>
 #else
 #import "AFNetworking.h"
-#import "ParticlePricingInfo.h"
 #endif
 
 NS_ASSUME_NONNULL_BEGIN

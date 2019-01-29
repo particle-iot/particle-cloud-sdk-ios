@@ -10,6 +10,7 @@
 #import "ParticleNetwork.h"
 #import "ParticleErrorHelper.h"
 #import "ParticleCloud.h"
+#import "ParticleLogger.h"
 #import <objc/runtime.h>
 
 
@@ -17,8 +18,6 @@
 #import <AFNetworking/AFNetworking.h>
 #else
 #import "AFNetworking.h"
-#import "ParticleLogger.h"
-
 #endif
 
 @interface ParticleNetwork()
