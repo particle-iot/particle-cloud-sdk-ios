@@ -472,6 +472,16 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 - (NSURLSessionDataTask *)getRecoveryMobileSecret:(NSString *_Nonnull)serialNumber mobileSecret:(NSString *_Nonnull)mobileSecret completion:(nullable void (^)(NSString *_Nullable mobileSecret, NSError *_Nullable error))completion;
 
 
+/**
+ *  Get platform ID for serial number.
+ *
+ *  @param serialNumber     Serial number of the device
+ *
+ *  @return NSURLSessionDataTask task for requested network access
+ */
+- (NSURLSessionDataTask *)getPlatformId:(NSString *_Nonnull)serialNumber completion:(nullable void (^)(NSNumber *_Nullable platformId, NSError *_Nullable error))completion;
+
+
 
 /**
  *  Create mesh network

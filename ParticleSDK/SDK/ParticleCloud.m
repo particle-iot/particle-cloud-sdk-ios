@@ -1457,9 +1457,55 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                   }];
 
     return task;
-
 }
 
+
+-(NSURLSessionDataTask *)getPlatformId:(NSString *  _Nonnull)serialNumber
+                                      completion:(nullable void(^)(NSNumber * _Nullable platformId, NSError * _Nullable error))completion
+{
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+
+    NSMutableString *endpoint = [NSString stringWithFormat:@"/v1/serial_numbers/%@", serialNumber];
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", endpoint];
+
+    NSURLSessionDataTask *task = [self.manager GET:endpoint parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", endpoint, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
+        if (completion)
+        {
+            NSDictionary *response = responseObject;
+            if (response[@"platform_id"] != nil && ![response[@"platform_id"] isKindOfClass:[NSNull class]]) {
+                completion(@([response[@"platform_id"] intValue]), nil);
+            } else {
+                NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:@"Platform ID cannot be retrieved."];
+
+                completion(nil, particleError);
+
+                [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getPlatformId Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
+            }
+
+        }
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+    {
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
+        {
+            completion(nil, particleError);
+        }
+
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getRecoveryMobileSecret Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
+    }];
+
+    return task;
+}
 
 
 
