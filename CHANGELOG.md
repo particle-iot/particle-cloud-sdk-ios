@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+
+## [0.9.1](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.1) (2019-02-08)
+
+* Added support for 3rd generation SOM devices
+
+* Added support for retrieving device platform ID from serial number
+
+## [0.9.0](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.0) (2019-01-29)
+
+* Added support for 3rd generation devices
+
+* Fixed a crashing EventStreams bug
+
 ## [0.8.1](https://github.com/spark/spark-sdk-ios/releases/tag/0.8.1) (2018-08-03)
 
 * Bug fixes
