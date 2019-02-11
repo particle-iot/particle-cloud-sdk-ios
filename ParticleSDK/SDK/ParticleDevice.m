@@ -19,7 +19,7 @@
 #import "AFNetworking.h"
 #endif
 
-#define MAX_SPARK_FUNCTION_ARG_LENGTH 63
+#define MAX_PARTICLE_FUNCTION_ARG_LENGTH 622
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -313,9 +313,9 @@ NS_ASSUME_NONNULL_BEGIN
             [argsStr addObject:[arg description]];
         }
         NSString *argsValue = [argsStr componentsJoinedByString:@","];
-        if (argsValue.length > MAX_SPARK_FUNCTION_ARG_LENGTH)
+        if (argsValue.length > MAX_PARTICLE_FUNCTION_ARG_LENGTH)
         {
-            NSError *particleError = [ParticleErrorHelper getParticleError:nil task:nil customMessage:[NSString stringWithFormat:@"Maximum argument length cannot exceed %d",MAX_SPARK_FUNCTION_ARG_LENGTH]];
+            NSError *particleError = [ParticleErrorHelper getParticleError:nil task:nil customMessage:[NSString stringWithFormat:@"Maximum argument length cannot exceed %d",MAX_PARTICLE_FUNCTION_ARG_LENGTH]];
             if (completion)
                 completion(nil, particleError);
             return nil;
