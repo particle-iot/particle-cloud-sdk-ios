@@ -4,6 +4,10 @@ Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.9.3](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.2) (2019-02-25)
+
+* Introduced 4th log level `Complete` that outputs very noisy data sources (such as getDevice API call)
+
 ## [0.9.2](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.2) (2019-02-11)
 
 * Increased max length for function argument from 62 chars to 622 chars
