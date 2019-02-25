@@ -201,7 +201,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-        [ParticleLogger logDebug:@"ParticleDevice" format:@"self = %@", self];
+        [ParticleLogger logComplete:@"ParticleDevice" format:@"self = %@", self];
         return self;
     }
     

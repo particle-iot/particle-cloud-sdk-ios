@@ -557,7 +557,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     NSURLSessionDataTask *task = [self.manager GET:urlPath parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", urlPath, (int)((NSHTTPURLResponse *)task.response).statusCode];
-        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+        [ParticleLogger logComplete:NSStringFromClass([self class]) format:@"%@", responseObject];
          if (completion)
          {
              NSMutableDictionary *responseDict = responseObject;
@@ -603,7 +603,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     NSURLSessionDataTask *task = [self.manager GET:@"/v1/devices" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/devices", (int)((NSHTTPURLResponse *)task.response).statusCode];
-        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+        [ParticleLogger logComplete:NSStringFromClass([self class]) format:@"%@", responseObject];
          if (completion)
          {
              NSArray *responseList = responseObject;

@@ -16,9 +16,18 @@ NSString * const ParticleLogNotificationMessageKey = @"io.particle.log.message";
 
 static ParticleLoggerLevel particleLoggerLevel = ParticleLoggerLevelOff;
 static NSArray<NSString *> *ignoreControls = nil;
+static NSMutableDictionary<NSString *, NSNumber *> *controlLevels = nil;
 
 + (void)setLoggerLevel:(ParticleLoggerLevel)level {
     particleLoggerLevel = level;
+}
+
++ (void)setLoggerLevel:(ParticleLoggerLevel)level forControl:(NSString *)control {
+    if (!controlLevels) {
+        controlLevels = [[NSMutableDictionary alloc] init];
+    }
+
+    controlLevels[control] = @(level);
 }
 
 + (void)setIgnoreControls:(NSArray<NSString *> *)list {
@@ -26,14 +35,23 @@ static NSArray<NSString *> *ignoreControls = nil;
 }
 
 + (void)log:(NSString *)control type:(ParticleLogType)type format:(NSString *)format withParameters:(va_list)args {
+    int currentLevel = (int)particleLoggerLevel;
+
+    if (controlLevels != nil && controlLevels[control] != nil) {
+        currentLevel = [controlLevels[control] intValue];
+    }
+
     if (ignoreControls != nil && [ignoreControls containsObject:control]) {
+        currentLevel = (int)ParticleLoggerLevelOff;
+    }
+
+    if (currentLevel < (int)type) {
         return;
     }
 
     NSDictionary *info = @{ ParticleLogNotificationTypeKey: @((int)type), ParticleLogNotificationMessageKey: [[NSString alloc] initWithFormat:format arguments:args] };
-    if ((int)particleLoggerLevel >= (int)type) {
-        [self logToConsole:control type:type message:info[ParticleLogNotificationMessageKey]];
-    }
+
+    [self logToConsole:control type:type message:info[ParticleLogNotificationMessageKey]];
 
     [NSNotificationCenter.defaultCenter postNotificationName:ParticleLogNotification object:control userInfo:info];
 }
@@ -83,6 +101,18 @@ static NSArray<NSString *> *ignoreControls = nil;
 }
 
 
++ (void)logComplete:(NSString *)control format:(NSString *)format, ... {
+    va_list args;
+    va_start(args, format);
+    [self log:control type:ParticleLogTypeComplete format:format withParameters: args];
+    va_end(args);
+}
+
++ (void)logComplete:(NSString *)control format:(NSString *)format withParameters:(va_list)args {
+    [self log:control type:ParticleLogTypeComplete format:format withParameters: args];
+}
+
+
 + (NSString *)logTypeStringFromType:(ParticleLogType)type {
     return [self logTypeStringFromInt:(int)type];
 }
@@ -95,6 +125,8 @@ static NSArray<NSString *> *ignoreControls = nil;
             return @"Info";
         case (int)ParticleLogTypeDebug:
             return @"Debug";
+        case (int)ParticleLogTypeComplete:
+            return @"Complete";
         default:
             return @"Unknown";
     }

@@ -17,20 +17,24 @@ FOUNDATION_EXPORT NSString * const ParticleLogNotificationMessageKey;
 typedef NS_ENUM(NSInteger, ParticleLogType) {
     ParticleLogTypeError=0,
     ParticleLogTypeInfo=1,
-    ParticleLogTypeDebug=2
+    ParticleLogTypeDebug=2,
+    ParticleLogTypeComplete=3
 };
 
 typedef NS_ENUM(NSInteger, ParticleLoggerLevel) {
     ParticleLoggerLevelOff=-1,
     ParticleLoggerLevelError=0,
     ParticleLoggerLevelInfo=1,
-    ParticleLoggerLevelDebug=2
+    ParticleLoggerLevelDebug=2,
+    ParticleLoggerLevelComplete=3
 };
 
 
 @interface ParticleLogger : NSObject
 
 + (void)setLoggerLevel:(ParticleLoggerLevel)level;
++ (void)setLoggerLevel:(ParticleLoggerLevel)level forControl:(NSString *)control;
+
 + (void)setIgnoreControls:(NSArray<NSString *> *)list;
 
 + (void)log:(NSString *)control type:(ParticleLogType)type format:(NSString *)format withParameters:(va_list)args;
@@ -44,6 +48,9 @@ typedef NS_ENUM(NSInteger, ParticleLoggerLevel) {
 
 + (void)logDebug:(NSString *)control format:(NSString *)format, ...;
 + (void)logDebug:(NSString *)control format:(NSString *)format withParameters:(va_list)args;
+
++ (void)logComplete:(NSString *)control format:(NSString *)format, ...;
++ (void)logComplete:(NSString *)control format:(NSString *)format withParameters:(va_list)args;
 
 + (NSString *)logTypeStringFromType:(ParticleLogType)type;
 + (NSString *)logTypeStringFromInt:(int)typeInt;
