@@ -4,7 +4,12 @@ Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [0.9.3](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.2) (2019-02-25)
+## [0.9.4](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.4) (2019-03-05)
+
+!!! Potentially breaking change !!!
+* Call to `ParticleCloud.getDevices()` will no longer call `ParticleCloud.getDevice()` for every device that is reported as being online. To receive full device information, call `ParticleCloud.getDevice()` or `ParticleDevice.refresh()` on a device instance returned by `ParticleCloud.getDevices()`
+
+## [0.9.3](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.3) (2019-02-25)
 
 * Introduced 4th log level `Complete` that outputs very noisy data sources (such as getDevice API call)
 

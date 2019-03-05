@@ -604,82 +604,31 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/devices", (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logComplete:NSStringFromClass([self class]) format:@"%@", responseObject];
-         if (completion)
-         {
-             NSArray *responseList = responseObject;
-             NSMutableArray *queryDeviceIDList = [[NSMutableArray alloc] init];
-             __block NSMutableArray *deviceList = [[NSMutableArray alloc] init];
-             __block NSError *deviceError = nil;
-             // analyze
-             for (NSDictionary *deviceDict in responseList)
-             {
-                 if (deviceDict[@"id"])   // ignore <null> device listings that sometimes return from /v1/devices API call
-                 {
-                     if (![deviceDict[@"id"] isKindOfClass:[NSNull class]])
-                     {
-                         if ([deviceDict[@"connected"] boolValue]==YES) // do inquiry only for online devices (otherwise we waste time on request timeouts and get no new info)
-                         {
-                             // if it's online then add it to the query list so we can get additional information about it
-                             [queryDeviceIDList addObject:deviceDict[@"id"]];
-                         }
-                         else
-                         {
-                             // if it's offline just make an instance for it with the limited data with have
-                             ParticleDevice *device = [[ParticleDevice alloc] initWithParams:deviceDict];
-                             [deviceList addObject:device];
-                             
-                             if (device) { // new 0.5.0 local storage of devices for reporting system events
-                                 if (!self.devicesMapTable) {
-                                     self.devicesMapTable = [NSMapTable mapTableWithKeyOptions:NSMapTableStrongMemory valueOptions:NSMapTableObjectPointerPersonality]; // let the user decide when to release ParticleDevice objects
-                                 }
-                                 [self.devicesMapTable setObject:device forKey:device.id];
-                             }
 
-                         }
-                     }
-                     
-                 }
-             }
-             
-             // iterate thru deviceList and create ParticleDevice instances through query
-             __block dispatch_group_t group = dispatch_group_create();
-             
-             for (NSString *deviceID in queryDeviceIDList)
-             {
-                 dispatch_group_enter(group);
-                 [self getDevice:deviceID completion:^(ParticleDevice *device, NSError *error) {
-                     if ((!error) && (device))
-                         [deviceList addObject:device];
-                     
-                     if ((error) && (!deviceError)) // if there wasn't an error before cache it
-                         deviceError = error;
-                     
-                     dispatch_group_leave(group);
-                 }];
-             }
-             
-             // call user's completion block on main thread after all concurrent GET requests finished and ParticleDevice instances created
-             dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-                 if (completion)
-                 {
-                     if (deviceError && (deviceList.count==0)) // empty list? error? report it
-                     {
-                         completion(nil, deviceError);
-                     }
-                     else if (deviceList.count > 0)  // if some devices reported error but some not, then return at least the ones that didn't report error, ditch error
-                     {
-                         completion(deviceList, nil);
-                     }
-                     else
-                     {
-                         completion(nil, nil);
-                     }
-                 }
-             });
-             
-             
-             
-         }
+        NSArray *responseList = responseObject;
+        NSMutableArray *queryDeviceIDList = [[NSMutableArray alloc] init];
+        NSMutableArray *deviceList = [[NSMutableArray alloc] init];
+
+        // analyze
+        for (NSDictionary *deviceDict in responseList)
+        {
+            if (deviceDict[@"id"] && ![deviceDict[@"id"] isKindOfClass:[NSNull class]])   // ignore <null> device listings that sometimes return from /v1/devices API call
+            {
+                ParticleDevice *device = [[ParticleDevice alloc] initWithParams:deviceDict];
+                [deviceList addObject:device];
+
+                if (device) { // new 0.5.0 local storage of devices for reporting system events
+                    if (!self.devicesMapTable) {
+                        self.devicesMapTable = [NSMapTable mapTableWithKeyOptions:NSMapTableStrongMemory valueOptions:NSMapTableObjectPointerPersonality]; // let the user decide when to release ParticleDevice objects
+                    }
+                    [self.devicesMapTable setObject:device forKey:device.id];
+                }
+            }
+        }
+
+        if (completion) {
+            completion(deviceList, nil);
+        }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
         NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
