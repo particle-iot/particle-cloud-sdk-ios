@@ -129,6 +129,11 @@ typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
 @property (nonatomic, readonly) NSUInteger productId;
 @property (strong, nonatomic, nullable, readonly) NSString *status; // inactive
 
+
+//new properties starting SDK v0.9.1
+@property (strong, nonatomic, nullable, readonly) NSString *serialNumber; // inactive
+@property (strong, nonatomic, nullable, readonly) NSString *mobileSecret; // inactive
+
 /**
  *  Device firmware version string
  */
@@ -136,6 +141,8 @@ typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
 @property (nonatomic, readonly) BOOL requiresUpdate;
 @property (nonatomic, readonly) ParticleDeviceType type;
 @property (nonatomic, readonly) NSString *typeString;
+
+
 
 -(nullable instancetype)initWithParams:(NSDictionary *)params NS_DESIGNATED_INITIALIZER;
 -(instancetype)init __attribute__((unavailable("Must use initWithParams:")));

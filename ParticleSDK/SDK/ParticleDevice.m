@@ -81,7 +81,6 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
-
 -(nullable instancetype)initWithParams:(NSDictionary *)params
 {
     if (self = [super init])
@@ -155,6 +154,16 @@ NS_ASSUME_NONNULL_BEGIN
         if ((params[@"imei"]) && ([params[@"imei"] isKindOfClass:[NSString class]]))
         {
             _imei = params[@"imei"];
+        }
+
+        if ((params[@"serial_number"]) && ([params[@"serial_number"] isKindOfClass:[NSString class]]))
+        {
+            _serialNumber = params[@"serial_number"];
+        }
+
+        if ((params[@"mobile_secret"]) && ([params[@"mobile_secret"] isKindOfClass:[NSString class]]))
+        {
+            _mobileSecret = params[@"mobile_secret"];
         }
 
         if ((params[@"status"]) && ([params[@"status"] isKindOfClass:[NSString class]]))
