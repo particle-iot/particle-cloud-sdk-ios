@@ -422,7 +422,7 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
  *  @param iccid      ICCID of the SIM card that was shipped with Particle hardware.
  *  @return NSURLSessionDataTask task for requested network access
  */
--(NSURLSessionDataTask *)getSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimInfo * _Nullable, NSError * _Nullable))completion
+-(NSURLSessionDataTask *)getSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimInfo * _Nullable, NSError * _Nullable))completion;
 
 
 
