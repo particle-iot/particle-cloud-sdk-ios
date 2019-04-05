@@ -30,11 +30,11 @@ extern NSString *const kParticleAPIBaseURL;
 
 typedef NS_ENUM(NSInteger, ParticleSimStatus) {
     ParticleSimStatusError=0,
-    ParticleSimStatusOK,
+    ParticleSimStatusInactive,
+    ParticleSimStatusInactiveFree,
+    ParticleSimStatusActive,
     ParticleSimStatusNotFound,
     ParticleSimStatusNotOwnedByUser,
-    ParticleSimStatusActivated,
-    ParticleSimStatusActivatedFree
 };
 
 

@@ -1568,15 +1568,15 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
                                           
                                           switch (code) {
                                               case 204:
-                                                  completion(ParticleSimStatusActivatedFree, nil);
+                                                  completion(ParticleSimStatusInactiveFree, nil);
                                                   break;
 
                                               case 205:
-                                                  completion(ParticleSimStatusActivated, nil);
+                                                  completion(ParticleSimStatusActive, nil);
                                                   break;
 
                                               default: // 200
-                                                  completion(ParticleSimStatusOK, nil);
+                                                  completion(ParticleSimStatusInactive, nil);
                                                   break;
                                           }
                                       }
