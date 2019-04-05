@@ -1545,6 +1545,44 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     
 }
 
+-(NSURLSessionDataTask *)getSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimInfo * _Nullable, NSError * _Nullable))completion
+{
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+    NSString *url = [NSString stringWithFormat:@"/v1/sims/%@/", iccid];
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", url];
+
+
+    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
+        if (completion)
+        {
+            NSHTTPURLResponse *serverResponse = (NSHTTPURLResponse *)task.response;
+            NSDictionary *responseDict = responseObject;
+            completion([[ParticleSimInfo alloc] initWithParams:responseDict], nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
+        {
+            completion(nil, particleError);
+        }
+
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getSim Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
+    }];
+
+
+    return task;
+}
+
+
 -(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSError * _Nullable))completion
 {
     if (self.session.accessToken) {

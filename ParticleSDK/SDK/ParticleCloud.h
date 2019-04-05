@@ -22,6 +22,7 @@
 #import "ParticleEvent.h"
 #import "ParticleNetwork.h"
 #import "ParticlePricingInfo.h"
+#import "ParticleSimInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -413,6 +414,16 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
  *  @return NSURLSessionDataTask task for requested network access
  */
 -(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSError * _Nullable))completion;
+
+
+/**
+ *  Get ParticleSimInfo object for the SIM card
+ *
+ *  @param iccid      ICCID of the SIM card that was shipped with Particle hardware.
+ *  @return NSURLSessionDataTask task for requested network access
+ */
+-(NSURLSessionDataTask *)getSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimInfo * _Nullable, NSError * _Nullable))completion
+
 
 
 /**
