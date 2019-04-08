@@ -1558,7 +1558,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
-        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
 
         if (completion)
