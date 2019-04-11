@@ -21,7 +21,7 @@
             if ([status.lowercaseString isEqualToString:@"active"]) {
                 _status = ParticleSimDetailedStatusActivate;
             } else if ([status.lowercaseString isEqualToString:@"never_before_activated"]) {
-                _status = ParticleSimDetailedStatusNeverActivated;
+                _status = ParticleSimDetailedStatusInactiveNeverActivated;
             } else if ([status.lowercaseString isEqualToString:@"inactive_user_deactivated"]) {
                 _status = ParticleSimDetailedStatusInactivateUserDeactivated;
             } else if ([status.lowercaseString isEqualToString:@"inactive_data_limit_reached"]) {

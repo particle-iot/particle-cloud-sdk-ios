@@ -7,8 +7,8 @@
 
 
 typedef NS_ENUM(NSInteger, ParticleSimDetailedStatus) {
-    ParticleSimDetailedStatusNeverActivated = 0,
-    ParticleSimDetailedStatusActivate,
+    ParticleSimDetailedStatusActivate = 0,
+    ParticleSimDetailedStatusInactiveNeverActivated,
     ParticleSimDetailedStatusInactivateUserDeactivated,
     ParticleSimDetailedStatusInactiveDataLimitReached,
     ParticleSimDetailedStatusInactiveInvalidPayment
