@@ -416,6 +416,8 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 -(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSError * _Nullable))completion;
 
 
+- (NSURLSessionDataTask *)addCard:(NSString *)stripeTokenId completion:(nullable void (^)(NSError *_Nullable))completion;
+
 /**
  *  Get ParticleSimInfo object for the SIM card
  *

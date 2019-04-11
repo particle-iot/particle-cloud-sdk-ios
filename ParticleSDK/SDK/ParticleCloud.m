@@ -1545,6 +1545,42 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     
 }
 
+-(NSURLSessionDataTask *)addCard:(NSString *)stripeTokenId completion:(nullable void(^)(NSError * _Nullable))completion{
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    params[@"stripe_token"] = stripeTokenId;
+
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", @"/v1/card/", params];
+
+    NSURLSessionDataTask *task = [self.manager PUT:@"/v1/card/" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/card/", (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
+        if (completion)
+        {
+            completion(nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
+        {
+            completion(particleError);
+        }
+
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! addCard Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
+    }];
+
+
+    return task;
+}
+
 -(NSURLSessionDataTask *)getSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimInfo * _Nullable, NSError * _Nullable))completion
 {
     if (self.session.accessToken) {
