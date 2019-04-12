@@ -4,6 +4,10 @@ Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [0.9.5](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.5) (2019-04-12)
+
+* Added support for endpoints related to SIM & credit card management used in 3rg generation device guided setup. 
+
 ## [0.9.4](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.4) (2019-03-05)
 
 !!! Potentially breaking change !!!
