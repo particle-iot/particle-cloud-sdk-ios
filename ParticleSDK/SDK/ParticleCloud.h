@@ -416,6 +416,12 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 -(NSURLSessionDataTask *)checkSim:(NSString *)iccid completion:(nullable void(^)(ParticleSimStatus simStatus, NSError * _Nullable))completion;
 
 
+/**
+ *  Add credit card to user account
+ *
+ *  @param stripeTokenId      id of token returned by stripe
+ *  @return NSURLSessionDataTask task for requested network access
+ */
 - (NSURLSessionDataTask *)addCard:(NSString *)stripeTokenId completion:(nullable void (^)(NSError *_Nullable))completion;
 
 /**
