@@ -514,12 +514,13 @@ NS_ASSUME_NONNULL_BEGIN
 
     }
 
-    NSString *desc = [NSString stringWithFormat:@"<ParticleDevice 0x%lx, type: %@, id: %@, name: %@, connected: %@, variables: %@, functions: %@, version: %@, requires update: %@, last app: %@, last heard: %@>",
+    NSString *desc = [NSString stringWithFormat:@"<ParticleDevice 0x%lx, type: %@, id: %@, name: %@, connected: %@, flashing: %@, variables: %@, functions: %@, version: %@, requires update: %@, last app: %@, last heard: %@>",
                       (unsigned long)self,
                       self.typeString,
                       self.id,
                       self.name,
                       (self.connected) ? @"true" : @"false",
+                      (self.isFlashing) ? @"true" : @"false",
                       self.variables,
                       self.functions,
                       self.version,
@@ -716,7 +717,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)__receivedSystemEvent:(ParticleEvent *)event {
-    //{"name":"spark/status","data":"online","ttl":"60","published_at":"2016-07-13T06:20:07.300Z","coreid":"25002a001147353230333635"}
+    //        {"name":"spark/status","data":"online","ttl":"60","published_at":"2016-07-13T06:20:07.300Z","coreid":"25002a001147353230333635"}
     //        {"name":"spark/flash/status","data":"started ","ttl":"60","published_at":"2016-07-13T06:30:47.130Z","coreid":"25002a001147353230333635"}
     //        {"name":"spark/flash/status","data":"success ","ttl":"60","published_at":"2016-07-13T06:30:47.702Z","coreid":"25002a001147353230333635"}
     //
@@ -726,8 +727,11 @@ NS_ASSUME_NONNULL_BEGIN
     //        {"name":"spark/safe-mode-updater/updating","data":"1","ttl":"60","published_at":"2016-07-13T06:39:19.467Z","coreid":"particle-internal"}
     //        {"name":"spark/safe-mode-updater/updating","data":"1","ttl":"60","published_at":"2016-07-13T06:39:19.560Z","coreid":"particle-internal"}
     //        {"name":"spark/flash/status","data":"started ","ttl":"60","published_at":"2016-07-13T06:39:21.581Z","coreid":"25002a001147353230333635"}
-    
-    
+
+
+    NSLog(@"event.event = %@ \r\n%@", event.event, event.data);
+
+
     if ([event.event isEqualToString:@"spark/status"]) {
         if ([event.data isEqualToString:@"online"]) {
             self.connected = YES;
@@ -749,6 +753,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     if ([event.event isEqualToString:@"spark/flash/status"]) {
         if ([event.data containsString:@"started"]) {
+            self.connected = YES;
             self.isFlashing = YES;
             if ([self.delegate respondsToSelector:@selector(particleDevice:didReceiveSystemEvent:)]) {
                 [self.delegate particleDevice:self didReceiveSystemEvent:ParticleDeviceSystemEventFlashStarted];
@@ -757,6 +762,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
         
         if ([event.data containsString:@"success"]) {
+            self.connected = YES;
             self.isFlashing = NO;
             if ([self.delegate respondsToSelector:@selector(particleDevice:didReceiveSystemEvent:)]) {
                 [self.delegate particleDevice:self didReceiveSystemEvent:ParticleDeviceSystemEventFlashSucceeded];
@@ -767,6 +773,7 @@ NS_ASSUME_NONNULL_BEGIN
     
     if ([event.event isEqualToString:@"spark/device/app-hash"]) {
         self.appHash = event.data;
+        self.connected = YES;
         self.isFlashing = NO;
         if ([self.delegate respondsToSelector:@selector(particleDevice:didReceiveSystemEvent:)]) {
             [self.delegate particleDevice:self didReceiveSystemEvent:ParticleDeviceSystemEventAppHashUpdated];
@@ -775,12 +782,16 @@ NS_ASSUME_NONNULL_BEGIN
     
     
     if ([event.event isEqualToString:@"particle/status/safe-mode"]) {
+        self.connected = YES;
+        self.isFlashing = YES;
         if ([self.delegate respondsToSelector:@selector(particleDevice:didReceiveSystemEvent:)]) {
             [self.delegate particleDevice:self didReceiveSystemEvent:ParticleDeviceSystemEventSafeModeUpdater];
         }
     }
     
     if ([event.event isEqualToString:@"spark/safe-mode-updater/updating"]) {
+        self.connected = YES;
+        self.isFlashing = YES;
         if ([self.delegate respondsToSelector:@selector(particleDevice:didReceiveSystemEvent:)]) {
             [self.delegate particleDevice:self didReceiveSystemEvent:ParticleDeviceSystemEventSafeModeUpdater];
         }

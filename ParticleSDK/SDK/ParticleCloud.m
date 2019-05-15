@@ -1175,7 +1175,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 -(void)subscribeToDevicesSystemEvents {
     
     __weak ParticleCloud *weakSelf = self;
-    self.systemEventsListenerId = [self subscribeToMyDevicesEventsWithPrefix:@"particle" handler:^(ParticleEvent * _Nullable event, NSError * _Nullable error) {
+    self.systemEventsListenerId = [self subscribeToMyDevicesEventsWithPrefix:@"spark" handler:^(ParticleEvent * _Nullable event, NSError * _Nullable error) {
 
         if (!error) {
             ParticleDevice *device = [weakSelf.devicesMapTable objectForKey:event.deviceID];
