@@ -88,6 +88,10 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
  */
 @property (nonatomic, nullable, strong) NSString *oAuthClientSecret;
 
+
+@property (nonatomic, nullable, strong) NSString *customAPIBaseURL;
+@property (nonatomic, readonly) NSString *currentBaseURL;
+
 /**
  *  Singleton instance of ParticleCloud class
  *

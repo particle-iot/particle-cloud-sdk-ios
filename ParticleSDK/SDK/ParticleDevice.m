@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL connected; // might be impossible
 @property (strong, nonatomic, nonnull) NSArray *functions;
 @property (strong, nonatomic, nonnull) NSDictionary *variables;
-@property (strong, nonatomic, nullable) NSString *version;
+@property (strong, nonatomic, nullable) NSString *systemFirmwareVersion;
 //@property (nonatomic) ParticleDeviceType type;
 @property (nonatomic) BOOL requiresUpdate;
 @property (nonatomic) BOOL isFlashing;
@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
     static dispatch_once_t onceToken;
     static AFHTTPSessionManager *manager = nil;
     dispatch_once(&onceToken, ^{
-        manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:kParticleAPIBaseURL]];
+        manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:ParticleCloud.sharedInstance.currentBaseURL]];
         manager.responseSerializer = [AFJSONResponseSerializer serializer];
     });
 
@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     if (self = [super init])
     {
-        _baseURL = [NSURL URLWithString:kParticleAPIBaseURL];
+        _baseURL = [NSURL URLWithString:ParticleCloud.sharedInstance.currentBaseURL];
         if (!_baseURL) {
             return nil;
         }
@@ -99,6 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
         
         _connected = [params[@"connected"] boolValue] == YES;
+        _cellular = [params[@"cellular"] boolValue] == YES;
         
         _functions = params[@"functions"] ?: @[];
         _variables = params[@"variables"] ?: @{};
@@ -182,6 +183,16 @@ NS_ASSUME_NONNULL_BEGIN
             _lastApp = params[@"last_app"];
         }
 
+        if ((params[@"notes"]) && ([params[@"notes"] isKindOfClass:[NSString class]]))
+        {
+            _notes = params[@"notes"];
+        }
+
+        if ((params[@"system_firmware_version"]) && ([params[@"system_firmware_version"] isKindOfClass:[NSString class]]))
+        {
+            _systemFirmwareVersion = params[@"system_firmware_version"];
+        }
+
         if ([params[@"last_heard"] isKindOfClass:[NSString class]])
         {
             // TODO: add to utils class as POSIX time to NSDate
@@ -193,16 +204,6 @@ NS_ASSUME_NONNULL_BEGIN
             _lastHeard = [formatter dateFromString:dateString];
         }
 
-        /// WIP
-        /*
-        if (params[@"cc3000_patch_version"]) { // Core only
-            self.systemFirmwareVersion = (params[@"cc3000_patch_version"]);
-        } else if (params[@"current_build_target"]) { // Electron only
-            self.systemFirmwareVersion = params[@"current_build_target"];
-        }
-         */
-        
-            
         if (params[@"device_needs_update"])
         {
             _requiresUpdate = YES;
@@ -215,6 +216,35 @@ NS_ASSUME_NONNULL_BEGIN
     }
     
     return nil;
+}
+
+-(NSURLSessionDataTask *)ping:(nullable void(^)(BOOL result, NSError* _Nullable error))completion {
+    NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/devices/%@/ping", self.id]];
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@", url.absoluteString];
+
+    [self setAuthHeaderWithAccessToken];
+
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
+        if (completion)
+        {
+            completion([responseObject[@"online"] boolValue], nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
+        {
+            completion(nil, particleError);
+        }
+
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! ping Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
+    }];
+
+    return task;
 }
 
 -(NSURLSessionDataTask *)refresh:(nullable ParticleCompletionBlock)completion;
@@ -486,6 +516,40 @@ NS_ASSUME_NONNULL_BEGIN
     return task;
 }
 
+-(NSURLSessionDataTask *)setNotes:(NSString *)notes completion:(nullable ParticleCompletionBlock)completion
+{
+    NSURL *url = [self.baseURL URLByAppendingPathComponent:[NSString stringWithFormat:@"v1/devices/%@", self.id]];
+    
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    params[@"notes"] = notes;
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", url.absoluteString, params];
+
+    [self setAuthHeaderWithAccessToken];
+
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
+        self.notes = notes;
+        if (completion)
+        {
+            completion(nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
+        {
+            completion(particleError);
+        }
+
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! setNotes Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
+    }];
+
+    return task;
+}
+
 
 
 #pragma mark Internal use methods
@@ -514,7 +578,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     }
 
-    NSString *desc = [NSString stringWithFormat:@"<ParticleDevice 0x%lx, type: %@, id: %@, name: %@, connected: %@, flashing: %@, variables: %@, functions: %@, version: %@, requires update: %@, last app: %@, last heard: %@>",
+    NSString *desc = [NSString stringWithFormat:@"<ParticleDevice 0x%lx, type: %@, id: %@, name: %@, connected: %@, flashing: %@, variables: %@, functions: %@, version: %@, requires update: %@, last app: %@, last heard: %@, notes: %@>",
                       (unsigned long)self,
                       self.typeString,
                       self.id,
@@ -523,10 +587,11 @@ NS_ASSUME_NONNULL_BEGIN
                       (self.isFlashing) ? @"true" : @"false",
                       self.variables,
                       self.functions,
-                      self.version,
+                      self.systemFirmwareVersion,
                       (self.requiresUpdate) ? @"true" : @"false",
                       self.lastApp,
-                      self.lastHeard];
+                      self.lastHeard,
+                      self.notes];
     
     return desc;
     
@@ -766,6 +831,14 @@ NS_ASSUME_NONNULL_BEGIN
             self.isFlashing = NO;
             if ([self.delegate respondsToSelector:@selector(particleDevice:didReceiveSystemEvent:)]) {
                 [self.delegate particleDevice:self didReceiveSystemEvent:ParticleDeviceSystemEventFlashSucceeded];
+            }
+        }
+
+        if ([event.data containsString:@"failed"]) {
+            self.connected = YES;
+            self.isFlashing = NO;
+            if ([self.delegate respondsToSelector:@selector(particleDevice:didReceiveSystemEvent:)]) {
+                [self.delegate particleDevice:self didReceiveSystemEvent:ParticleDeviceSystemEventFlashFailed];
             }
         }
     }

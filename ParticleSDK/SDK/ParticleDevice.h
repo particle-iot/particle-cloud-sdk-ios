@@ -131,13 +131,17 @@ typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
 
 
 //new properties starting SDK v0.9.1
-@property (strong, nonatomic, nullable, readonly) NSString *serialNumber; // inactive
-@property (strong, nonatomic, nullable, readonly) NSString *mobileSecret; // inactive
+@property (strong, nonatomic, nullable, readonly) NSString *serialNumber;
+@property (strong, nonatomic, nullable, readonly) NSString *mobileSecret;
 
+//new properties starting SDK v0.9.6
+@property (strong, nonatomic, nullable) NSString *notes;
+@property (strong, nonatomic, readonly) NSString *systemFirmwareVersion;
+@property (nonatomic, readonly) BOOL cellular;
 /**
  *  Device firmware version string
  */
-@property (strong, nonatomic, readonly) NSString *version; // inactive
+
 @property (nonatomic, readonly) BOOL requiresUpdate;
 @property (nonatomic, readonly) ParticleDeviceType type;
 @property (nonatomic, readonly) NSString *typeString;
@@ -179,6 +183,11 @@ typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
 
 
 /**
+ *  This will ping a device, enabling you to see if your device is online or offline
+ */
+- (NSURLSessionDataTask *)ping:(nullable void (^)(BOOL result, NSError *_Nullable error))completion;
+
+/**
  *  Request device refresh from cloud
  *  update online status/functions/variables/device name, etc
  *
@@ -194,10 +203,6 @@ typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
  */
 -(NSURLSessionDataTask *)unclaim:(nullable ParticleCompletionBlock)completion;
 
-/*
--(void)compileAndFlash:(NSString *)sourceCode completion:(void(^)(NSError* error))completion;
--(void)flash:(NSData *)binary completion:(void(^)(NSError* error))completion;
-*/
 
 /**
  *  Rename device
@@ -206,6 +211,14 @@ typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
  *  @param completion   Completion block called when function completes with NSError object in case of an error or nil if success.
  */
 -(NSURLSessionDataTask *)rename:(NSString *)newName completion:(nullable ParticleCompletionBlock)completion;
+
+/**
+ *  Edit device notes
+ *
+ *  @param notes        Notes to be associated with particular device
+ *  @param completion   Completion block called when function completes with NSError object in case of an error or nil if success.
+ */
+-(NSURLSessionDataTask *)setNotes:(NSString *)notes completion:(nullable ParticleCompletionBlock)completion;
 
 /**
  *  Retrieve current data usage report (For Electron only)
