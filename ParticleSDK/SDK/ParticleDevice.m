@@ -204,16 +204,6 @@ NS_ASSUME_NONNULL_BEGIN
             _lastHeard = [formatter dateFromString:dateString];
         }
 
-        /// WIP
-        /*
-        if (params[@"cc3000_patch_version"]) { // Core only
-            self.systemFirmwareVersion = (params[@"cc3000_patch_version"]);
-        } else if (params[@"current_build_target"]) { // Electron only
-            self.systemFirmwareVersion = params[@"current_build_target"];
-        }
-         */
-        
-            
         if (params[@"device_needs_update"])
         {
             _requiresUpdate = YES;
