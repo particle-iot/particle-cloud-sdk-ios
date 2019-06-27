@@ -94,7 +94,11 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         // init event listeners internal dictionary
         self.eventListenersDict = [NSMutableDictionary new];
 
-        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Has access token = %d", self.session.accessToken != nil];
+        #if DEBUG
+            [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Has access token = %@", self.session.accessToken];
+        #else
+            [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"Has access token = %d", self.session.accessToken != nil];
+        #endif
 
         if (self.session.accessToken) {
             [self subscribeToDevicesSystemEvents];
