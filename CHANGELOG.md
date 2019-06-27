@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## [0.9.6](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.6) (2019-06-27)
+
+* Added support for editing device notes and pinging the device
+
+* Added support for custom ParticleCloud API base URL
+
+* Added support for `ParticleDeviceSystemEventFlashFailed` event
+
+!!! Potentially breaking change !!!
+* Preciusly unused `version` property has been renamed to `systemFirmwareVersion` and now it contains DeviceOS version string.
 
 ## [0.9.5](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.5) (2019-04-12)
 
