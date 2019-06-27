@@ -32,7 +32,7 @@
 {
     if (self = [super init])
     {
-        _baseURL = [NSURL URLWithString:kParticleAPIBaseURL];
+        _baseURL = [NSURL URLWithString:ParticleCloud.sharedInstance.currentBaseURL];
         if (!_baseURL) {
             return nil;
         }

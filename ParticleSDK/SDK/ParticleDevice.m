@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
     static dispatch_once_t onceToken;
     static AFHTTPSessionManager *manager = nil;
     dispatch_once(&onceToken, ^{
-        manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:kParticleAPIBaseURL]];
+        manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:ParticleCloud.sharedInstance.currentBaseURL]];
         manager.responseSerializer = [AFJSONResponseSerializer serializer];
     });
 
@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     if (self = [super init])
     {
-        _baseURL = [NSURL URLWithString:kParticleAPIBaseURL];
+        _baseURL = [NSURL URLWithString:ParticleCloud.sharedInstance.currentBaseURL];
         if (!_baseURL) {
             return nil;
         }

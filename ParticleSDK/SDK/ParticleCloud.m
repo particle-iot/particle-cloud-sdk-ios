@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define GLOBAL_API_TIMEOUT_INTERVAL     31.0f
 
 NSString *const kParticleAPIBaseURL = @"https://api.particle.io";
+
 NSString *const kEventListenersDictEventSourceKey = @"eventSource";
 NSString *const kEventListenersDictHandlerKey = @"eventHandler";
 NSString *const kEventListenersDictIDKey = @"id";
@@ -50,11 +51,17 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
 #pragma mark Class initialization and singleton instancing
 
-+ (instancetype)sharedInstance;
++ (instancetype)sharedInstance
+{
+    return [ParticleCloud sharedInstance:NO];
+}
+
++ (instancetype)sharedInstance:(BOOL)flush
 {
     static ParticleCloud *sharedInstance = nil;
+
     @synchronized(self) {
-        if (sharedInstance == nil)
+        if (sharedInstance == nil || flush == YES)
         {
             sharedInstance = [[self alloc] init];
         }
@@ -66,7 +73,12 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 {
     self = [super init];
     if (self) {
-        self.baseURL = [NSURL URLWithString:kParticleAPIBaseURL];
+        if (self.customAPIBaseURL == nil) {
+            self.baseURL = [NSURL URLWithString:kParticleAPIBaseURL];
+        } else {
+            self.baseURL = [NSURL URLWithString:self.customAPIBaseURL];
+        }
+
         if (!self.baseURL)
         {
             return nil;
@@ -108,6 +120,11 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 }
 
 #pragma mark Getter functions
+
+- (nullable NSString *)customAPIBaseURL {
+    NSString *url = [[NSUserDefaults standardUserDefaults] objectForKey:@"io.particle.customAPIBaseURL"];
+    return url;
+}
 
 -(nullable NSString *)accessToken
 {
@@ -172,7 +189,21 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     return (self.session.accessToken != nil);
 }
 
+- (NSString *)currentBaseURL {
+    return self.baseURL.absoluteString;
+}
+
 #pragma mark Setter functions
+
+- (void)setCustomAPIBaseURL:(nullable NSString *)customApiBaseUrl {
+    if (customApiBaseUrl != nil) {
+        [[NSUserDefaults standardUserDefaults] setObject:customApiBaseUrl forKey:@"io.particle.customAPIBaseURL"];
+    } else {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"io.particle.customAPIBaseURL"];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [ParticleCloud sharedInstance:YES];
+}
 
 - (void)setoAuthClientId:(nullable NSString *)oAuthClientId {
     _oAuthClientId = oAuthClientId ?: kDefaultoAuthClientId;
