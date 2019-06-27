@@ -770,6 +770,14 @@ NS_ASSUME_NONNULL_BEGIN
                 [self.delegate particleDevice:self didReceiveSystemEvent:ParticleDeviceSystemEventFlashSucceeded];
             }
         }
+
+        if ([event.data containsString:@"failed"]) {
+            self.connected = YES;
+            self.isFlashing = NO;
+            if ([self.delegate respondsToSelector:@selector(particleDevice:didReceiveSystemEvent:)]) {
+                [self.delegate particleDevice:self didReceiveSystemEvent:ParticleDeviceSystemEventFlashFailed];
+            }
+        }
     }
     
     
