@@ -131,8 +131,8 @@ typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
 
 
 //new properties starting SDK v0.9.1
-@property (strong, nonatomic, nullable, readonly) NSString *serialNumber; // inactive
-@property (strong, nonatomic, nullable, readonly) NSString *mobileSecret; // inactive
+@property (strong, nonatomic, nullable, readonly) NSString *serialNumber;
+@property (strong, nonatomic, nullable, readonly) NSString *mobileSecret;
 
 /**
  *  Device firmware version string
