@@ -134,10 +134,14 @@ typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
 @property (strong, nonatomic, nullable, readonly) NSString *serialNumber;
 @property (strong, nonatomic, nullable, readonly) NSString *mobileSecret;
 
+//new properties starting SDK v0.9.2
+@property (strong, nonatomic, nullable) NSString *notes;
+@property (strong, nonatomic, readonly) NSString *systemFirmwareVersion;
+@property (nonatomic, readonly) BOOL cellular;
 /**
  *  Device firmware version string
  */
-@property (strong, nonatomic, readonly) NSString *version; // inactive
+
 @property (nonatomic, readonly) BOOL requiresUpdate;
 @property (nonatomic, readonly) ParticleDeviceType type;
 @property (nonatomic, readonly) NSString *typeString;

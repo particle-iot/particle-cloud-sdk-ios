@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL connected; // might be impossible
 @property (strong, nonatomic, nonnull) NSArray *functions;
 @property (strong, nonatomic, nonnull) NSDictionary *variables;
-@property (strong, nonatomic, nullable) NSString *version;
+@property (strong, nonatomic, nullable) NSString *systemFirmwareVersion;
 //@property (nonatomic) ParticleDeviceType type;
 @property (nonatomic) BOOL requiresUpdate;
 @property (nonatomic) BOOL isFlashing;
@@ -99,6 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
         
         _connected = [params[@"connected"] boolValue] == YES;
+        _cellular = [params[@"cellular"] boolValue] == YES;
         
         _functions = params[@"functions"] ?: @[];
         _variables = params[@"variables"] ?: @{};
@@ -180,6 +181,16 @@ NS_ASSUME_NONNULL_BEGIN
         if ([params[@"last_app"] isKindOfClass:[NSString class]])
         {
             _lastApp = params[@"last_app"];
+        }
+
+        if ((params[@"notes"]) && ([params[@"notes"] isKindOfClass:[NSString class]]))
+        {
+            _notes = params[@"notes"];
+        }
+
+        if ((params[@"system_firmware_version"]) && ([params[@"system_firmware_version"] isKindOfClass:[NSString class]]))
+        {
+            _systemFirmwareVersion = params[@"system_firmware_version"];
         }
 
         if ([params[@"last_heard"] isKindOfClass:[NSString class]])
@@ -514,7 +525,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     }
 
-    NSString *desc = [NSString stringWithFormat:@"<ParticleDevice 0x%lx, type: %@, id: %@, name: %@, connected: %@, flashing: %@, variables: %@, functions: %@, version: %@, requires update: %@, last app: %@, last heard: %@>",
+    NSString *desc = [NSString stringWithFormat:@"<ParticleDevice 0x%lx, type: %@, id: %@, name: %@, connected: %@, flashing: %@, variables: %@, functions: %@, version: %@, requires update: %@, last app: %@, last heard: %@, notes: %@>",
                       (unsigned long)self,
                       self.typeString,
                       self.id,
@@ -523,10 +534,11 @@ NS_ASSUME_NONNULL_BEGIN
                       (self.isFlashing) ? @"true" : @"false",
                       self.variables,
                       self.functions,
-                      self.version,
+                      self.systemFirmwareVersion,
                       (self.requiresUpdate) ? @"true" : @"false",
                       self.lastApp,
-                      self.lastHeard];
+                      self.lastHeard,
+                      self.notes];
     
     return desc;
     
