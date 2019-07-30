@@ -188,6 +188,29 @@ NS_ASSUME_NONNULL_BEGIN
             _notes = params[@"notes"];
         }
 
+        if (params[@"network"] != nil) {
+            if ((params[@"network"][@"id"]) && ([params[@"network"][@"id"] isKindOfClass:[NSString class]])) {
+                _networkId = params[@"network"][@"id"];
+
+                if ((params[@"network"][@"role"]) && (params[@"network"][@"role"][@"gateway"])) {
+                    _networkRole = ([params[@"network"][@"role"][@"gateway"] boolValue]) ? ParticleDeviceNetworkRoleGateway : ParticleDeviceNetworkRoleNode;
+                }
+
+                if ((params[@"network"][@"role"]) && (params[@"network"][@"role"][@"state"]) && ([params[@"network"][@"role"][@"state"] isKindOfClass:[NSString class]])) {
+                    NSString *state = [params[@"network"][@"role"][@"state"] lowercaseString];
+
+                    if ([state isEqualToString:@"confirmed"]) {
+                        _networkRoleState = ParticleDeviceNetworkRoleStatePendingConfirmed;
+                    } else if ([state isEqualToString:@"pending"]) {
+                        _networkRoleState = ParticleDeviceNetworkRoleStatePending;
+                    } else {
+                        _networkRoleState = ParticleDeviceNetworkRoleStatePendingOwnerApproval;
+                    }
+                }
+            }
+        }
+
+
         if ((params[@"system_firmware_version"]) && ([params[@"system_firmware_version"] isKindOfClass:[NSString class]]))
         {
             _systemFirmwareVersion = params[@"system_firmware_version"];
@@ -578,7 +601,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     }
 
-    NSString *desc = [NSString stringWithFormat:@"<ParticleDevice 0x%lx, type: %@, id: %@, name: %@, connected: %@, flashing: %@, variables: %@, functions: %@, version: %@, requires update: %@, last app: %@, last heard: %@, notes: %@>",
+    NSString *desc = [NSString stringWithFormat:@"<ParticleDevice 0x%lx, type: %@, id: %@, name: %@, connected: %@, flashing: %@, variables: %@, functions: %@, version: %@, requires update: %@, last app: %@, last heard: %@, notes: %@, networkId: %@, networkRole: %d, networkRoleState: %d>",
                       (unsigned long)self,
                       self.typeString,
                       self.id,
@@ -591,8 +614,11 @@ NS_ASSUME_NONNULL_BEGIN
                       (self.requiresUpdate) ? @"true" : @"false",
                       self.lastApp,
                       self.lastHeard,
-                      self.notes];
-    
+                      self.notes,
+                      self.networkId,
+                      self.networkRole,
+                      self.networkRoleState];
+
     return desc;
     
 }

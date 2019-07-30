@@ -58,21 +58,15 @@ typedef NS_ENUM(NSInteger, ParticleDeviceSystemEvent) {
     ParticleDeviceSystemEventSafeModeUpdater
 };
 
-
-typedef NS_ENUM(NSInteger, ParticleDeviceNetworkState) {
-    ParticleDeviceNetworkStatePending,
-    ParticleDeviceNetworkStateConfirmed
-};
-
 typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRole) {
-    ParticleDeviceNetworkStateGateway,
-    ParticleDeviceNetworkStateNode,
+    ParticleDeviceNetworkRoleGateway,
+    ParticleDeviceNetworkRoleNode,
 };
 
 typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
     ParticleDeviceNetworkRoleStatePending,
     ParticleDeviceNetworkRoleStatePendingConfirmed,
-//    ParticleDeviceNetworkRoleStateOwnerConfirmation
+    ParticleDeviceNetworkRoleStatePendingOwnerApproval
 };
 
 @class ParticleDevice;
@@ -115,7 +109,6 @@ typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
 
 // new properties for mesh networks SDK v0.9
 @property (strong, nonatomic, nullable, readonly) NSString *networkId; // if device belongs to a mesh network thats the network ID
-@property (nonatomic, readonly) ParticleDeviceNetworkState networkState; // pending if device is waiting to join network confirmation
 @property (nonatomic, readonly) ParticleDeviceNetworkRole networkRole; // if device belongs to a mesh network true means it is a gateway device
 @property (nonatomic, readonly) ParticleDeviceNetworkRoleState networkRoleState; // pending if device is waiting to role change confirmation
 
