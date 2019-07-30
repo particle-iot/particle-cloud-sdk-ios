@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## [0.9.7](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.7) (2019-07-30)
+
+* Removed unused `networkState` property from `ParticleDevice`
+
+* Added support for `networkId`, `networkRole`, `networkRoleState` (device roles need to be approved) properties
+
 ## [0.9.6](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.6) (2019-06-27)
 
 * Added support for editing device notes and pinging the device
