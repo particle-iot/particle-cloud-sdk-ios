@@ -47,6 +47,7 @@
 
     //add new value if one is provided
     if (value) {
+        [query setObject:(__bridge id)kSecAttrAccessibleAfterFirstUnlock forKey:(__bridge id)kSecAttrAccessible];
         [query setObject:[value dataUsingEncoding:NSUTF8StringEncoding] forKey:(__bridge id<NSCopying>)(kSecValueData)];
         OSStatus err = SecItemAdd((__bridge CFDictionaryRef)query, nil);
         if (err != noErr) {
