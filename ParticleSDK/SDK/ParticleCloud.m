@@ -802,50 +802,6 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 }
 
 
--(NSURLSessionDataTask *)requestPasswordResetForCustomer:(NSString *)email
-                                               productId:(NSUInteger)productId
-                                              completion:(nullable ParticleCompletionBlock)completion
-
-{
-    NSDictionary *params = @{@"email": email};
-    
-    NSString *urlPath = [NSString stringWithFormat:@"/v1/products/%tu/customers/reset_password", productId];
-
-    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", urlPath, params];
-
-    NSURLSessionDataTask *task = [self.manager POST:urlPath parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
-                                  {
-                                      [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", urlPath, (int)((NSHTTPURLResponse *)task.response).statusCode];
-                                      [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
-
-                                      if (completion) // TODO: check responses
-                                      {
-                                          completion(nil);
-                                      }
-                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
-                                  {
-                                      NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
-
-                                      if (completion)
-                                      {
-                                          completion(particleError);
-                                      }
-
-                                      [ParticleLogger logError:NSStringFromClass([self class]) format:@"! requestPasswordReset Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
-                                  }];
-    
-    return task;
-    
-}
-
--(NSURLSessionDataTask *)requestPasswordResetForCustomer:(NSString *)orgSlug
-                                                   email:(NSString *)email
-                                              completion:(nullable ParticleCompletionBlock)completion
-{
-    return [self requestPasswordResetForCustomer:email productId:[orgSlug integerValue] completion:completion];
-}
-
-
 -(NSURLSessionDataTask *)requestPasswordResetForUser:(NSString *)email
                                           completion:(nullable ParticleCompletionBlock)completion
 {

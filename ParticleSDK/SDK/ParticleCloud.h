@@ -215,29 +215,6 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
  */
 -(BOOL)injectSessionAccessToken:(NSString *)accessToken withExpiryDate:(NSDate *)expiryDate andRefreshToken:(NSString *)refreshToken;
 
-/**
- *  Request password reset for customer (organization mode) DEPRECATED
- *  command generates confirmation token and sends email to customer using org SMTP settings
- *
- *  @param email      user email
- *  @param completion Completion block with NSError object if failure, nil if success
- */
-
--(NSURLSessionDataTask *)requestPasswordResetForCustomer:(NSString *)orgSlug
-                                                   email:(NSString *)email
-                                              completion:(nullable ParticleCompletionBlock)completion __deprecated_msg("use requestPasswordResetForCustomer:email:productId:completion instead");
-
-/**
- *  Request password reset for customer (in product mode)
- *  command generates confirmation token and sends email to customer using org SMTP settings
- *
- *  @param email      user email
- *  @param productId  Product ID number
- *  @param completion Completion block with NSError object if failure, nil if success
- */
--(NSURLSessionDataTask *)requestPasswordResetForCustomer:(NSString *)email
-                                               productId:(NSUInteger)productId
-                                              completion:(nullable ParticleCompletionBlock)completion;
 
 /**
 *  Request password reset for user
