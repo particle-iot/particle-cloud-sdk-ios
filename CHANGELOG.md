@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## [1.0.0](https://github.com/spark/spark-sdk-ios/releases/tag/1.0.0) (2019-11-04)
+
+* Changed access token logging behavior to always log just last 4 digits
+
+* Fixed a bug causing app to crash when attempting to resume session from the app running in the background
+
+* Removed `requestPasswordResetForCustomer` as it is no longer supported by Particle Cloud API
+
 ## [0.9.7](https://github.com/spark/spark-sdk-ios/releases/tag/0.9.7) (2019-07-30)
 
 * Removed unused `networkState` property from `ParticleDevice`
