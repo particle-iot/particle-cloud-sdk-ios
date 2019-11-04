@@ -34,7 +34,6 @@ Particle iOS Cloud SDK enables iOS apps to interact with Particle-powered connec
 
 ### Maintainers
 
-- Ido Kleinman [Github](https://www.github.com/idokleinman) | [Twitter](https://www.twitter.com/idokleinman)
 - Raimundas Sakalauskas [Github](https://www.github.com/raimundassakalauskas)
 
 ### License
