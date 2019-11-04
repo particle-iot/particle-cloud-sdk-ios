@@ -245,6 +245,11 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 
 
 
+/**
+*  Downloads a file to caches directory and returns filesystem url.
+*
+*  @param url   url of the file to download
+*/
 - (NSURLSessionDataTask *)getNextBinary:(NSString *)url completion:(nullable void (^)(NSString *_Nullable binaryURL, NSError *_Nullable error))completion;
 
 #pragma mark Device management functions
