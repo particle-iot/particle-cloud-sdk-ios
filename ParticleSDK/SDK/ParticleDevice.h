@@ -237,9 +237,6 @@ typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
  */
 -(NSURLSessionDataTask *)flashKnownApp:(NSString *)knownAppName completion:(nullable ParticleCompletionBlock)completion; // knownAppName = @"tinker", @"blinky", ... see http://docs.
 
-//-(void)compileAndFlashFiles:(NSDictionary *)filesDict completion:(void(^)(NSError* error))completion; //@{@"<filename>" : @"<file contents>"}
-//-(void)complileFiles:(NSDictionary *)filesDict completion:(void(^)(NSData *resultBinary, NSError* error))completion; //@{@"<filename>" : @"<file contents>"}
-
 // --------------------------------------------------------------------------------------------------------------------------------------------------------
 // Events subsystem:
 // --------------------------------------------------------------------------------------------------------------------------------------------------------

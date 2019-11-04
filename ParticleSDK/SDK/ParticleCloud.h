@@ -272,8 +272,6 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 -(NSURLSessionDataTask *)getDevice:(NSString *)deviceID
                         completion:(nullable void (^)(ParticleDevice * _Nullable device, NSError * _Nullable error))completion;
 
-// Not available yet
-//-(void)publishEvent:(NSString *)eventName data:(NSData *)data;
 
 /**
  *  Claim the specified device to the currently logged in user (without claim code mechanism)
@@ -499,7 +497,6 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 
 
 
-// TODO: create a takeAction function that takes ParticleNetworkAction param instead of those 4:
 /**
  *  Add device to existing mesh network
  *
