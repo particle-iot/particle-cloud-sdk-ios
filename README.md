@@ -1,5 +1,5 @@
 <p align="center" >
-<img src="particle-mark.png" alt="Particle" title="Particle">
+<img src="https://github.com/particle-iot/particle-cloud-sdk-ios/raw/master/particle-mark.png" alt="Particle" title="Particle">
 </p>
 
 # Particle iOS Cloud SDK
