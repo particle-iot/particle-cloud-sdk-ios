@@ -4,9 +4,8 @@
 
 # Particle iOS Cloud SDK
 
-[![Platform](https://img.shields.io/badge/platform-iOS-10a4fa.svg)](https://github.com/particle-iot/particle-sdk-ios) [![Build Status](https://api.travis-ci.org/particle-iot/particle-sdk-ios.svg)](https://travis-ci.org/particle-iot/particle-sdk-ios) [![license](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/particle-iot/particle-sdk-ios/blob/master/LICENSE) [![version](https://img.shields.io/badge/cocoapods-1.0.0-green.svg)](https://github.com/particle-iot/particle-sdk-ios/blob/master/CHANGELOG.md) [![Carthage compatible](https://img.shields.io/badge/carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-
 ### Introduction
+
 
 Particle iOS Cloud SDK enables iOS apps to interact with Particle-powered connected products via the Particle Cloud. It’s an easy-to-use wrapper for Particle REST API. The Cloud SDK will allow you to:
 
@@ -20,7 +19,7 @@ Particle iOS Cloud SDK enables iOS apps to interact with Particle-powered connec
 
 ### Getting Started
 
-- Download [Particle iOS Cloud SDK](https://github.com/particle/particle-sdk-ios/archive/master.zip) and try out the included iPhone example app
+- Download [Particle iOS Cloud SDK](https://github.com/particle/particle-cloud-sdk-ios/archive/master.zip) and try out the included iPhone example app
 - Refer to our [documentation](https://docs.particle.io/reference/ios/) for getting started guide, API reference, support & feedback links.
 
 
@@ -38,4 +37,4 @@ Particle iOS Cloud SDK enables iOS apps to interact with Particle-powered connec
 
 ### License
 
-Particle iOS Cloud SDK is available under the Apache License 2.0. See the [LICENSE file](https://github.com/particle-iot/particle-sdk-ios/blob/master/LICENSE) for more info.
+Particle iOS Cloud SDK is available under the Apache License 2.0. See the [LICENSE file](https://github.com/particle-iot/particle-cloud-sdk-ios/blob/master/LICENSE) for more info.
