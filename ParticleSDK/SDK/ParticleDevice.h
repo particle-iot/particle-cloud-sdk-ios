@@ -84,59 +84,126 @@ typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
  *  DeviceID string
  */
 @property (strong, nonatomic, readonly) NSString* id;
+
 /**
  *  Device name. Device can be renamed in the cloud by setting this property. If renaming fails name will stay the same.
  */
 @property (strong, nullable, nonatomic) NSString* name;
+
 /**
  *  Is device connected to the cloud? Best effort - May not accurate reflect true state.
  */
 @property (nonatomic, readonly) BOOL connected;
+
 /**
- *  List of function names exposed by device
+ *  List of function names exposed by device. Functions are only available after `refresh` is called on the device instance returned by `getDevices` call.
  */
 @property (strong, nonatomic, nonnull, readonly) NSArray<NSString *> *functions;
+
 /**
- *  Dictionary of exposed variables on device with their respective types.
+ *  Dictionary of exposed variables on device with their respective types. Variables are only available after `refresh` is called on the device instance returned by `getDevices` call.
  */
 @property (strong, nonatomic, nonnull, readonly) NSDictionary<NSString *, NSString *> *variables; // @{varName : varType, ...}
 
-@property (strong, nonatomic, nullable, readonly) NSString *lastApp; // inactive
+@property (strong, nonatomic, nullable, readonly) NSString *lastApp; __deprecated_msg("This property is not updated");
 
+/**
+ * Date when the device was last heard.
+ */
 @property (strong, nonatomic, nullable, readonly) NSDate *lastHeard;
 
-@property (strong, nonatomic, nullable, readonly) NSString *appHash; // app hash received from system event after flashing a new different user app
+/**
+ * App hash received from system event after flashing a new different user application. Please note that if you flashe same app, the app hash event won't trigger.
+ */
+@property (strong, nonatomic, nullable, readonly) NSString *appHash;
 
-// new properties for mesh networks SDK v0.9
-@property (strong, nonatomic, nullable, readonly) NSString *networkId; // if device belongs to a mesh network thats the network ID
-@property (nonatomic, readonly) ParticleDeviceNetworkRole networkRole; // if device belongs to a mesh network true means it is a gateway device
-@property (nonatomic, readonly) ParticleDeviceNetworkRoleState networkRoleState; // pending if device is waiting to role change confirmation
+/**
+ * Mesh network ID if device belongs to a mesh network. `nil` otherwise.
+ */
+@property (strong, nonatomic, nullable, readonly) NSString *networkId;
 
+/**
+ * Mesh network role if device belongs to a mesh network (gateway or a node).
+ */
+@property (nonatomic, readonly) ParticleDeviceNetworkRole networkRole;
+
+/**
+ * Mesh network state if device belongs to a mesh network. State can be pending if device is waiting for the role change confirmation.
+ */
+@property (nonatomic, readonly) ParticleDeviceNetworkRoleState networkRoleState;
+
+/**
+ * Is device currently being flashed? Best effort - May not accurate reflect true state.
+ */
 @property (nonatomic, readonly) BOOL isFlashing;
 
-// new properties starting SDK v0.5
+/**
+ * Last know IP address of the device.
+ */
 @property (strong, nonatomic, nullable, readonly) NSString *lastIPAdress;
-@property (strong, nonatomic, nullable, readonly) NSString *lastIccid; // Electron only
-@property (strong, nonatomic, nullable, readonly) NSString *imei; // inactive
+
+/**
+ * Last known ICCID (for cellular devices only)
+ */
+@property (strong, nonatomic, nullable, readonly) NSString *lastIccid;
+
+/**
+ * Last know IMEI (for cellular devices only)
+ */
+@property (strong, nonatomic, nullable, readonly) NSString *imei;
+
+/**
+ * Device platfomr ID (device type).
+ */
 @property (nonatomic, readonly) NSUInteger platformId;
+
+/**
+ * ID of the product device belongs to.
+ */
 @property (nonatomic, readonly) NSUInteger productId;
-@property (strong, nonatomic, nullable, readonly) NSString *status; // inactive
 
 
-//new properties starting SDK v0.9.1
+@property (strong, nonatomic, nullable, readonly) NSString *status; __deprecated_msg("This property is not updated");
+
+
+/**
+ * Unique serial number of the device
+ */
 @property (strong, nonatomic, nullable, readonly) NSString *serialNumber;
+
+/**
+ * Mobile secret of the device. Only available for 3rd gen devices.
+ */
 @property (strong, nonatomic, nullable, readonly) NSString *mobileSecret;
 
-//new properties starting SDK v0.9.6
+/**
+ * Additional device notes. User editable.
+ */
 @property (strong, nonatomic, nullable) NSString *notes;
-@property (strong, nonatomic, readonly) NSString *systemFirmwareVersion;
-@property (nonatomic, readonly) BOOL cellular;
+
 /**
  *  Device firmware version string
  */
+@property (strong, nonatomic, readonly) NSString *systemFirmwareVersion;
 
+/**
+ * Is this device a cellular device?
+ */
+@property (nonatomic, readonly) BOOL cellular;
+
+/**
+ * Does this device require software update?
+ */
 @property (nonatomic, readonly) BOOL requiresUpdate;
+
+/**
+ * Particle device type. A easier to use version of `platformId`.
+ */
 @property (nonatomic, readonly) ParticleDeviceType type;
+
+/**
+ * `type` casted into a human readable String.
+ */
 @property (nonatomic, readonly) NSString *typeString;
 
 
@@ -237,9 +304,7 @@ typedef NS_ENUM(NSInteger, ParticleDeviceNetworkRoleState) {
  */
 -(NSURLSessionDataTask *)flashKnownApp:(NSString *)knownAppName completion:(nullable ParticleCompletionBlock)completion; // knownAppName = @"tinker", @"blinky", ... see http://docs.
 
-// --------------------------------------------------------------------------------------------------------------------------------------------------------
-// Events subsystem:
-// --------------------------------------------------------------------------------------------------------------------------------------------------------
+#pragma mark Events subsystem functions
 
 /**
  *  Subscribe to events from this specific (claimed) device - both public and private.

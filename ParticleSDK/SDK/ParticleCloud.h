@@ -65,10 +65,12 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
  *  Currently logged in user name, nil if no valid session
  */
 @property (nonatomic, strong, nullable, readonly) NSString* loggedInUsername;
+
 /**
  *  Currently logged in via app - deprecated
  */
 @property (nonatomic, readonly) BOOL isLoggedIn __deprecated_msg("Use isAuthenticated instead");
+
 /**
  *  Currently authenticated (does a access token exist?)
  */
@@ -83,13 +85,20 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
  *  oAuthClientId unique for your app, use 'particle' for development or generate your OAuth creds for production apps (https://docs.particle.io/reference/api/#create-an-oauth-client)
  */
 @property (nonatomic, nullable, strong) NSString *oAuthClientId;
+
 /**
  *  oAuthClientSecret unique for your app, use 'particle' for development or generate your OAuth creds for production apps (https://docs.particle.io/reference/api/#create-an-oauth-client)
  */
 @property (nonatomic, nullable, strong) NSString *oAuthClientSecret;
 
-
+/**
+ *  Base URL for the Particle Cloud API. This can be used to proxy all API calls though your server or to point at staging server.
+ */
 @property (nonatomic, nullable, strong) NSString *customAPIBaseURL;
+
+/**
+ *  Current Base URL for this instance of ParticleCloud.
+ */
 @property (nonatomic, readonly) NSString *currentBaseURL;
 
 /**
@@ -100,9 +109,6 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 + (instancetype)sharedInstance;
 
 #pragma mark User onboarding functions
-// --------------------------------------------------------------------------------------------------------------------------------------------------------
-// User onboarding functions
-// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /**
  *  Login with existing account credentials to Particle cloud
@@ -139,7 +145,6 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
                              completion:(nullable ParticleCompletionBlock)completion __deprecated_msg("use createUser:password:accountInfo:completion instead");
 
 
-// NEW
 /**
  *  Sign up with new account credentials to Particle cloud
  *
@@ -168,7 +173,6 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
                                              orgSlug:(NSString *)orgSlug
                                           completion:(nullable ParticleCompletionBlock)completion __deprecated_msg("use createCustomer:password:productId:completion instead");
 
-// NEW
 /**
  *  Sign up with new account credentials to Particle cloud
  *
@@ -197,6 +201,8 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
  *  @return YES if session injected successfully
  */
 -(BOOL)injectSessionAccessToken:(NSString * _Nonnull)accessToken;
+
+
 /**
  *  Inject session access token received from a custom backend service in case Two-legged auth is being used. Session will expire at expiry date.
  *
@@ -205,6 +211,8 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
  *  @return YES if session injected successfully
  */
 -(BOOL)injectSessionAccessToken:(NSString *)accessToken withExpiryDate:(NSDate *)expiryDate;
+
+
 /**
  *  Inject session access token received from a custom backend service in case Two-legged auth is being used. Session will expire at expiry date, and SDK will try to renew it using supplied refreshToken.
  *
@@ -253,9 +261,6 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 - (NSURLSessionDataTask *)getNextBinary:(NSString *)url completion:(nullable void (^)(NSString *_Nullable binaryURL, NSError *_Nullable error))completion;
 
 #pragma mark Device management functions
-// --------------------------------------------------------------------------------------------------------------------------------------------------------
-// Device management functions
-// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /**
  *  Get an array of instances of all user's claimed devices
@@ -323,9 +328,6 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 
 
 #pragma mark Events subsystem functions
-// --------------------------------------------------------------------------------------------------------------------------------------------------------
-// Events subsystem:
-// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /**
  *  Subscribe to the firehose of public events, plus private events published by devices one owns. Note that as of April 2018, the event prefix filter is required. It was optional before.
@@ -357,8 +359,6 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
  */
 -(nullable id)subscribeToDeviceEventsWithPrefix:(nullable NSString *)eventNamePrefix deviceID:(NSString *)deviceID handler:(nullable ParticleEventHandler)eventHandler;
 
-
-// ADD: subscribe to product events...
 
 /**
  *  Unsubscribe from event/events.
@@ -513,6 +513,7 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 -(NSURLSessionDataTask *)addDevice:(NSString *)deviceID toNetwork:(NSString *)networkID
                         completion:(nullable ParticleCompletionBlock)completion;
 
+
 /**
  *  Remove device from existing mesh network
  *
@@ -545,7 +546,6 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
  *
  *  @return NSURLSessionDataTask task for requested network access
  */
-
 -(NSURLSessionDataTask *)disableGateway:(NSString *)deviceID onNetwork:(NSString *)networkID
                              completion:(nullable ParticleCompletionBlock)completion;
 

@@ -16,7 +16,14 @@ typedef NS_ENUM(NSInteger, ParticleSimDetailedStatus) {
 
 @interface ParticleSimInfo : NSObject
 
+/*!
+ * Data limit set for SIM card.
+ */
 @property (nonatomic, readonly) int mbLimit;
+
+/*!
+ * SIM card status (active, inactive, etc.)
+ */
 @property (nonatomic, readonly) ParticleSimDetailedStatus status;
 
 - (instancetype)initWithParams:(NSDictionary *)params;

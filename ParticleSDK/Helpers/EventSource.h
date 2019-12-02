@@ -17,7 +17,6 @@ typedef enum {
     kEventStateClosed = 2,
 } EventState;
 
-// ---------------------------------------------------------------------------------------------------------------------
 
 /// Describes an Event received from an EventSource
 @interface Event : NSObject <NSCopying>
@@ -36,11 +35,9 @@ typedef enum {
 
 @end
 
-// ---------------------------------------------------------------------------------------------------------------------
 
 typedef void (^EventSourceEventHandler)(Event *event);
 
-// ---------------------------------------------------------------------------------------------------------------------
 
 /// Connect to and receive Server-Sent Events (SSEs).
 @interface EventSource : NSObject
@@ -87,7 +84,6 @@ typedef void (^EventSourceEventHandler)(Event *event);
 
 @end
 
-// ---------------------------------------------------------------------------------------------------------------------
 
 extern NSString *const ParticleMessageEvent;
 extern NSString *const ParticleErrorEvent;

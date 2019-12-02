@@ -16,11 +16,30 @@ typedef void (^ParticleEventHandler)(ParticleEvent * _Nullable event, NSError * 
 
 @interface ParticleEvent : NSObject
 
-@property (nonatomic, strong) NSString *deviceID;   // Event published by this device ID
-@property (nonatomic, nullable, strong) NSString *data;  // Event payload in string format
-@property (nonatomic, strong) NSString *event;      // Event name
-@property (nonatomic, strong) NSDate *time;         // Event "published at" time/date UTC
-@property (nonatomic) NSInteger ttl;                // Event time to live (currently unused)
+/**
+ * Event published by this device ID
+ */
+@property (nonatomic, strong) NSString *deviceID;
+
+/**
+ * Event payload in string format
+ */
+@property (nonatomic, nullable, strong) NSString *data;
+
+/**
+ * Event name
+ */
+@property (nonatomic, strong) NSString *event;
+
+/**
+ * Event "published at" time/date UTC
+ */
+@property (nonatomic, strong) NSDate *time;
+
+/**
+ * Event time to live (currently unused)
+ */
+@property (nonatomic) NSInteger ttl;
 
 /**
  *  Particle event handler class initializer which receives a dictionary argument
