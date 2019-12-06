@@ -17,3 +17,6 @@ xcode_destination: platform=iOS Simulator,OS=13.2.2,name=iPhone 11
 
 cache: cocoapods
 
+#slack notifications
+notifications:
+  slack: s:SGT6o8jAzgff7j1dO2XMYRo3
