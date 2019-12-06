@@ -4,6 +4,9 @@
 
 # Particle iOS Cloud SDK
 
+[![Build Status](https://travis-ci.org/particle-iot/particle-cloud-sdk-ios.svg?branch=master)](https://travis-ci.org/particle-iot/particle-cloud-sdk-ios)
+[![Coverage Status](https://coveralls.io/repos/github/particle-iot/particle-cloud-sdk-ios/badge.svg?branch=master)](https://coveralls.io/github/particle-iot/particle-cloud-sdk-ios?branch=master)
+
 ### Introduction
 
 
