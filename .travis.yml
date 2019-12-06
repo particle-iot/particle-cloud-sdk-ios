@@ -2,6 +2,13 @@ os: osx
 osx_image: xcode11.2
 language: objective-c
 
+#coveralls
+before_install: rvm use $RVM_RUBY_VERSION
+install: 
+  - bundle install
+  - pod install
+after_success: slather
+#end of coveralls
 
 xcode_workspace: ParticleSDK.xcworkspace
 xcode_scheme: ParticleSDKPods
