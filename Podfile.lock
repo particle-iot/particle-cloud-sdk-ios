@@ -14,17 +14,34 @@ PODS:
   - AFNetworking/Serialization (3.2.1)
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
+  - OHHTTPStubs/Core (8.0.0)
+  - OHHTTPStubs/Default (8.0.0):
+    - OHHTTPStubs/Core
+    - OHHTTPStubs/JSON
+    - OHHTTPStubs/NSURLSession
+    - OHHTTPStubs/OHPathHelpers
+  - OHHTTPStubs/JSON (8.0.0):
+    - OHHTTPStubs/Core
+  - OHHTTPStubs/NSURLSession (8.0.0):
+    - OHHTTPStubs/Core
+  - OHHTTPStubs/OHPathHelpers (8.0.0)
+  - OHHTTPStubs/Swift (8.0.0):
+    - OHHTTPStubs/Default
 
 DEPENDENCIES:
   - AFNetworking
+  - OHHTTPStubs/Swift
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - AFNetworking
+  trunk:
+    - OHHTTPStubs
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  OHHTTPStubs: 9cbce6364bec557cc3439aa6bb7514670d780881
 
-PODFILE CHECKSUM: c67655cfae78f0fc0cb53dc0ecacce48fd2cd907
+PODFILE CHECKSUM: aeb0467b75a043cb4733421f2b08474ffa4f9431
 
 COCOAPODS: 1.8.4
