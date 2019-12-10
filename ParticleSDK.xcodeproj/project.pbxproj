@@ -12,6 +12,8 @@
 		5069CB30215993D5000B842A /* ParticleNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 5069CB2C215993C1000B842A /* ParticleNetwork.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5069CB4C215F3756000B842A /* ParticleNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 5069CB2D215993C1000B842A /* ParticleNetwork.m */; };
 		604F6CF16FFFB58A8C6C685C /* libPods-ParticleSDKPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BA016110586E35DA989AB67 /* libPods-ParticleSDKPods.a */; };
+		9305F5A6239FAFB000F3620F /* ParticleCloudTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9305F5A5239FAFB000F3620F /* ParticleCloudTests.m */; };
+		9305F5A9239FB25F00F3620F /* ParticleCloudTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9305F5A8239FB25F00F3620F /* ParticleCloudTests.swift */; };
 		930EECBB2397F7A00043D980 /* ParticleSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93944D85210BAF6F00C2DC16 /* ParticleSDK.framework */; };
 		930EECC12397F7AC0043D980 /* KeychainHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9358DA3720FE2241003FF8DC /* KeychainHelperTests.m */; };
 		930EECC22397F7AC0043D980 /* ParticleErrorHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E849B820F795A000CBEFEC /* ParticleErrorHelperTests.m */; };
@@ -65,6 +67,7 @@
 		93B0F83F2180D17C00D8F8C0 /* ParticlePricingInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 93B0F83C2180D17C00D8F8C0 /* ParticlePricingInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		93B0F8402180D17C00D8F8C0 /* ParticlePricingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B0F83D2180D17C00D8F8C0 /* ParticlePricingInfo.m */; };
 		93B0F8412180D17C00D8F8C0 /* ParticlePricingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B0F83D2180D17C00D8F8C0 /* ParticlePricingInfo.m */; };
+		96CEC8BD9E3CA1601FACDB07 /* libPods-ParticleSDKPods-ParticleSDKTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 062CEC15EC692AF8217196DA /* libPods-ParticleSDKPods-ParticleSDKTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,10 +88,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		062CEC15EC692AF8217196DA /* libPods-ParticleSDKPods-ParticleSDKTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ParticleSDKPods-ParticleSDKTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BA016110586E35DA989AB67 /* libPods-ParticleSDKPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ParticleSDKPods.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5069CB2C215993C1000B842A /* ParticleNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ParticleNetwork.h; path = SDK/ParticleNetwork.h; sourceTree = "<group>"; };
 		5069CB2D215993C1000B842A /* ParticleNetwork.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ParticleNetwork.m; path = SDK/ParticleNetwork.m; sourceTree = "<group>"; };
 		703FE20FE4C4BEFB88B42F49 /* Pods-ParticleSDKPods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParticleSDKPods.release.xcconfig"; path = "Target Support Files/Pods-ParticleSDKPods/Pods-ParticleSDKPods.release.xcconfig"; sourceTree = "<group>"; };
+		8786FEA8D4397A4B9A515534 /* Pods-ParticleSDKPods-ParticleSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParticleSDKPods-ParticleSDKTests.release.xcconfig"; path = "Target Support Files/Pods-ParticleSDKPods-ParticleSDKTests/Pods-ParticleSDKPods-ParticleSDKTests.release.xcconfig"; sourceTree = "<group>"; };
+		9305F5A5239FAFB000F3620F /* ParticleCloudTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParticleCloudTests.m; sourceTree = "<group>"; };
+		9305F5A7239FB25F00F3620F /* ParticleSDKTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ParticleSDKTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		9305F5A8239FB25F00F3620F /* ParticleCloudTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleCloudTests.swift; sourceTree = "<group>"; };
 		930EECB62397F7A00043D980 /* ParticleSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParticleSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		930EECBA2397F7A00043D980 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		930EECE62397FA1A0043D980 /* ParticleSDKTestsHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParticleSDKTestsHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,6 +131,7 @@
 		93F9744D20EA7F2200015D9D /* KeychainHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeychainHelper.m; path = Helpers/KeychainHelper.m; sourceTree = "<group>"; };
 		93F9744E20EA7F2200015D9D /* EventSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventSource.m; path = Helpers/EventSource.m; sourceTree = "<group>"; };
 		93FB8ACA21134A4C00C2CB2B /* Particle-SDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Particle-SDK.h"; sourceTree = "<group>"; };
+		B16C42D9726BD9612468A815 /* Pods-ParticleSDKPods-ParticleSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParticleSDKPods-ParticleSDKTests.debug.xcconfig"; path = "Target Support Files/Pods-ParticleSDKPods-ParticleSDKTests/Pods-ParticleSDKPods-ParticleSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C810B01CA34C4A6C2000B1A2 /* ParticleCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleCloud.h; path = SDK/ParticleCloud.h; sourceTree = "<group>"; };
 		C810B035D36C9EB63EF1A92F /* ParticleErrorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleErrorHelper.h; path = Helpers/ParticleErrorHelper.h; sourceTree = "<group>"; };
 		C810B0BB68419CEE10A16B09 /* ParticleErrorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParticleErrorHelper.m; path = Helpers/ParticleErrorHelper.m; sourceTree = "<group>"; };
@@ -142,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				930EECBB2397F7A00043D980 /* ParticleSDK.framework in Frameworks */,
+				96CEC8BD9E3CA1601FACDB07 /* libPods-ParticleSDKPods-ParticleSDKTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,11 +230,20 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
+		9305F5A2239FAF4A00F3620F /* SDK */ = {
+			isa = PBXGroup;
+			children = (
+				9305F5A5239FAFB000F3620F /* ParticleCloudTests.m */,
+				9305F5A8239FB25F00F3620F /* ParticleCloudTests.swift */,
+			);
+			path = SDK;
+			sourceTree = "<group>";
+		};
 		930EECB72397F7A00043D980 /* ParticleSDKTests */ = {
 			isa = PBXGroup;
 			children = (
-				9358DA3720FE2241003FF8DC /* KeychainHelperTests.m */,
-				93E849B820F795A000CBEFEC /* ParticleErrorHelperTests.m */,
+				930EED01239AAEB40043D980 /* Cases */,
+				9305F5A7239FB25F00F3620F /* ParticleSDKTests-Bridging-Header.h */,
 				930EECBA2397F7A00043D980 /* Info.plist */,
 			);
 			path = ParticleSDKTests;
@@ -248,6 +267,24 @@
 			path = ParticleSDKTestsHost;
 			sourceTree = "<group>";
 		};
+		930EED01239AAEB40043D980 /* Cases */ = {
+			isa = PBXGroup;
+			children = (
+				9305F5A2239FAF4A00F3620F /* SDK */,
+				930EED02239AAEBC0043D980 /* Helpers */,
+			);
+			path = Cases;
+			sourceTree = "<group>";
+		};
+		930EED02239AAEBC0043D980 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				9358DA3720FE2241003FF8DC /* KeychainHelperTests.m */,
+				93E849B820F795A000CBEFEC /* ParticleErrorHelperTests.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		93F9743620EA7E4300015D9D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -264,6 +301,7 @@
 				93331581210BA9C800BEFAD9 /* Security.framework */,
 				93B6689C2109F90700DFF793 /* AFNetworking.framework */,
 				1BA016110586E35DA989AB67 /* libPods-ParticleSDKPods.a */,
+				062CEC15EC692AF8217196DA /* libPods-ParticleSDKPods-ParticleSDKTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -294,8 +332,9 @@
 			children = (
 				EEA3C2FAF8A858A381A90725 /* Pods-ParticleSDKPods.debug.xcconfig */,
 				703FE20FE4C4BEFB88B42F49 /* Pods-ParticleSDKPods.release.xcconfig */,
+				B16C42D9726BD9612468A815 /* Pods-ParticleSDKPods-ParticleSDKTests.debug.xcconfig */,
+				8786FEA8D4397A4B9A515534 /* Pods-ParticleSDKPods-ParticleSDKTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -347,6 +386,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 930EECBE2397F7A00043D980 /* Build configuration list for PBXNativeTarget "ParticleSDKTests" */;
 			buildPhases = (
+				3CBFE42747B6E4CF7F385BE5 /* [CP] Check Pods Manifest.lock */,
 				930EECB22397F7A00043D980 /* Sources */,
 				930EECB32397F7A00043D980 /* Frameworks */,
 				930EECB42397F7A00043D980 /* Resources */,
@@ -430,6 +470,7 @@
 					930EECB52397F7A00043D980 = {
 						CreatedOnToolsVersion = 11.2.1;
 						DevelopmentTeam = TNJ67X9MQD;
+						LastSwiftMigration = 1120;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 930EECE52397FA1A0043D980;
 					};
@@ -505,6 +546,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3CBFE42747B6E4CF7F385BE5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ParticleSDKPods-ParticleSDKTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		422F3AEDE7A78436634CE4B1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -550,7 +613,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				930EECC22397F7AC0043D980 /* ParticleErrorHelperTests.m in Sources */,
+				9305F5A9239FB25F00F3620F /* ParticleCloudTests.swift in Sources */,
 				930EECC12397F7AC0043D980 /* KeychainHelperTests.m in Sources */,
+				9305F5A6239FAFB000F3620F /* ParticleCloudTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -752,8 +817,10 @@
 		};
 		930EECBF2397F7A00043D980 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B16C42D9726BD9612468A815 /* Pods-ParticleSDKPods-ParticleSDKTests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
@@ -766,6 +833,9 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.particle.ParticleSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ParticleSDKTests/ParticleSDKTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ParticleSDKTestsHost.app/ParticleSDKTestsHost";
 			};
@@ -773,8 +843,10 @@
 		};
 		930EECC02397F7A00043D980 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8786FEA8D4397A4B9A515534 /* Pods-ParticleSDKPods-ParticleSDKTests.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
@@ -786,6 +858,8 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.particle.ParticleSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ParticleSDKTests/ParticleSDKTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ParticleSDKTestsHost.app/ParticleSDKTestsHost";
 			};
