@@ -12,7 +12,6 @@
 		5069CB30215993D5000B842A /* ParticleNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 5069CB2C215993C1000B842A /* ParticleNetwork.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5069CB4C215F3756000B842A /* ParticleNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 5069CB2D215993C1000B842A /* ParticleNetwork.m */; };
 		604F6CF16FFFB58A8C6C685C /* libPods-ParticleSDKPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BA016110586E35DA989AB67 /* libPods-ParticleSDKPods.a */; };
-		9305F5A6239FAFB000F3620F /* ParticleCloudTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9305F5A5239FAFB000F3620F /* ParticleCloudTests.m */; };
 		9305F5A9239FB25F00F3620F /* ParticleCloudTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9305F5A8239FB25F00F3620F /* ParticleCloudTests.swift */; };
 		930EECBB2397F7A00043D980 /* ParticleSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93944D85210BAF6F00C2DC16 /* ParticleSDK.framework */; };
 		930EECC12397F7AC0043D980 /* KeychainHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9358DA3720FE2241003FF8DC /* KeychainHelperTests.m */; };
@@ -94,7 +93,6 @@
 		5069CB2D215993C1000B842A /* ParticleNetwork.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ParticleNetwork.m; path = SDK/ParticleNetwork.m; sourceTree = "<group>"; };
 		703FE20FE4C4BEFB88B42F49 /* Pods-ParticleSDKPods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParticleSDKPods.release.xcconfig"; path = "Target Support Files/Pods-ParticleSDKPods/Pods-ParticleSDKPods.release.xcconfig"; sourceTree = "<group>"; };
 		8786FEA8D4397A4B9A515534 /* Pods-ParticleSDKPods-ParticleSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParticleSDKPods-ParticleSDKTests.release.xcconfig"; path = "Target Support Files/Pods-ParticleSDKPods-ParticleSDKTests/Pods-ParticleSDKPods-ParticleSDKTests.release.xcconfig"; sourceTree = "<group>"; };
-		9305F5A5239FAFB000F3620F /* ParticleCloudTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParticleCloudTests.m; sourceTree = "<group>"; };
 		9305F5A7239FB25F00F3620F /* ParticleSDKTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ParticleSDKTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		9305F5A8239FB25F00F3620F /* ParticleCloudTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleCloudTests.swift; sourceTree = "<group>"; };
 		930EECB62397F7A00043D980 /* ParticleSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParticleSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -233,7 +231,6 @@
 		9305F5A2239FAF4A00F3620F /* SDK */ = {
 			isa = PBXGroup;
 			children = (
-				9305F5A5239FAFB000F3620F /* ParticleCloudTests.m */,
 				9305F5A8239FB25F00F3620F /* ParticleCloudTests.swift */,
 			);
 			path = SDK;
@@ -615,7 +612,6 @@
 				930EECC22397F7AC0043D980 /* ParticleErrorHelperTests.m in Sources */,
 				9305F5A9239FB25F00F3620F /* ParticleCloudTests.swift in Sources */,
 				930EECC12397F7AC0043D980 /* KeychainHelperTests.m in Sources */,
-				9305F5A6239FAFB000F3620F /* ParticleCloudTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
