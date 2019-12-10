@@ -1,0 +1,12 @@
+coverage_service: coveralls
+xcodeproj: ParticleSDK.xcodeproj
+workspace: ParticleSDK.xcworkspace
+scheme: ParticleSDKPods
+ignore:
+  - bin/*
+  - Carthage/*
+  - Example/*
+  - Framework/*
+  - ParticleSDKTests/*
+  - ParticleSDKTestsHost/*
+  - Pods/*

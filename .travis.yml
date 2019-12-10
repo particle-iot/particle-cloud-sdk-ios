@@ -1,20 +1,22 @@
-# references:
-# * http://www.objc.io/issue-6/travis-ci.html
-# * https://github.com/supermarin/xcpretty#usage
-
+os: osx
+osx_image: xcode11.2
 language: objective-c
-osx_image: xcode9.4
 
-env:
-  - LC_CTYPE=en_US.UTF-8 LANG=en_US.UTF-8
+#coveralls
+before_install: rvm use $RVM_RUBY_VERSION
+install: 
+  - bundle install
+  - pod install
+after_success: slather
+#end of coveralls
 
+xcode_workspace: ParticleSDK.xcworkspace
+xcode_scheme: ParticleSDKPods
+xcode_sdk: iphonesimulator13.2
+xcode_destination: platform=iOS Simulator,OS=13.2.2,name=iPhone 11
 
-before_install:
-  - rvm install ruby-2.2.2
-  - gem install cocoapods
-  - gem install xcpretty -N
+cache: cocoapods
 
-osx_image: xcode7
-script:
-- xctool -workspace ParticleSDK.xcworkspace -scheme ParticleSDKTests test -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO | xcpretty -c
-- pod lib lint --quick
+#slack notifications
+notifications:
+  slack: s:SGT6o8jAzgff7j1dO2XMYRo3

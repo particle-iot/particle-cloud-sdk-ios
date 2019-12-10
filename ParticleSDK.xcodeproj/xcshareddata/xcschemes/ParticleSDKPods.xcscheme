@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1000"
+   LastUpgradeVersion = "1120"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,37 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9352CD31210B8268005EB505"
+               BlueprintIdentifier = "93944D6C210BAF6F00C2DC16"
                BuildableName = "ParticleSDK.framework"
-               BlueprintName = "ParticleSDKCarthage"
+               BlueprintName = "ParticleSDKPods"
+               ReferencedContainer = "container:ParticleSDK.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "930EECE52397FA1A0043D980"
+               BuildableName = "ParticleSDKTestsHost.app"
+               BlueprintName = "ParticleSDKTestsHost"
+               ReferencedContainer = "container:ParticleSDK.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "930EECB52397F7A00043D980"
+               BuildableName = "ParticleSDKTests.xctest"
+               BlueprintName = "ParticleSDKTests"
                ReferencedContainer = "container:ParticleSDK.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -26,8 +54,19 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "930EECB52397F7A00043D980"
+               BuildableName = "ParticleSDKTests.xctest"
+               BlueprintName = "ParticleSDKTests"
+               ReferencedContainer = "container:ParticleSDK.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -40,15 +79,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9352CD31210B8268005EB505"
-            BuildableName = "ParticleSDK.framework"
-            BlueprintName = "ParticleSDKCarthage"
+            BlueprintIdentifier = "930EECE52397FA1A0043D980"
+            BuildableName = "ParticleSDKTestsHost.app"
+            BlueprintName = "ParticleSDKTestsHost"
             ReferencedContainer = "container:ParticleSDK.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -59,9 +99,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9352CD31210B8268005EB505"
+            BlueprintIdentifier = "93944D6C210BAF6F00C2DC16"
             BuildableName = "ParticleSDK.framework"
-            BlueprintName = "ParticleSDKCarthage"
+            BlueprintName = "ParticleSDKPods"
             ReferencedContainer = "container:ParticleSDK.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
