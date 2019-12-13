@@ -27,30 +27,37 @@ class ParticleCloudTests: XCTestCase {
         XCTAssertNotNil(sut.currentBaseURL)
     }
 
-    func test_generateAccessToken_notNil() {
-        var expectedAccessToken: String = "some+access+token"
+    let expectedAccessToken: String = "some+access+token"
+    let expectedTokenType: String = "bearer"
+    let expectedExpiresIn: String = "6000"
+    let expectedRefreshToken: String = "some+refresh+token"
+
+    func setupCorrectDict() -> Dictionary<String,Any> {
         let string = """
-        {
-            "token_type": "bearer",
-            "access_token": "\(expectedAccessToken)",
-            "expires_in": 7776000,
-            "refresh_token": "5343db5c9737cff45bc734ac44b19780753389ea"
-        }
-        """
+                     {
+                         "token_type": "\(expectedTokenType)",
+                         "access_token": "\(expectedAccessToken)",
+                         "expires_in": \(expectedExpiresIn),
+                         "refresh_token": "\(expectedRefreshToken)"
+                     }
+                     """
         let data = string.data(using: .utf8)!
-        let json = try! JSONSerialization.jsonObject(with: data, options : .allowFragments) as? Dictionary<String,Any>
-        
+        return try! JSONSerialization.jsonObject(with: data, options : .allowFragments) as! Dictionary<String,Any>
+    }
+    
+    func test_generateAccessToken_notNil() {
+        let json = setupCorrectDict()
         stub(condition: isPath("/oauth/token")) {
             _ -> OHHTTPStubsResponse in
-            return OHHTTPStubsResponse(jsonObject: json, statusCode: 200, headers: nil)
+            return OHHTTPStubsResponse(jsonObject: json as Any, statusCode: 200, headers: nil)
         }
         
-        let expected = expectation(description: "Claim code endpoint returns response")
+        let expected = expectation(description: "Login endpoint returns request")
         sut.login(withUser: "user", password: "password") { (error) in
             expected.fulfill()
         }
-        wait(for: [expected], timeout: 1)
         
-        XCTAssertEqual(sut.accessToken!, "some+access+token")
+        wait(for: [expected], timeout: 1)
+        XCTAssertEqual(sut.accessToken, self.expectedAccessToken)
     }
 }
