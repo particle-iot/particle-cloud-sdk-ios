@@ -15,8 +15,6 @@
 		9305F5A9239FB25F00F3620F /* ParticleCloudTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9305F5A8239FB25F00F3620F /* ParticleCloudTests.swift */; };
 		9305F5AC23A1319700F3620F /* ParticleSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9305F5AB23A1319700F3620F /* ParticleSessionTests.swift */; };
 		930EECBB2397F7A00043D980 /* ParticleSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93944D85210BAF6F00C2DC16 /* ParticleSDK.framework */; };
-		930EECC12397F7AC0043D980 /* KeychainHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9358DA3720FE2241003FF8DC /* KeychainHelperTests.m */; };
-		930EECC22397F7AC0043D980 /* ParticleErrorHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E849B820F795A000CBEFEC /* ParticleErrorHelperTests.m */; };
 		930EECEA2397FA1A0043D980 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 930EECE92397FA1A0043D980 /* AppDelegate.m */; };
 		930EECED2397FA1A0043D980 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 930EECEC2397FA1A0043D980 /* SceneDelegate.m */; };
 		930EECF02397FA1A0043D980 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 930EECEF2397FA1A0043D980 /* ViewController.m */; };
@@ -44,6 +42,8 @@
 		93536EB12257CFEC00A65A94 /* ParticleSimInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 93536EAE2257CFEC00A65A94 /* ParticleSimInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		93536EB22257CFEC00A65A94 /* ParticleSimInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 93536EAE2257CFEC00A65A94 /* ParticleSimInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		936F14C3210B986A0095A12F /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B6689C2109F90700DFF793 /* AFNetworking.framework */; };
+		937AF30923A3C1780022A60C /* KeychainHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937AF30823A3C1780022A60C /* KeychainHelperTests.swift */; };
+		937AF30B23A3CB960022A60C /* ParticleErrorHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937AF30A23A3CB960022A60C /* ParticleErrorHelperTests.swift */; };
 		93944D6E210BAF6F00C2DC16 /* KeychainHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9744D20EA7F2200015D9D /* KeychainHelper.m */; };
 		93944D6F210BAF6F00C2DC16 /* EventSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F9744E20EA7F2200015D9D /* EventSource.m */; };
 		93944D70210BAF6F00C2DC16 /* ParticleErrorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C810B0BB68419CEE10A16B09 /* ParticleErrorHelper.m */; };
@@ -116,14 +116,14 @@
 		9352CD4C210B8296005EB505 /* InfoPods.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = InfoPods.plist; path = Framework/InfoPods.plist; sourceTree = "<group>"; };
 		93536EAD2257CFEC00A65A94 /* ParticleSimInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParticleSimInfo.m; path = SDK/ParticleSimInfo.m; sourceTree = "<group>"; };
 		93536EAE2257CFEC00A65A94 /* ParticleSimInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleSimInfo.h; path = SDK/ParticleSimInfo.h; sourceTree = "<group>"; };
-		9358DA3720FE2241003FF8DC /* KeychainHelperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainHelperTests.m; sourceTree = "<group>"; };
+		937AF30823A3C1780022A60C /* KeychainHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelperTests.swift; sourceTree = "<group>"; };
+		937AF30A23A3CB960022A60C /* ParticleErrorHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleErrorHelperTests.swift; sourceTree = "<group>"; };
 		93944D85210BAF6F00C2DC16 /* ParticleSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParticleSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		939CA80221AD906D00A5ED93 /* ParticleLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ParticleLogger.h; path = Helpers/ParticleLogger.h; sourceTree = "<group>"; };
 		939CA80321AD906D00A5ED93 /* ParticleLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ParticleLogger.m; path = Helpers/ParticleLogger.m; sourceTree = "<group>"; };
 		93B0F83C2180D17C00D8F8C0 /* ParticlePricingInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticlePricingInfo.h; path = SDK/ParticlePricingInfo.h; sourceTree = "<group>"; };
 		93B0F83D2180D17C00D8F8C0 /* ParticlePricingInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParticlePricingInfo.m; path = SDK/ParticlePricingInfo.m; sourceTree = "<group>"; };
 		93B6689C2109F90700DFF793 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = Carthage/Build/iOS/AFNetworking.framework; sourceTree = "<group>"; };
-		93E849B820F795A000CBEFEC /* ParticleErrorHelperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParticleErrorHelperTests.m; sourceTree = "<group>"; };
 		93F9743720EA7E5600015D9D /* InfoCarthage.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = InfoCarthage.plist; path = Framework/InfoCarthage.plist; sourceTree = SOURCE_ROOT; };
 		93F9743820EA7E5600015D9D /* ParticleSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParticleSDK.h; path = Framework/ParticleSDK.h; sourceTree = SOURCE_ROOT; };
 		93F9744B20EA7F2200015D9D /* EventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSource.h; path = Helpers/EventSource.h; sourceTree = "<group>"; };
@@ -279,8 +279,8 @@
 		930EED02239AAEBC0043D980 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				9358DA3720FE2241003FF8DC /* KeychainHelperTests.m */,
-				93E849B820F795A000CBEFEC /* ParticleErrorHelperTests.m */,
+				937AF30823A3C1780022A60C /* KeychainHelperTests.swift */,
+				937AF30A23A3CB960022A60C /* ParticleErrorHelperTests.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -612,10 +612,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				937AF30B23A3CB960022A60C /* ParticleErrorHelperTests.swift in Sources */,
+				937AF30923A3C1780022A60C /* KeychainHelperTests.swift in Sources */,
 				9305F5AC23A1319700F3620F /* ParticleSessionTests.swift in Sources */,
-				930EECC22397F7AC0043D980 /* ParticleErrorHelperTests.m in Sources */,
 				9305F5A9239FB25F00F3620F /* ParticleCloudTests.swift in Sources */,
-				930EECC12397F7AC0043D980 /* KeychainHelperTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
