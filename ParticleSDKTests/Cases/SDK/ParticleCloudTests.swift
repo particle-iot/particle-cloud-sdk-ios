@@ -32,7 +32,11 @@ class ParticleCloudTests: XCTestCase {
     let expectedExpiresIn: String = "6000"
     let expectedRefreshToken: String = "some+refresh+token"
 
-    func setupCorrectDict() -> Dictionary<String,Any> {
+    let expectedClaimCode: String = "some+claim+code"
+    let expectedDevice1: String = "some+device+id1"
+    let expectedDevice2: String = "some+device+id2"
+
+    func setupAccessTokenDict() -> Dictionary<String,Any>  {
         let string = """
                      {
                          "token_type": "\(expectedTokenType)",
@@ -44,9 +48,23 @@ class ParticleCloudTests: XCTestCase {
         let data = string.data(using: .utf8)!
         return try! JSONSerialization.jsonObject(with: data, options : .allowFragments) as! Dictionary<String,Any>
     }
+
+    func setupClaimCodeDict() -> Dictionary<String, Any> {
+        let string = """
+                     {
+                         "claim_code": "\(expectedClaimCode)",
+                         "device_ids": [
+                             "\(expectedDevice1)",
+                             "\(expectedDevice2)"
+                         ]
+                     }
+                     """
+        let data = string.data(using: .utf8)!
+        return try! JSONSerialization.jsonObject(with: data, options : .allowFragments) as! Dictionary<String,Any>
+    }
     
     func test_generateAccessToken_notNil() {
-        let json = setupCorrectDict()
+        let json = setupAccessTokenDict()
         stub(condition: isPath("/oauth/token")) {
             _ -> OHHTTPStubsResponse in
             return OHHTTPStubsResponse(jsonObject: json as Any, statusCode: 200, headers: nil)
@@ -60,4 +78,50 @@ class ParticleCloudTests: XCTestCase {
         wait(for: [expected], timeout: 1)
         XCTAssertEqual(sut.accessToken, self.expectedAccessToken)
     }
+
+
+    func test_generateClaimCode_notNil() {
+        let json = setupClaimCodeDict()
+        stub(condition: isPath("/v1/device_claims")) {
+            _ -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(jsonObject: json as Any, statusCode: 200, headers: nil)
+        }
+
+        let expected = expectation(description: "Generate claim code endpoint returns request")
+
+
+        var generatedClaimCode: String!
+        var receivedDevices: [String]!
+        sut.generateClaimCode { claimCode, devices, error in
+            generatedClaimCode = claimCode
+            receivedDevices = devices as? [String]
+            expected.fulfill()
+        }
+        wait(for: [expected], timeout: 1)
+        XCTAssertEqual(generatedClaimCode, self.expectedClaimCode)
+    }
+
+    func test_generateClaimCode_deviceIdsAreCorrect() {
+        let json = setupClaimCodeDict()
+        stub(condition: isPath("/v1/device_claims")) {
+            _ -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(jsonObject: json as Any, statusCode: 200, headers: nil)
+        }
+
+        let expected = expectation(description: "Generate claim code endpoint returns request")
+
+
+        var generatedClaimCode: String!
+        var receivedDevices: [String]!
+        sut.generateClaimCode { claimCode, devices, error in
+            generatedClaimCode = claimCode
+            receivedDevices = devices as? [String]
+            expected.fulfill()
+        }
+        wait(for: [expected], timeout: 1)
+        XCTAssertTrue(receivedDevices.contains(self.expectedDevice1))
+        XCTAssertTrue(receivedDevices.contains(self.expectedDevice2))
+    }
+    
+    
 }
