@@ -23,6 +23,7 @@
 #import "ParticleNetwork.h"
 #import "ParticlePricingInfo.h"
 #import "ParticleSimInfo.h"
+#import "ParticleSession.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

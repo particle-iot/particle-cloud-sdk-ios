@@ -5,7 +5,12 @@ platform :ios, '8.0'
 
 target 'ParticleSDKPods' do
     pod 'AFNetworking'
+
+    target 'ParticleSDKTests' do
+        pod 'OHHTTPStubs/Swift'
+    end
 end
+
 
 post_install do |pi|
     pi.pods_project.targets.each do |t|
