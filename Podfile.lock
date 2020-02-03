@@ -1,10 +1,4 @@
 PODS:
-  - AFNetworking (3.2.1):
-    - AFNetworking/NSURLSession (= 3.2.1)
-    - AFNetworking/Reachability (= 3.2.1)
-    - AFNetworking/Security (= 3.2.1)
-    - AFNetworking/Serialization (= 3.2.1)
-    - AFNetworking/UIKit (= 3.2.1)
   - AFNetworking/NSURLSession (3.2.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
@@ -12,8 +6,6 @@ PODS:
   - AFNetworking/Reachability (3.2.1)
   - AFNetworking/Security (3.2.1)
   - AFNetworking/Serialization (3.2.1)
-  - AFNetworking/UIKit (3.2.1):
-    - AFNetworking/NSURLSession
   - OHHTTPStubs/Core (8.0.0)
   - OHHTTPStubs/Default (8.0.0):
     - OHHTTPStubs/Core
@@ -29,19 +21,21 @@ PODS:
     - OHHTTPStubs/Default
 
 DEPENDENCIES:
-  - AFNetworking
+  - AFNetworking/NSURLSession
+  - AFNetworking/Reachability
+  - AFNetworking/Security
+  - AFNetworking/Serialization
   - OHHTTPStubs/Swift
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - AFNetworking
   trunk:
+    - AFNetworking
     - OHHTTPStubs
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   OHHTTPStubs: 9cbce6364bec557cc3439aa6bb7514670d780881
 
-PODFILE CHECKSUM: aeb0467b75a043cb4733421f2b08474ffa4f9431
+PODFILE CHECKSUM: 027f053e83809645ead3edaabbde93d0ba34e8c5
 
 COCOAPODS: 1.8.4
