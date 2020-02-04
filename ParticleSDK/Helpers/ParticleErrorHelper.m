@@ -8,7 +8,7 @@
 #ifdef USE_FRAMEWORKS
 #import <AFNetworking/AFNetworking.h>
 #else
-#import "AFNetworking.h"
+#import "AFHTTPSessionManager.h"
 #endif
 
 NSString * const ParticleSDKErrorResponseBodyKey = @"io.particle.error.response.body";

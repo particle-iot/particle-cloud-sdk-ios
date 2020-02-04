@@ -16,7 +16,7 @@
 #ifdef USE_FRAMEWORKS
 #import <AFNetworking/AFNetworking.h>
 #else
-#import "AFNetworking.h"
+#import "AFHTTPSessionManager.h"
 #endif
 
 #define MAX_PARTICLE_FUNCTION_ARG_LENGTH 622
