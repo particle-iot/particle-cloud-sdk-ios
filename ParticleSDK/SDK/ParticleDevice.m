@@ -77,7 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
             case ParticleDeviceTypeBSeries : return @"Boron";
             case ParticleDeviceTypeXenon : return @"Xenon";
             case ParticleDeviceTypeXSeries : return @"Xenon";
-            case ParticleDeviceTypeBSoMCat1 : return @"BSoMCAT1";
+            case ParticleDeviceTypeB5SoM : return @"B5SoM";
             default: return @"Unknown";
     }
 }
@@ -134,7 +134,7 @@ NS_ASSUME_NONNULL_BEGIN
                 case ParticleDeviceTypeXSeries:
                 case ParticleDeviceTypeBoron:
                 case ParticleDeviceTypeBSeries:
-                case ParticleDeviceTypeBSoMCat1:
+                case ParticleDeviceTypeB5SoM:
                     _type = self.platformId;
                     break;
                 default:

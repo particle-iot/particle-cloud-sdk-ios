@@ -45,7 +45,7 @@ typedef NS_ENUM(NSInteger, ParticleDeviceType) {
     ParticleDeviceTypeASeries=22,
     ParticleDeviceTypeBSeries=23,
     ParticleDeviceTypeXSeries=24,
-    ParticleDeviceTypeBSoMCat1=25
+    ParticleDeviceTypeB5SoM=25
 };
 
 typedef NS_ENUM(NSInteger, ParticleDeviceSystemEvent) {
