@@ -5,7 +5,7 @@ Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 ---
 ## [1.0.3](https://github.com/particle-iot/particle-cloud-sdk-ios/releases/tag/1.0.3) (2020-02-04)
 
-* Added support for platform id 25 (BSoM CAT 1)
+* Added support for platform id 25 (B5 SoM / BSoM CAT 1)
 
 * Switched to using AFNetworking subspecs to silence appstore warning shown when submitting an app update
 
