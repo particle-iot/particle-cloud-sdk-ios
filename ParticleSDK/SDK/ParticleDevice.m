@@ -16,7 +16,7 @@
 #ifdef USE_FRAMEWORKS
 #import <AFNetworking/AFNetworking.h>
 #else
-#import "AFNetworking.h"
+#import "AFHTTPSessionManager.h"
 #endif
 
 #define MAX_PARTICLE_FUNCTION_ARG_LENGTH 622
@@ -77,6 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
             case ParticleDeviceTypeBSeries : return @"Boron";
             case ParticleDeviceTypeXenon : return @"Xenon";
             case ParticleDeviceTypeXSeries : return @"Xenon";
+            case ParticleDeviceTypeB5SoM : return @"B5SoM";
             default: return @"Unknown";
     }
 }
@@ -133,6 +134,7 @@ NS_ASSUME_NONNULL_BEGIN
                 case ParticleDeviceTypeXSeries:
                 case ParticleDeviceTypeBoron:
                 case ParticleDeviceTypeBSeries:
+                case ParticleDeviceTypeB5SoM:
                     _type = self.platformId;
                     break;
                 default:

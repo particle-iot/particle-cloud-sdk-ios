@@ -22,9 +22,6 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking/NSURLSession
-  - AFNetworking/Reachability
-  - AFNetworking/Security
-  - AFNetworking/Serialization
   - OHHTTPStubs/Swift
 
 SPEC REPOS:
@@ -36,6 +33,6 @@ SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   OHHTTPStubs: 9cbce6364bec557cc3439aa6bb7514670d780881
 
-PODFILE CHECKSUM: 027f053e83809645ead3edaabbde93d0ba34e8c5
+PODFILE CHECKSUM: 7860238827a698a5fe8d564cb12f57b58fc30512
 
 COCOAPODS: 1.8.4
