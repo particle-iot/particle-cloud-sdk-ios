@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## [1.0.4](https://github.com/particle-iot/particle-cloud-sdk-ios/releases/tag/1.0.4) (2020-03-23)
+
+* Add custom header to easier identify traffic coming from mobile SDK
+
 ## [1.0.3](https://github.com/particle-iot/particle-cloud-sdk-ios/releases/tag/1.0.3) (2020-02-04)
 
 * Added support for platform id 25 (B5 SoM / BSoM CAT 1)
