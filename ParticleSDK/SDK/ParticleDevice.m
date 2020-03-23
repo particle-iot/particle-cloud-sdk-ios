@@ -54,6 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
     dispatch_once(&onceToken, ^{
         manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:ParticleCloud.sharedInstance.currentBaseURL]];
         manager.responseSerializer = [AFJSONResponseSerializer serializer];
+        [manager.requestSerializer setValue:@"ios-cloud-sdk" forHTTPHeaderField:@"X-Particle-Tool"];
     });
 
     return manager;

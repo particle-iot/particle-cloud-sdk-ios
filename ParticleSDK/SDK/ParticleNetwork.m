@@ -126,6 +126,7 @@
 
         self.manager = [[AFHTTPSessionManager alloc] initWithBaseURL:self.baseURL];
         self.manager.responseSerializer = [AFJSONResponseSerializer serializer];
+        [self.manager.requestSerializer setValue:@"ios-cloud-sdk" forHTTPHeaderField:@"X-Particle-Tool"];
 
         [ParticleLogger logDebug:@"ParticleNetwork" format:@"self = %@", self];
 

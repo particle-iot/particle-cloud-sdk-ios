@@ -98,6 +98,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         self.manager = [[AFHTTPSessionManager alloc] initWithBaseURL:self.baseURL];
         self.manager.responseSerializer = [AFJSONResponseSerializer serializer];
         [self.manager.requestSerializer setTimeoutInterval:GLOBAL_API_TIMEOUT_INTERVAL];
+        [self.manager.requestSerializer setValue:@"ios-cloud-sdk" forHTTPHeaderField:@"X-Particle-Tool"];
         if (!self.manager)
         {
             return nil;
