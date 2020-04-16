@@ -241,7 +241,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", @"oauth/token", params];
 
     // OAuth login
-    [self.manager POST:@"oauth/token" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self.manager POST:@"oauth/token" parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"oauth/token", (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
 
@@ -281,7 +281,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@", @"oauth/token"];
 
     // OAuth login
-    NSURLSessionDataTask *task = [self.manager POST:@"oauth/token" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSURLSessionDataTask *task = [self.manager POST:@"oauth/token" parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"oauth/token", (int)((NSHTTPURLResponse *)task.response).statusCode];
         NSMutableDictionary *responseDict = [responseObject mutableCopy];
 
@@ -325,7 +325,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", @"oauth/token", params];
 
     [self.manager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.oAuthClientId password:self.oAuthClientSecret];
-    NSURLSessionDataTask *task = [self.manager POST:@"oauth/token" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSURLSessionDataTask *task = [self.manager POST:@"oauth/token" parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"oauth/token", (int)((NSHTTPURLResponse *)task.response).statusCode];
 
         NSMutableDictionary *responseDict = [responseObject mutableCopy];
@@ -378,7 +378,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     }
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@", @"/v1/users/"];
-    NSURLSessionDataTask *task = [self.manager POST:@"/v1/users/" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager POST:@"/v1/users/" parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
                                       [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/users/", (int)((NSHTTPURLResponse *)task.response).statusCode];
                                       NSDictionary *responseDict = responseObject;
@@ -469,7 +469,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@", url];
 
-    NSURLSessionDataTask *task = [self.manager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager POST:url parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
                                       [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url, (int)((NSHTTPURLResponse *)task.response).statusCode];
 
@@ -544,7 +544,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", @"/v1/devices", params];
     
-    NSURLSessionDataTask *task = [self.manager POST:@"/v1/devices" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager POST:@"/v1/devices" parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/devices", (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -591,7 +591,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     NSString *urlPath = [NSString stringWithFormat:@"/v1/devices/%@",deviceID];
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", urlPath];
 
-    NSURLSessionDataTask *task = [self.manager GET:urlPath parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager GET:urlPath parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", urlPath, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logComplete:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -637,7 +637,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     }
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", @"/v1/devices"];
-    NSURLSessionDataTask *task = [self.manager GET:@"/v1/devices" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager GET:@"/v1/devices" parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/devices", (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logComplete:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -694,7 +694,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@", urlPath];
 
-    NSURLSessionDataTask *task = [self.manager POST:urlPath parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager POST:urlPath parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", urlPath, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -762,7 +762,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@", @"/v1/products/%tu/device_claims"];
 
-    NSURLSessionDataTask *task = [self.manager POST:urlPath parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager POST:urlPath parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
                                       [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/products/%tu/device_claims", (int)((NSHTTPURLResponse *)task.response).statusCode];
                                       [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -816,7 +816,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%POST @, params = %@", urlPath, params];
 
-    NSURLSessionDataTask *task = [self.manager POST:urlPath parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+
+    NSURLSessionDataTask *task = [self.manager POST:urlPath parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", urlPath, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -864,7 +865,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@, params = %@", url.absoluteString, params];
 
 
-    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -939,7 +940,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", @"/v1/access_tokens"];
 
-    NSURLSessionDataTask *task = [self.manager GET:@"/v1/access_tokens" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager GET:@"/v1/access_tokens" parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/access_tokens", (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1126,7 +1127,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", @"/v1/devices/events", params];
 
-    NSURLSessionDataTask *task = [self.manager POST:@"/v1/devices/events" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager POST:@"/v1/devices/events" parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/devices/events", (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1198,7 +1199,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@", @"GET /v1/card"];
 
-    NSURLSessionDataTask *task = [self.manager GET:@"/v1/card" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager GET:@"/v1/card" parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
                                       [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/card", (int)((NSHTTPURLResponse *)task.response).statusCode];
                                       [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1255,7 +1256,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", @"/v1/networks"];
 
-    NSURLSessionDataTask *task = [self.manager GET:@"/v1/networks" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager GET:@"/v1/networks" parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
                                       [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/networks", (int)((NSHTTPURLResponse *)task.response).statusCode];
                                       [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1317,7 +1318,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", endpoint];
 
-    NSURLSessionDataTask *task = [self.manager GET:endpoint parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager GET:endpoint parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
                                       [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", endpoint, (int)((NSHTTPURLResponse *)task.response).statusCode];
                                       [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1366,7 +1367,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", endpoint];
 
-    NSURLSessionDataTask *task = [self.manager GET:endpoint parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager GET:endpoint parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
                                       [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", endpoint, (int)((NSHTTPURLResponse *)task.response).statusCode];
                                       [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1414,7 +1415,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", endpoint];
 
-    NSURLSessionDataTask *task = [self.manager GET:endpoint parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager GET:endpoint parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", endpoint, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1494,7 +1495,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"POST %@, params = %@", @"/v1/networks/", params];
 
-    NSURLSessionDataTask *task = [self.manager POST:@"/v1/networks/" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager POST:@"/v1/networks/" parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
                                       [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/networks/", (int)((NSHTTPURLResponse *)task.response).statusCode];
                                       [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1550,7 +1551,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", @"/v1/card/", params];
 
-    NSURLSessionDataTask *task = [self.manager PUT:@"/v1/card/" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager PUT:@"/v1/card/" parameters:params headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", @"/v1/card/", (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1585,7 +1586,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", url];
 
 
-    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1623,7 +1624,8 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"HEAD %@", url];
 
-    NSURLSessionDataTask *task = [self.manager HEAD:url parameters:nil success:^(NSURLSessionDataTask * _Nonnull task)
+
+    NSURLSessionDataTask *task = [self.manager HEAD:url parameters:nil headers:nil success:^(NSURLSessionDataTask * _Nonnull task)
                                   {
                                       [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url, (int)((NSHTTPURLResponse *)task.response).statusCode];
 
@@ -1756,7 +1758,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", url, params];
 
-    NSURLSessionDataTask *task = [self.manager PUT:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager PUT:url parameters:params headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject)
                                   {
                                       [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url, (int)((NSHTTPURLResponse *)task.response).statusCode];
                                       [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1809,7 +1811,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"PUT %@, params = %@", url, params];
 
-    NSURLSessionDataTask *task = [self.manager PUT:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager PUT:url parameters:params headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1892,7 +1894,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"DELETE %@", urlPath];
 
-    NSURLSessionDataTask *task = [self.manager DELETE:urlPath parameters:nil success:^(NSURLSessionDataTask *task, id responseObject)
+    NSURLSessionDataTask *task = [self.manager DELETE:urlPath parameters:nil headers:nil success:^(NSURLSessionDataTask *task, id responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", urlPath, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -1962,7 +1964,7 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
 
     [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@, params = %@", url.absoluteString, params];
 
-    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [self.manager GET:[url description] parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
                                       [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
                                       [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];

@@ -251,7 +251,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self setAuthHeaderWithAccessToken];
 
-    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:nil headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
 
@@ -326,7 +326,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [ParticleDevice.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager GET:[url description] parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -392,7 +392,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [ParticleDevice.manager POST:[url description] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager POST:[url description] parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -439,7 +439,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self setAuthHeaderWithAccessToken];
 
-    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
 
@@ -470,7 +470,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self setAuthHeaderWithAccessToken];
 
-    NSURLSessionDataTask *task = [ParticleDevice.manager DELETE:[url description] parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager DELETE:[url description] parameters:nil headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -519,7 +519,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self setAuthHeaderWithAccessToken];
 
-    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
 
@@ -553,7 +553,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self setAuthHeaderWithAccessToken];
 
-    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
 
@@ -638,7 +638,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager PUT:[url description] parameters:params headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
         [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
@@ -775,7 +775,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self setAuthHeaderWithAccessToken];
     
-    NSURLSessionDataTask *task = [ParticleDevice.manager GET:[url description] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    NSURLSessionDataTask *task = [ParticleDevice.manager GET:[url description] parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
                                   {
                                       [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", url.absoluteString, (int)((NSHTTPURLResponse *)task.response).statusCode];
                                       [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
