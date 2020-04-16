@@ -22,13 +22,13 @@ Pod::Spec.new do |s|
 
     s.subspec 'Helpers' do |ss|
         ss.source_files = 'ParticleSDK/Helpers/*.{h,m}'
-        ss.dependency 'AFNetworking', '~> 3.0'
+        ss.dependency 'AFNetworking', '~> 4.0'
         ss.ios.frameworks = 'SystemConfiguration', 'Security'
     end
 
     s.subspec 'SDK' do |ss|
         ss.source_files = 'ParticleSDK/SDK/Particle*.{h,m}'
-        ss.dependency 'AFNetworking', '~> 3.0'
+        ss.dependency 'AFNetworking', '~> 4.0'
         ss.dependency 'Particle-SDK/Helpers'
     end
 
