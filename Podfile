@@ -1,7 +1,7 @@
 source 'https://cdn.cocoapods.org/'
 
 
-platform :ios, '8.0'
+platform :ios, '9.0'
 
 target 'ParticleSDKPods' do
     pod 'AFNetworking/NSURLSession'
