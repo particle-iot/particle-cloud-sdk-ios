@@ -127,13 +127,15 @@ static NSString *const ESEventEventKey = @"event";
         return;
     }
 
-    wasClosed = YES;
-
     dispatch_after(DISPATCH_TIME_NOW, self.queue, ^(void) {
-        [self.eventSource cancel];
-    });
+        if (wasClosed) {
+            return;
+        }
 
-    self.queue = nil;
+        [self.eventSource cancel];
+        self.queue = nil;
+        wasClosed = YES;
+    });
 }
 
 
