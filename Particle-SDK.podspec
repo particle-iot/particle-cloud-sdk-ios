@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "Particle-SDK"
-    s.version          = "1.0.4"
+    s.version          = "1.0.5"
     s.summary          = "Particle iOS Cloud SDK for interacting with Particle powered devices"
     s.description      = <<-DESC
                         Particle iOS Cloud SDK Cocoapod library
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
     s.source           = { :git => "https://github.com/particle-iot/particle-cloud-sdk-ios.git", :tag => s.version.to_s }
     s.social_media_url = 'https://twitter.com/particle'
 
-    s.platform     = :ios, '8.0'
+    s.platform     = :ios, '9.0'
     s.requires_arc = true
 
     s.public_header_files = 'ParticleSDK/*.h'
@@ -22,13 +22,13 @@ Pod::Spec.new do |s|
 
     s.subspec 'Helpers' do |ss|
         ss.source_files = 'ParticleSDK/Helpers/*.{h,m}'
-        ss.dependency 'AFNetworking', '~> 3.0'
+        ss.dependency 'AFNetworking', '~> 4.0'
         ss.ios.frameworks = 'SystemConfiguration', 'Security'
     end
 
     s.subspec 'SDK' do |ss|
         ss.source_files = 'ParticleSDK/SDK/Particle*.{h,m}'
-        ss.dependency 'AFNetworking', '~> 3.0'
+        ss.dependency 'AFNetworking', '~> 4.0'
         ss.dependency 'Particle-SDK/Helpers'
     end
 
