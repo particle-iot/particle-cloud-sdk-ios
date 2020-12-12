@@ -39,10 +39,6 @@ We try to make sure tip of master branch always compiles. We will tag commits us
 
 (Note: while it is our intent to release on this schedule, it is not meant as a guarantee. Circumstances may require us to expand the window between a change and when that change ships in a release.)
 
-### Maintainers
-
-- Raimundas Sakalauskas [Github](https://www.github.com/raimundassakalauskas)
-
 ### License
 
 Particle iOS Cloud SDK is available under the Apache License 2.0. See the [LICENSE file](https://github.com/particle-iot/particle-cloud-sdk-ios/blob/master/LICENSE) for more info.
