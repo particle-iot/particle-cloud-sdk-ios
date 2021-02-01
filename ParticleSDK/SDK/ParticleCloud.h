@@ -25,6 +25,8 @@
 #import "ParticleSimInfo.h"
 #import "ParticleSession.h"
 
+@class ParticleDeveloperAgreement;
+
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *const kParticleAPIBaseURL;
@@ -283,6 +285,14 @@ typedef NS_ENUM(NSInteger, ParticleUpdateSimAction) {
 -(NSURLSessionDataTask *)getDevice:(NSString *)deviceID
                         completion:(nullable void (^)(ParticleDevice * _Nullable device, NSError * _Nullable error))completion;
 
+
+/**
+ *  Get properties associated with developer account.
+ *
+ *  @param completion Completion block with ParticleDeveloperAgreement value or with second argument NSError object if operation failed
+ *  @return NSURLSessionDataTask task for requested network access
+ */
+-(NSURLSessionDataTask *)getDeveloperAgreement:(nullable void(^)(ParticleDeveloperAgreement * _Nullable developerAgreement, NSError * _Nullable error))completion;
 
 /**
  *  Claim the specified device to the currently logged in user (without claim code mechanism)

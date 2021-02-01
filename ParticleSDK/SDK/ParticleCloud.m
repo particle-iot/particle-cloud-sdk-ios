@@ -13,6 +13,7 @@
 #import "ParticleErrorHelper.h"
 #import "ParticleLogger.h"
 #import "ParticlePricingInfo.h"
+#import "ParticleDeveloperAgreement.h"
 
 #ifdef USE_FRAMEWORKS
 #import <AFNetworking/AFNetworking.h>
@@ -678,6 +679,61 @@ static NSString *const kDefaultoAuthClientSecret = @"particle";
         [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getDevices Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
     }];
     
+    return task;
+}
+
+
+-(NSURLSessionDataTask *)getDeveloperAgreement:(nullable void(^)(ParticleDeveloperAgreement * _Nullable developerAgreement, NSError * _Nullable error))completion
+{
+    if (self.session.accessToken) {
+        NSString *authorization = [NSString stringWithFormat:@"Bearer %@", self.session.accessToken];
+        [self.manager.requestSerializer setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+
+    NSMutableString *endpoint = [NSString stringWithFormat:@"/v1/user/service_agreements"];
+
+    [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"GET %@", endpoint];
+
+    NSURLSessionDataTask *task = [self.manager GET:endpoint parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    {
+        [ParticleLogger logInfo:NSStringFromClass([self class]) format:@"%@ (%i)", endpoint, (int)((NSHTTPURLResponse *)task.response).statusCode];
+        [ParticleLogger logDebug:NSStringFromClass([self class]) format:@"%@", responseObject];
+
+        if (completion)
+        {
+            NSDictionary *response = responseObject;
+            if (response[@"data"] != nil && ![response[@"data"] isKindOfClass:[NSNull class]]) {
+                for (NSDictionary *agreementData in response[@"data"]) {
+                    ParticleDeveloperAgreement *agreement = [[ParticleDeveloperAgreement alloc] initWithParams:agreementData];
+
+                    if (agreement) {
+                        completion(agreement, nil);
+                        return;
+                    }
+                }
+                completion(nil, nil);
+            } else {
+                NSError *particleError = [ParticleErrorHelper getParticleError:nil task:task customMessage:@"Mobile secret cannot be retrieved."];
+
+                completion(nil, particleError);
+
+                [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getDeveloperAgreement Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
+            }
+
+        }
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+    {
+        NSError *particleError = [ParticleErrorHelper getParticleError:error task:task customMessage:nil];
+
+        if (completion)
+        {
+            completion(nil, particleError);
+        }
+
+        [ParticleLogger logError:NSStringFromClass([self class]) format:@"! getDeveloperAgreement Failed %@ (%ld): %@\r\n%@", task.originalRequest.URL, (long)particleError.code, particleError.localizedDescription, particleError.userInfo[ParticleSDKErrorResponseBodyKey]];
+    }];
+
     return task;
 }
 
