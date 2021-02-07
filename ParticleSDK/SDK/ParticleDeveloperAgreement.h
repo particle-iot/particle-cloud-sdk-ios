@@ -13,16 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ParticleDeveloperAgreement : NSObject
 
 /*!
- * Number of active devices associated with the current agreement.
- */
-@property (nonatomic) int activeDevices;
-
-/*!
- * Number of owned devices associated with the current agreement.
- */
-@property (nonatomic) int ownedDevices;
-
-/*!
  * Number of max devices allowed by the current agreement.
  */
 @property (nonatomic) int maxDevices;

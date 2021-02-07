@@ -19,17 +19,7 @@
 
         NSDictionary *attributes = params[@"attributes"];
         if (attributes != nil) {
-            if ([[attributes[@"agreement_type"] stringValue] isEqualToString:@"developer"] || [[attributes[@"agreement_type"] stringValue] isEqualToString:@"self_service"]) {
-                _activeDevices = 0;
-                if ([attributes[@"current_usage_summary"][@"active_devices"] isKindOfClass:[NSNumber class]]) {
-                    _activeDevices = [attributes[@"current_usage_summary"][@"active_devices"] intValue];
-                }
-
-                _ownedDevices = 0;
-                if ([attributes[@"current_usage_summary"][@"owned_devices"] isKindOfClass:[NSNumber class]]) {
-                    _ownedDevices = [attributes[@"current_usage_summary"][@"owned_devices"] intValue];
-                }
-
+            if ([[attributes[@"agreement_type"] stringValue] isEqualToString:@"developer"]) {
                 _deviceLimitReached = NO;
                 if ([attributes[@"current_usage_summary"][@"device_limit_reached"] isKindOfClass:[NSNumber class]]) {
                     _deviceLimitReached = [attributes[@"current_usage_summary"][@"device_limit_reached"] boolValue];
@@ -50,8 +40,6 @@
 
 - (NSString *)description {
     NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"_activeDevices: %i ", _activeDevices];
-    [description appendFormat:@"_ownedDevices: %i ", _ownedDevices];
     [description appendFormat:@"_maxDevices: %i ", _maxDevices];
     [description appendFormat:@"_deviceLimitReached: %i ", _deviceLimitReached];
     [description appendString:@">"];
