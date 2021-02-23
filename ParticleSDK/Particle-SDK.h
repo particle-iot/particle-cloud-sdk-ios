@@ -24,6 +24,7 @@
 
 #import "ParticleCloud.h"
 #import "ParticleDevice.h"
+#import "ParticleDeveloperAgreement.h"
 #import "ParticleNetwork.h"
 #import "ParticleErrorHelper.h"
 #import "ParticleLogger.h"
