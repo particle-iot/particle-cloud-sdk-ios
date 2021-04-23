@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 Particle iOS Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ---
+## [1.0.7](https://github.com/particle-iot/particle-cloud-sdk-ios/releases/tag/1.0.7) (2021-04-24)
+
+* Fixing an issue with cocoapods
+
 ## [1.0.6](https://github.com/particle-iot/particle-cloud-sdk-ios/releases/tag/1.0.6) (2021-02-23)
 
 * Added support for developer plans
