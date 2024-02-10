@@ -22,7 +22,7 @@ Particle iOS Cloud SDK enables iOS apps to interact with Particle-powered connec
 
 ### Getting Started
 
-- Download [Particle iOS Cloud SDK](https://github.com/particle/particle-cloud-sdk-ios/archive/master.zip) and try out the included iPhone example app
+- Download [Particle iOS Cloud SDK](https://github.com/particle-iot/particle-cloud-sdk-ios/archive/master.zip) and try out the included iPhone example app
 - Refer to our [documentation](https://docs.particle.io/reference/ios/) for getting started guide, API reference, support & feedback links.
 
 
